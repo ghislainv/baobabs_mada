@@ -48,6 +48,7 @@ source("R/functions.R")
 
 ## Rasters of environmental variables
 if (!file.exists("data/gisdata/sdm_variables/environ.tif")) {
+  dir.create("data/gisdata/sdm_variables", recursive=TRUE, showWarnings=FALSE)
   list.url <- c(
     ## Environment
     "https://madaclim.cirad.fr/environ/environ.tif",
@@ -70,8 +71,8 @@ if (!file.exists("data/gisdata/sdm_variables/environ.tif")) {
     "https://madaclim.cirad.fr/climate/no_85_2080.tif"
     
   )
-  dir.create("data/gisdata/sdm_variables", recursive=TRUE, showWarnings=FALSE)
   for (i in 1:length(list.url)) {
+    cat(paste0("Downloading ",list.url[i]," \n"))
     dest.f <- file.path("data/gisdata/sdm_variables",basename(list.url[i]))
     curl::curl_download(url=list.url[i],destfile=dest.f)
   }
