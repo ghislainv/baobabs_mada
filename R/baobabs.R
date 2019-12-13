@@ -108,7 +108,10 @@ if(!file.exists("outputs/environ.pdf")) {
 ## Occurence data for baobab species
 ##==================================
 
-df.orig <- read.csv(file="data/baobabs/baobabs.csv",header=TRUE,sep=",")
+## Building the occurrence dataset from raw data
+source("R/data_baobabs.R")
+## Load dataset
+df.orig <- read.csv(file="data/baobabs/data_Adansonia.csv",header=TRUE,sep=",")
 ## Make a SpatialPointsDataFrame object
 coords <- cbind(df.orig$Long,df.orig$Lat)
 df.sp <- SpatialPointsDataFrame(coords,data=df.orig,proj4string=CRS("+init=epsg:4326"))
@@ -116,7 +119,6 @@ df.sp <- SpatialPointsDataFrame(coords,data=df.orig,proj4string=CRS("+init=epsg:
 df.sp <- spTransform(df.sp,CRS("+init=epsg:32738"))
 ## Only for Baoabab data: change species names
 df.sp$Species <- gsub("A_","Adansonia ",df.sp$Species)
-df.sp$Species <- gsub("_"," ",df.sp$Species) ## For A.za.perrieri
 # Species
 sp.names <- levels(as.factor(df.sp$Species)) # Sorted in alphabetical order
 sp.dir <- gsub(" ",".",sp.names)

@@ -7,8 +7,8 @@
 # ==============================================================================
 
 # Libraries
-library(readr)
-library(dplyr)
+require(readr)
+require(dplyr)
 
 # ==============================================================================
 # Import and format each dataset
@@ -208,5 +208,11 @@ obs_per_sp <- data_Adansonia %>%
   group_by(Species) %>%
   summarise(n())
 write_csv(obs_per_sp, "data/baobabs/obs_per_sp.csv")
+
+# ==============================================================================
+# Message
+# ==============================================================================
+
+cat("Occurrence dataset available: data/baobabs/data_Adansonia.csv\n")
 
 # End of script

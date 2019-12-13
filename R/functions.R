@@ -4,6 +4,8 @@
 # license         :GPLv3
 # ==============================================================================
 
+require(raster)
+
 # Automatic zoom
 fun.extent <- function(sp,s) {
   width <- xmax(sp)-xmin(sp)
