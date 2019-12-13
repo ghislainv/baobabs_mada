@@ -1,0 +1,49 @@
+# Data and outputs
+data/*
+!data/baobabs_raw_data
+outputs/*
+!outputs/README-Figure1.png
+
+# biblio bak
+bib/*.bak
+
+# History files
+.Rhistory
+.Rapp.history
+Rplots.pdf
+
+# Session Data files
+.RData
+
+# Example code in package build process
+*-Ex.R
+
+# Output files from R CMD build
+/*.tar.gz
+
+# Output files from R CMD check
+/*.Rcheck/
+
+# RStudio files
+baobabs-mada.Rproj
+.Rproj.user/
+
+# logs
+baobabs.log
+
+# produced vignettes
+vignettes/*.html
+vignettes/*.pdf
+*.html
+
+# OAuth2 token, see https://github.com/hadley/httr/releases/tag/v0.3
+.httr-oauth
+
+# knitr and R markdown default cache directories
+/*_cache/
+/cache/
+
+# Temporary files created by R markdown
+*.utf8.md
+*.knit.md
+.Rproj.user
