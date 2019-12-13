@@ -1,4 +1,6 @@
 # Data and outputs
+Adansonia*
+maxent
 data/*
 !data/baobabs_raw_data
 outputs/*
@@ -25,7 +27,7 @@ Rplots.pdf
 /*.Rcheck/
 
 # RStudio files
-baobabs-mada.Rproj
+baobabs_mada.Rproj
 .Rproj.user/
 
 # logs
