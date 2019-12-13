@@ -12,7 +12,7 @@ To run the script, you can either execute the `baobabs.sh` shellscript file or r
 
 ## Data
 
-Data can be found in the `data` folder. The `baobabs_raw_data` folder includes several `.csv` files with raw occurrence data for the seven baobab species that can be found in Madagascar. These files are the result of more than 10 years of field inventories by botanists and ecologists at [CIRAD](https://www.cirad.fr) since 2004.
+Data can be found in the `data` folder. The `baobabs_raw_data` folder includes several `.csv` files with raw occurrence data for the seven baobab species that can be found in Madagascar. These files are the result of more than 10 years (since 2004) of field inventories by botanists and ecologists at [CIRAD](https://www.cirad.fr).
 
 ## Results
 
