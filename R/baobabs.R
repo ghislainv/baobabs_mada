@@ -126,7 +126,7 @@ n.species <- length(sp.names)
 
 ##================
 ## Loop on species
-#run.species <- function (i) {
+run.species <- function (i) {
 for (i in 1: length(sp.names)) {
   
   spdir <- sp.dir[i]
