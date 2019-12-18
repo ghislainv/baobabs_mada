@@ -6,9 +6,6 @@
 # license         :GPLv3
 # ==============================================================================
 
-# library() or require() only load one package at a time
-# but...
-
 # packages <- c("plotly","RColorBrewer","viridis","raster","rgdal","ENMeval","maptools",
 #               "XML","dismo","sp","MASS","maps","mapdata","plotrix","fields","spam",
 #               "png","reshape","spatstat","mapdata","maptools","scales","ggplot2","mapproj",
@@ -19,7 +16,7 @@
 Sys.unsetenv("DISPLAY")
 
 ## Libraries
-pkg <- c("curl", "rgdal", "sp", "raster")
+pkg <- c("curl", "rgdal", "sp", "raster", "biomod2")
 load.pkg <- function(x) {
   if(!require(x, character.only = T)) {
     install.packages(x)
@@ -34,21 +31,22 @@ run.models <- TRUE
 run.plots <- TRUE
 run.taxo <- TRUE
 
+## Directory names (with trailing slash "/")
+dir_var_sdm <- "data/gisdata/sdm_variables/"
+dir_baobabs <- "data/baobabs/"
+
 # =======================
 # Source R functions
 # =======================
 source("R/functions.R")
-## source("R/modelling.R") # => GV: where is that file ?
-## setwd("~/MEGA/Artigos/baobas_article") => Now use GitHub dir
-## getwd()
 
 ##=======================
 ## Environmental data
 ##=======================
 
 ## Rasters of environmental variables
-if (!file.exists("data/gisdata/sdm_variables/environ.tif")) {
-  dir.create("data/gisdata/sdm_variables", recursive=TRUE, showWarnings=FALSE)
+if (!file.exists(paste0(dir_var_sdm,"environ.tif"))) {
+  dir.create(dir_var_sdm, recursive=TRUE, showWarnings=FALSE)
   list.url <- c(
     ## Environment
     "https://madaclim.cirad.fr/environ/environ.tif",
@@ -73,21 +71,21 @@ if (!file.exists("data/gisdata/sdm_variables/environ.tif")) {
   )
   for (i in 1:length(list.url)) {
     cat(paste0("Downloading ",list.url[i]," \n"))
-    dest.f <- file.path("data/gisdata/sdm_variables",basename(list.url[i]))
+    dest.f <- file.path(dir_var_sdm,basename(list.url[i]))
     curl::curl_download(url=list.url[i],destfile=dest.f)
   }
 }
 
-current <- raster::stack("data/gisdata/sdm_variables/current.tif")
+current <- raster::stack(paste0(dir_var_sdm,"current.tif"))
 names(current) <- c(paste("tmin",1:12,sep=""),paste("tmax",1:12,sep=""),
                     paste("prec",1:12,sep=""),paste("bio",1:19,sep=""),
                     paste("pet",1:12,sep=""),"pet","cwd","ndm")
-environ <- raster::stack("data/gisdata/sdm_variables/environ.tif")
+environ <- raster::stack(paste0(dir_var_sdm,"environ.tif"))
 names(environ) <- c("alt","slope","asp","solar","geol","soil","veg","wshed","percfor2010")
 ## Stack of explicative variables
 wc <- which(names(current) %in% c("bio1","bio4","bio12","cwd"))
 we <- which(names(environ) %in% c("solar","alt","soil","percfor2010"))
-s <- stack(current[[wc]]) #,environ[[we]])
+s <- stack(current[[wc]])
 names(s) <- c("tmean","tseas","prec","cwd")
 
 ## Remove data for Comoro Islands
@@ -111,7 +109,7 @@ if(!file.exists("outputs/environ.pdf")) {
 ## Building the occurrence dataset from raw data
 source("R/data_baobabs.R")
 ## Load dataset
-df.orig <- read.csv(file="data/baobabs/data_Adansonia.csv",header=TRUE,sep=",")
+df.orig <- read.csv(file=paste0(dir_baobabs,"data_Adansonia.csv"),header=TRUE,sep=",")
 ## Make a SpatialPointsDataFrame object
 coords <- cbind(df.orig$Long,df.orig$Lat)
 df.sp <- SpatialPointsDataFrame(coords,data=df.orig,proj4string=CRS("+init=epsg:4326"))
@@ -127,7 +125,7 @@ n.species <- length(sp.names)
 ##================
 ## Loop on species
 run.species <- function (i) {
-for (i in 1: length(sp.names)) {
+#for (i in 1: length(sp.names)) {
   
   spdir <- sp.dir[i]
   spname <- sp.names[i]
@@ -138,6 +136,7 @@ for (i in 1: length(sp.names)) {
   ##===============================
   ## Select data for target species
   df.tsp <- df.sp[df.sp$Species==spname,]
+  
   ##===================
   ## Remove duplicates
   cell.pres <- cellFromXY(s,df.tsp)
@@ -160,11 +159,9 @@ for (i in 1: length(sp.names)) {
                               proj4string=CRS("+init=epsg:32738"))
   
   p <- SpatialPoints(d) ## This is used for presence-only data
-  
-  setwd("~/MEGA/Artigos/baobas_article/BIOMOD")
-  write.table(d@data,file=paste0(spdir,"/presences.txt"),
-              sep="\t",row.names=T)
-  setwd("~/MEGA/Artigos/baobas_article/")
+  ## Save "d" as data-frame
+  dir.create(paste0(spdir,"/figures"),recursive=TRUE)
+  write.table(d@data,file=paste0(spdir,"/figures/presences.txt"),sep="\t",row.names=FALSE)
   
   ## Extent for species distribution area maps
   ext <- fun.extent(p,s)
@@ -175,15 +172,7 @@ for (i in 1: length(sp.names)) {
   ## Number of 1km pixels with at least one presence
   npix <- nrow(d)
   
-  ## Extent of study area for target species
-  
-  names(s) <- c("tmean", "tseas", "prec", "cwd")
-  
-  ##### SDM Modelling
-  ## Conditions to run some code part
-  run.models <- TRUE
-  setwd("BIOMOD")
-  
+  ## BIOMOD_FormatingData
   set.seed(1234) ## Reproducible pseudo-absences
   BiomodData <- BIOMOD_FormatingData(resp.var=p,
                                      expl.var=s,
@@ -195,14 +184,14 @@ for (i in 1: length(sp.names)) {
   saveRDS(BiomodData,paste0(spdir,"/BiomodData.rds"))
   
   ## BIOMOD_ModelingOptions
-  BiomodOption <- BIOMOD_ModelingOptions(GLM=list(type="quadratic",interaction.level=0,myFormula=NULL,
-                                                  family=binomial(link="logit"),test="AIC"),
-                                         GAM=list(algo="GAM_mgcv",type="s_smoother",k=4,interaction.level=0, 
+  BiomodOption <- BIOMOD_ModelingOptions(GLM=list(type="quadratic", interaction.level=0, myFormula=NULL,
+                                                  family=binomial(link="logit"), test="AIC"),
+                                         GAM=list(algo="GAM_mgcv", type="s_smoother", k=4, interaction.level=0, 
                                                   myFormula=NULL, 
                                                   family=binomial(link="logit")),
                                          RF=list(do.classif=TRUE, ntree=500),
-                                         MAXENT.Phillips=list(path_to_maxent.jar='~\\MEGA\\Artigos\\baobas_article',
-                                                              visible=FALSE,maximumiterations=500,
+                                         MAXENT.Phillips=list(path_to_maxent.jar=paste0(getwd(), "/maxent"),
+                                                              visible=FALSE, maximumiterations=500,
                                                               memory_allocated=512,
                                                               # To avoid overparametrization (Merow  et al.  2013)
                                                               product=FALSE, threshold=FALSE, hinge=FALSE))
@@ -224,55 +213,37 @@ for (i in 1: length(sp.names)) {
   } else {
     BiomodModel <- get(load(paste0(spdir,"/",spdir,".4mod.models.out")))
   }
-  
-  (scores_all <- get_evaluations(BiomodModel))
-  
-  ## extract TSS scores
-  #scores_TSS <- as.numeric(scores_all["TSS","Cutoff",,,])
-  
-  ## select a threshold to keep a single model
-  #score_thresh <- mean(scores_TSS)
-  
-  # Tabela para salvar avalia?ao do modelo e vari?veis mais importantes ;)
+  ## Capture model evaluation and variable importance
   capture.output(get_evaluations(BiomodModel),
-                 file=file.path(paste0(spdir,"_formal_eval_evaluation.txt", sep="")))
-  
-  
+                 file=file.path(paste0(spdir,"/model_evaluation.txt")))
   capture.output(get_variables_importance(BiomodModel),
-                 file=file.path(paste0(spdir,"_formal_models_variables_importance.txt", sep="")))
+                 file=file.path(paste0(spdir,"/var_importance.txt")))
   
   ## Building ensemble-models
-  
   if (run.models) {
-    BiomodEM <- BIOMOD_EnsembleModeling( modeling.output = BiomodModel,
-                                         chosen.models = grep("_Full_",
-                                                              get_built_models(BiomodModel),
-                                                              value=TRUE), #Full models only
-                                         em.by = 'all', 
-                                         eval.metric=c("TSS"),
-                                         eval.metric.quality.threshold= 0.6, #important!
-                                         models.eval.meth = c('TSS','ROC'),
-                                         prob.mean=F,
-                                         prob.ci=F,
-                                         prob.ci.alpha=0.05,
-                                         committee.averaging=TRUE,
-                                         prob.mean.weight=F,
-                                         prob.mean.weight.decay="proportional")
+    BiomodEM <- BIOMOD_EnsembleModeling(modeling.output = BiomodModel,
+                                        chosen.models = grep("_Full_",
+                                                             get_built_models(BiomodModel),
+                                                             value=TRUE), #Full models only
+                                        em.by = 'all', 
+                                        eval.metric=c("TSS"),
+                                        # In the ensemble, we keep only models for which TSS >= 0.6
+                                        eval.metric.quality.threshold=0.6,
+                                        models.eval.meth=c('TSS','ROC'),
+                                        prob.mean=F,
+                                        prob.ci=F,
+                                        prob.ci.alpha=0.05,
+                                        committee.averaging=TRUE,
+                                        prob.mean.weight=F,
+                                        prob.mean.weight.decay="proportional")
   } else {
     BiomodEM <- get(load(paste0(spdir,"/",spdir,".4modensemble.models.out")))
   }
-  
-  # get_evaluations(Em_all_BiomodEM)
-  get_evaluations(BiomodEM)
-  
-  ## Change geometry for stack_target (for use with MAXENT.Phillips)
-  ## See this thread: https://r-forge.r-project.org/forum/forum.php?thread_id=33459&forum_id=995&group_id=302
-  
-  #xmax_target <- dim(s)[2]
-  #ymax_target <- dim(s)[1]
-  #extent(s) <- c(0, xmax_target, 0, ymax_target)
-  
-  ## Do the projections
+  ## Capture EM evaluation
+  capture.output(get_evaluations(BiomodEM),
+                 file=file.path(paste0(spdir,"/EM_evaluation.txt")))
+
+  ## BIOMOD_Projection == PRESENT == ## Individual model projection
   if (run.models) {
     BiomodProj <- BIOMOD_Projection(modeling.output=BiomodModel,
                                     new.env=s,
@@ -291,7 +262,6 @@ for (i in 1: length(sp.names)) {
     BiomodProj <- get(load(paste0(spdir,"/proj_current/",spdir,".current.projection.out")))
   }
   
-  
   ## BIOMOD_EnsembleForecasting == PRESENT == ## Ensemble forecasting
   if (run.models) {
     BiomodEF <- BIOMOD_EnsembleForecasting(EM.output=BiomodEM, ## Rules for assembling
@@ -304,13 +274,12 @@ for (i in 1: length(sp.names)) {
     BiomodEF <- get(load(paste0(spdir,"/proj_current/",spdir,".current.ensemble.projection.out")))
   }
   
-  ##=====================
-  ## Current distribution
-  
   ## Future distribution with Future Data - MadaClim   
-  mod <- c("no","he","gs") # For global climate models (GCMs): Noxxxxx, CNRM-CM5, GISS-E2-R, HadGEM2-ES 
-  rcp <- c("45","85") # For representative concentration pathways (RCPs): RCP 4.5, RCP 8.5
-  yr <- c("2050","2080") # For 2050, 2080
+  mod <- c("no","he","gs") # For global climate models (GCMs): NorESM1-M, HadGEM2-ES, GISS-E2-R,  
+  #rcp <- c("45","85") # For representative concentration pathways (RCPs): RCP 4.5, RCP 8.5
+  rcp <- c("85") # If only for RCP 85
+  #yr <- c("2050","2080") # For 2050, 2080
+  yr <- c("2080") # If only for 2080
   n.mod <- length(mod)*length(rcp)*length(yr)
   
   if (run.models) {
@@ -323,17 +292,12 @@ for (i in 1: length(sp.names)) {
           cat(paste0("\n","Model ",i.mod,"/",n.mod,": ",mod[mc],"_",rcp[j],"_",yr[l],"\n"))
           
           ## Load climatic data
-          getwd()
-          setwd("C:/Users/Usu?rio/Documents/MEGA/Artigos/baobas_article/rasters")
-          future <- stack(paste0(mod[mc],"_",rcp[j],"_",yr[l],".tif"))
+          future <- stack(paste0(dir_var_sdm,mod[mc],"_",rcp[j],"_",yr[l],".tif"))
           names(future) <- c(paste("tmin",1:12,sep=""),paste("tmax",1:12,sep=""),
                              paste("prec",1:12,sep=""),paste("bio",1:19,sep=""),
                              paste("pet",1:12,sep=""),"pet","cwd","ndm")
           ## Stack of explicative variables
-          setwd("C:/Users/Usu?rio/Documents/MEGA/Artigos/baobas_article/BIOMOD")
-          #we
           sf <- stack(future[[wc]]) ## See wc and we indexes before
-          
           names(sf) <- c("tmean","tseas","prec","cwd")
           
           ## Projections by model
@@ -362,15 +326,17 @@ for (i in 1: length(sp.names)) {
         }
       }
     }
-    
-  } # End of species function/loop
+  } # End of if(run.models)
+  
+  ##=====================
+  ## Current distribution
   
   ## Presence points and altitude
   # Legend specifications
   a.arg <- list(at=seq(0,3000,length.out=4),labels=seq(0,3000,length.out=4),cex.axis=1.5)
   l.arg <- list(text="Elevation (m)",side=2, line=0.5, cex=2.5)
   # Plot
-  pdf(paste0(spdir,"/presence_alt.pdf"),width=6.5,height=10)
+  pdf(paste0(spdir,"/figures/presence_alt.pdf"),width=6.5,height=10)
   par(mar=c(0,0,0,1),cex=1.4)
   plot(environ$alt,col=terrain.colors(255)[255:1],
        legend.width=1.5,legend.shrink=0.6,legend.mar=7,
@@ -382,9 +348,8 @@ for (i in 1: length(sp.names)) {
   
   ## Committee averaging
   # Legend specifications
-  
-  breakpoints <- c(-100,100,300,500,700,900,1100)
-  colors <- c(grey(c(0.90,seq(0.7,0.3,-0.2))),"#568203","#013220")
+  breakpoints <- c(-125,125,375,625,875,1125)
+  colors <- c(grey(seq(0.9,0.5,-0.2)),"#568203","#013220")
   a.arg <- list(at=seq(0,1000,length.out=5), labels=c("0","1","2","3","4"),cex.axis=1.5)
   l.arg <- list(text="Vote",side=2, line=0.5, cex=1.5)
   # Load predictions and update extent
@@ -392,35 +357,27 @@ for (i in 1: length(sp.names)) {
   ca <- pred[[1]]
   
   # Plot
-  getwd()
-  pdf(paste0(spdir,"/ca_current.pdf"),width=6.5,height=10)
+  pdf(paste0(spdir,"/figures/ca_current.pdf"),width=6.5,height=10)
   par(mar=c(0,0,0,r.mar),cex=1.4)
-  
   plot(ca,col=colors,ext=e.map, breaks=breakpoints,
        legend.width=1.5,legend.shrink=0.6,legend.mar=7,
        axis.args=a.arg,legend.arg=l.arg,
        axes=FALSE, box=FALSE, zlim=c(0,1000))
   dev.off()
   
-  # Export as tiff
+  # Export as tif
   writeRaster(ca,paste0(spdir,"/committee_averaging.tif"),datatype="INT2S",
               overwrite=TRUE,
               options=c("COMPRESS=LZW","PREDICTOR=2"))
   
-  
   ## Present species distribution area (km2)
-  unique(values(ca))
-  
-  SDA.pres <- sum(values(ca)>500,na.rm=TRUE) # at least three algos to indicate SDA
-  
-  # Just the sum because one pixel is 1km2.
+  SDA.pres <- sum(values(ca)>500,na.rm=TRUE) # Just the sum because one pixel is 1km2.
   
   ##=================
   ## Ecological niche
   
   ## 95% quantiles for alt, temp, prec, tseas, cwd
-  
-  wC <- which(values(ca)>500) 
+  wC <- which(values(ca)>500)
   niche.df <- as.data.frame(s)[wC,]
   niche.df$alt <- environ$alt[wC]
   Mean <- round(apply(niche.df,2,mean,na.rm=TRUE))
@@ -432,9 +389,9 @@ for (i in 1: length(sp.names)) {
   # In SDA
   nC <- length(wC)
   Samp <- if (nC>1000) {sample(wC,1000,replace=FALSE)} else {wC}
-  mapmat.df <- as.data.frame(s)[Samp,] 
+  mapmat.df <- as.data.frame(s)[Samp,]
   mapmat.df$alt <- environ$alt[Samp]
-  mapmat.df$species <- rep(c(spdir)) 
+  mapmat.df$species <- rep(c(spdir))
   write.csv2(mapmat.df,paste0(spdir,"/niche_graph_species.csv"))
   
   ## Model performance of committee averaging
@@ -442,7 +399,7 @@ for (i in 1: length(sp.names)) {
   # Individual models
   Perf.mods <- as.data.frame(as.table(get_evaluations(BiomodModel)))
   names(Perf.mods) <- c("wIndex","Index","Model","Run","PA","Value")
-  write.table(Perf.mods,paste0(spdir,"/baobab_current_model_evaluation.txt"),sep="\t")
+  write.table(Perf.mods,paste0(spdir,"/current_model_evaluation.txt"),sep="\t")
   
   # Observations and committee averaging predictions
   ObsData <- BiomodData@data.species
@@ -455,17 +412,24 @@ for (i in 1: length(sp.names)) {
   Index <- c("ROC","ACCURACY","TSS","KAPPA")
   Perf.ca <- data.frame(ROC=NA,OA=NA,TSS=NA,K=NA,Sen=NA,Spe=NA)
   for (ind in 1:length(Index)) {
-    v <- Find.Optim.Stat(Stat=Index[ind],Fit=caData,Obs=ObsData,Fixed.thresh=750) # ! here thresh=500: three models at least
+    # !! Fixed.thresh must be between 500 and 749 (three models at least). If we put 500 its OK.
+    # 250-499 will select vote>=2, 500-749 will select vote>=3, and >=750 will select vote >=4
+    v <- biomod2::Find.Optim.Stat(Stat=Index[ind],Fit=caData,Obs=ObsData,Fixed.thresh=500)
     Perf.ca[,ind] <- v[1]
   }
   Perf.ca$Sen <- v[3]
   Perf.ca$Spe <- v[4]
-  write.table(Perf.ca,paste0(spdir,"/new_performance_algos.txt"),sep="\t")
+  write.table(Perf.ca,paste0(spdir,"/performance_ca.txt"),sep="\t")
+  
+  # Compare with our own function for accuracy indices
+  Perf.ca.2 <- accuracy_indices(pred=PredData,obs=ObsData,digits=3)
+  write.table(Perf.ca.2,paste0(spdir,"/performance_ca2.txt"),sep="\t")
+  
+  # GV: 18/12/2019 OK until here
   
   ## Table of results
   
   ## Variable importance
-  
   VarImp <- as.data.frame(get_variables_importance(BiomodModel))#[,,"Full","PA1"])
   Rank <- as.data.frame(apply(-VarImp,2,rank))
   VarImp$mean.rank <- apply(Rank,1,mean)
