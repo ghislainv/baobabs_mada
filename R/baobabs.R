@@ -16,7 +16,7 @@
 Sys.unsetenv("DISPLAY")
 
 ## Libraries
-pkg <- c("curl", "rgdal", "sp", "raster", "biomod2")
+pkg <- c("curl", "rgdal", "sp", "raster", "biomod2", "foreach", "doParallel","colorRampPalette")
 load.pkg <- function(x) {
   if(!require(x, character.only = T)) {
     install.packages(x)
@@ -26,10 +26,16 @@ load.pkg <- function(x) {
 loaded <- lapply(pkg,load.pkg)
 rm(pkg,load.pkg,loaded)
 
+## Package names for parallel computations
+pkg.names.clust <- c("rgdal","raster","biomod2")
+
 ## Conditions to run some code part
 run.models <- TRUE
 run.plots <- TRUE
 run.taxo <- TRUE
+
+## Colors for legend
+gcolors <- colorRampPalette(c("#568203","#013220"))
 
 ## Directory names (with trailing slash "/")
 dir_var_sdm <- "data/gisdata/sdm_variables/"
@@ -122,8 +128,10 @@ sp.names <- levels(as.factor(df.sp$Species)) # Sorted in alphabetical order
 sp.dir <- gsub(" ",".",sp.names)
 n.species <- length(sp.names)
 
-##================
+##==================================
 ## Loop on species
+##==================================
+
 run.species <- function (i) {
 #for (i in 1: length(sp.names)) {
   
@@ -213,12 +221,7 @@ run.species <- function (i) {
   } else {
     BiomodModel <- get(load(paste0(spdir,"/",spdir,".4mod.models.out")))
   }
-  ## Capture model evaluation and variable importance
-  capture.output(get_evaluations(BiomodModel),
-                 file=file.path(paste0(spdir,"/model_evaluation.txt")))
-  capture.output(get_variables_importance(BiomodModel),
-                 file=file.path(paste0(spdir,"/var_importance.txt")))
-  
+
   ## Building ensemble-models
   if (run.models) {
     BiomodEM <- BIOMOD_EnsembleModeling(modeling.output = BiomodModel,
@@ -239,9 +242,6 @@ run.species <- function (i) {
   } else {
     BiomodEM <- get(load(paste0(spdir,"/",spdir,".4modensemble.models.out")))
   }
-  ## Capture EM evaluation
-  capture.output(get_evaluations(BiomodEM),
-                 file=file.path(paste0(spdir,"/EM_evaluation.txt")))
 
   ## BIOMOD_Projection == PRESENT == ## Individual model projection
   if (run.models) {
@@ -413,7 +413,7 @@ run.species <- function (i) {
   Perf.ca <- data.frame(ROC=NA,OA=NA,TSS=NA,K=NA,Sen=NA,Spe=NA)
   for (ind in 1:length(Index)) {
     # !! Fixed.thresh must be between 500 and 749 (three models at least). If we put 500 its OK.
-    # 250-499 will select vote>=2, 500-749 will select vote>=3, and >=750 will select vote >=4
+    # 250-499 will select vote >= 2, 500-749 will select vote >= 3, and >= 750 will select vote >= 4.
     v <- biomod2::Find.Optim.Stat(Stat=Index[ind],Fit=caData,Obs=ObsData,Fixed.thresh=500)
     Perf.ca[,ind] <- v[1]
   }
@@ -425,12 +425,10 @@ run.species <- function (i) {
   Perf.ca.2 <- accuracy_indices(pred=PredData,obs=ObsData,digits=3)
   write.table(Perf.ca.2,paste0(spdir,"/performance_ca2.txt"),sep="\t")
   
-  # GV: 18/12/2019 OK until here
-  
   ## Table of results
   
   ## Variable importance
-  VarImp <- as.data.frame(get_variables_importance(BiomodModel))#[,,"Full","PA1"])
+  VarImp <- as.data.frame(get_variables_importance(BiomodModel)[,,"Full","PA1"])
   Rank <- as.data.frame(apply(-VarImp,2,rank))
   VarImp$mean.rank <- apply(Rank,1,mean)
   VarImp$rank <- rank(VarImp$mean.rank,ties.method="max")
@@ -439,17 +437,33 @@ run.species <- function (i) {
   ##====================
   ## Future distribution
   
+  # ## Table for changes in area
+  # SDA.fut <- data.frame(area.pres=SDA.pres,
+  #                       rcp=rep(c("45","85"),each=4),yr=rep(rep(c("2050","2080"),each=2),2),
+  #                       rcp=rep(c("45","85"),each=4),yr=rep(rep(c("2050","2080"),each=2),2),
+  #                       disp=rep(c("full","zero"),4),area.fut=NA)
+  # ## Change in altitude
+  # Alt.fut <- data.frame(mean.pres=niche$alt[1],q1.pres=niche$alt[2],q2.pres=niche$alt[3],
+  #                       rcp=rep(c("45","85"),each=4),yr=rep(rep(c("2050","2080"),each=2),2),
+  #                       disp=rep(c("full","zero"),4),mean.fut=NA,q1.fut=NA,q2.fut=NA)
+  # ## Change in seasonality
+  # Seas.fut <- data.frame(mean.pres=niche$tseas[1],q1.pres=niche$tseas[2],q2.pres=niche$tseas[3],
+  #                        rcp=rep(c("45","85"),each=4),yr=rep(rep(c("2050","2080"),each=2),2),
+  #                        disp=rep(c("full","zero"),4),mean.fut=NA,q1.fut=NA,q2.fut=NA)
+  
+  # Only considering RCP 85 and year 2080
   ## Table for changes in area
-  SDA.fut <- data.frame(area.pres=SDA.pres,rcp=rep(c("45","85"),each=4),yr=rep(rep(c("2050","2080"),each=2),2),
-                        disp=rep(c("full","zero"),4),area.fut=NA)
+  SDA.fut <- data.frame(area.pres=SDA.pres,
+                        rcp=rep("85", 2),yr=rep("2080",2),
+                        disp=c("full","zero"),area.fut=NA)
   ## Change in altitude
   Alt.fut <- data.frame(mean.pres=niche$alt[1],q1.pres=niche$alt[2],q2.pres=niche$alt[3],
-                        rcp=rep(c("45","85"),each=4),yr=rep(rep(c("2050","2080"),each=2),2),
-                        disp=rep(c("full","zero"),4),mean.fut=NA,q1.fut=NA,q2.fut=NA)
+                        rcp=rep("85", 2),yr=rep("2080",2),
+                        disp=c("full","zero"),mean.fut=NA,q1.fut=NA,q2.fut=NA)
   ## Change in seasonality
   Seas.fut <- data.frame(mean.pres=niche$tseas[1],q1.pres=niche$tseas[2],q2.pres=niche$tseas[3],
-                         rcp=rep(c("45","85"),each=4),yr=rep(rep(c("2050","2080"),each=2),2),
-                         disp=rep(c("full","zero"),4),mean.fut=NA,q1.fut=NA,q2.fut=NA)
+                         rcp=rep("85", 2),yr=rep("2080",2),
+                         disp=c("full","zero"),mean.fut=NA,q1.fut=NA,q2.fut=NA)
   
   ## Committee averaging for the three GCMs (sum)
   for (j in 1:length(rcp)) {
@@ -468,12 +482,12 @@ run.species <- function (i) {
       values(caFut)[cellsCom] <- NA
       # Legend
       breakpoints <- seq(-125,3125,by=250)
-      colors <- c(grey(c(0.90,seq(0.7,0.5,-0.05))),gcolors(7))
+      colors <- c(grey(c(0.90,seq(0.7,0.45,-0.05))),gcolors(6))
       a.arg <- list(at=seq(0,3000,length.out=13), labels=c(0:12), cex.axis=1.2)
       l.arg <- list(text="Vote",side=2, line=0.5, cex=1.2)
       
       # Plot (Committee Averaging Full Dispersal)
-      pdf(paste0(spdir,"/cafd_",rcp[j],"_",yr[l],".pdf"),width=6.5,height=10)
+      pdf(paste0(spdir,"/figures/cafd_",rcp[j],"_",yr[l],".pdf"),width=6.5,height=10)
       par(mar=c(0,0,0,r.mar),cex=1.4)
       plot(caFut,col=colors,breaks=breakpoints,ext=e.map,
            legend.width=1.5,legend.shrink=0.75,legend.mar=7,
@@ -484,7 +498,7 @@ run.species <- function (i) {
       # Zero-dispersal
       caZD <- caFut
       values(caZD)[values(ca)<=500] <- 0 
-      pdf(paste0(spdir,"/cazd",rcp[j],"_",yr[l],".pdf"),width=6.5,height=10)
+      pdf(paste0(spdir,"/figures/cazd_",rcp[j],"_",yr[l],".pdf"),width=6.5,height=10)
       par(mar=c(0,0,0,r.mar),cex=1.4)
       plot(caZD,col=colors,breaks=breakpoints,ext=e.map,
            legend.width=1.5,legend.shrink=0.75,legend.mar=7,
@@ -493,10 +507,10 @@ run.species <- function (i) {
       dev.off()
       
       # SDA (in km2)
-      SDA.fut$area.fut[SDA.fut$rcp==rcp[j] & SDA.fut$yr==yr[l] & SDA.fut$disp=="full"] <- sum(values(caFut)>1500,na.rm=TRUE) # !! Here >1500
-      SDA.fut$area.fut[SDA.fut$rcp==rcp[j] & SDA.fut$yr==yr[l] & SDA.fut$disp=="zero"] <- sum(values(caZD)>1500,na.rm=TRUE) # !! Same here
-      # Altitude
+      SDA.fut$area.fut[SDA.fut$rcp==rcp[j] & SDA.fut$yr==yr[l] & SDA.fut$disp=="full"] <- sum(values(caFut)>1500,na.rm=TRUE)
+      SDA.fut$area.fut[SDA.fut$rcp==rcp[j] & SDA.fut$yr==yr[l] & SDA.fut$disp=="zero"] <- sum(values(caZD)>1500,na.rm=TRUE)
       
+      # Altitude
       # fd
       if (SDA.fut$area.fut[SDA.fut$rcp==rcp[j] & SDA.fut$yr==yr[l] & SDA.fut$disp=="full"] !=0) {
         Alt.fut$mean.fut[SDA.fut$rcp==rcp[j] & SDA.fut$yr==yr[l] & SDA.fut$disp=="full"] <- mean(values(environ$alt)[values(caFut)>1500],na.rm=TRUE)
@@ -509,6 +523,7 @@ run.species <- function (i) {
         Alt.fut$q1.fut[SDA.fut$rcp==rcp[j] & SDA.fut$yr==yr[l] & SDA.fut$disp=="zero"] <- quantile(values(environ$alt)[values(caZD)>1500],0.025,na.rm=TRUE)
         Alt.fut$q2.fut[SDA.fut$rcp==rcp[j] & SDA.fut$yr==yr[l] & SDA.fut$disp=="zero"] <- quantile(values(environ$alt)[values(caZD)>1500],0.975,na.rm=TRUE)
       }
+      
       # Seasonality
       # fd
       if (SDA.fut$area.fut[SDA.fut$rcp==rcp[j] & SDA.fut$yr==yr[l] & SDA.fut$disp=="full"] !=0) {
@@ -522,15 +537,14 @@ run.species <- function (i) {
         Seas.fut$q1.fut[SDA.fut$rcp==rcp[j] & SDA.fut$yr==yr[l] & SDA.fut$disp=="zero"] <- quantile(values(s$tseas)[values(caZD)>1500],0.025,na.rm=TRUE)
         Seas.fut$q2.fut[SDA.fut$rcp==rcp[j] & SDA.fut$yr==yr[l] & SDA.fut$disp=="zero"] <- quantile(values(s$tseas)[values(caZD)>1500],0.975,na.rm=TRUE)
       }
-      # round
-      Alt.fut[,7:9] <- round(Alt.fut[,7:9])
-      # round
-      Seas.fut[,7:9] <- round(Seas.fut[,7:9])
     }
   }
   
-  # SDA
+  # round
+  Alt.fut[,7:9] <- round(Alt.fut[,7:9])
+  Seas.fut[,7:9] <- round(Seas.fut[,7:9])
   
+  # SDA
   SDA.fut$perc.change <- round(100*((SDA.fut$area.fut-SDA.fut$area.pres)/SDA.fut$area.pres))
   write.table(SDA.fut,paste0(spdir,"/sda_fut.txt"),sep="\t")
   # Alt
@@ -541,113 +555,142 @@ run.species <- function (i) {
   write.table(Seas.fut,paste0(spdir,"/seas_fut.txt"),sep="\t")
   
   ##========================================
-  
+  ## Save main objects
   save(list=c("SDA.fut","Alt.fut","Seas.fut","niche","Perf.mods","VarImp"),file=paste0(spdir,"/main_obj.rda"))
   
-  #### Calculate anomalies
-  
-  ## Temperature seasonality
-  ## Actual
-  
-  setwd("~/MEGA/Artigos/baobas_article/anomalies")
-  
-  Xvar <- stack("./Xvar.tif") # rasters available at Vieilledent et al. 2016 --> https://doi.org/10.1111/1365-2745.12548
-  
-  bio4.region <- Xvar[[5]]
-  
-  ## Mean in 2080
-  setwd("~/MEGA/Artigos/baobas_article/")
-  
-  ### Tseas
-  bio4.gs.2080 <- raster("./anomalies/climproj/bio4_gs_85_2080_region.tif")
-  bio4.he.2080 <- raster("./anomalies/climproj/bio4_he_85_2080_region.tif")
-  bio4.no.2080 <- raster("./anomalies/climproj/bio4_no_85_2080_region.tif")
-  Stack.bio4.2080 <- stack(c(bio4.gs.2080,bio4.he.2080,
-                             bio4.no.2080))
-  bio4.2080 <- mean(Stack.bio4.2080)
-  
-  ##= Annual mean temp - 
-  ## Actual
-  
-  bio1.region <- Xvar[[4]]  # Annual mean present
-  bio1.gs.2080 <- raster("./anomalies/climproj/bio1_gs_85_2080_region.tif")
-  bio1.he.2080 <- raster("./anomalies/climproj/bio1_he_85_2080_region.tif")
-  bio1.no.2080 <- raster("./anomalies/climproj/bio1_no_85_2080_region.tif")
-  Stack.bio1.2080 <- stack(c(bio1.gs.2080,bio1.he.2080,
-                             bio1.no.2080))
-  
-  bio1.2080 <- mean(Stack.bio1.2080) ### 2080 temp seas. raster
-  
-  ## Annual mean precipitation
-  
-  bio12.region <- Xvar[[6]]  # Prec present
-  
-  bio6.gs.2080 <- raster("./anomalies/climproj/bio12_gs_85_2080_region.tif")
-  bio6.he.2080 <- raster("./anomalies/climproj/bio12_he_85_2080_region.tif")
-  bio6.no.2080 <- raster("./anomalies/climproj/bio12_no_85_2080_region.tif")
-  Stack.bio12.2080 <- stack(c(bio6.gs.2080,bio6.he.2080,
-                              bio6.no.2080))
-  bio12.2080 <- mean(Stack.bio12.2080) ### 2080 prec. raster
-  
-  ## climatic water deficit
-  
-  s_cwd_fut
-  
-  # configuring
-  step1 <- resample(bio1.2080,s_cwd_fut,"bilinear")
-  ex_2 <- extent(s_cwd_fut)
-  step2 <- crop(step1,ex_2)
-  step3 <- mask(step1,step2)
-  
-  ##
-  stepa <- resample(bio4.2080,s_cwd_fut,"bilinear")
-  ex_2 <- extent(s_cwd_fut)
-  stepb <- crop(stepa,ex_2)
-  stepc <- mask(stepa,stepb)
-  
-  ##
-  
-  stepd <- resample(bio12.2080,s_cwd_fut,"bilinear")
-  ex_2 <- extent(s_cwd_fut)
-  stepe <- crop(stepd,ex_2)
-  stepf <- mask(stepd,stepe)
-  anomalies_sf <- stack (step3,stepc,stepf,s_cwd_fut)
-  
-  names(anomalies_sf) <- c("tempf","tseasf","precf","cwdf")
-  
-  ## Draw points in the SDA and extract future environmental variables
-  # In SDA
-  
-  wC.anomalies <- which(values(ca)>500) 
-  nC.anomalies <- length(wC.anomalies)
-  Samp.anomalies <- if (nC.anomalies>1000) {sample(wC.anomalies,1000,replace=FALSE)} else {wC.anomalies}
-  mapmat.df.anomalies <- as.data.frame(anomalies_sf)[Samp.anomalies,] 
-  
-  ## table to compare current and future bioclimatic changes for each species 
-  # Used this table to create density niche curves to compare future baobabs niche
-  ## over current distribution (ca)
-  
-  names(mapmat.df.anomalies) <- c("tmeanf","tseasf","precf","cwdf")
-  mapmat.final <- cbind(mapmat.df.anomalies,mapmat.df)
-  head(mapmat.final)
-  mapmat.f <- mapmat.final[,c(1,5,2,6,3,7,4,8,9,10)]
-  head(mapmat.f)
-  setwd("~/MEGA/Artigos/baobas_article/BIOMOD")
-  write.csv2(mapmat.f,paste0(spdir,"/niche_graph_species_compared_anomaly.csv"))
-  
-  #### Future niche over current SDA!!! NO ANOMALY
-  
-  wC.future <- which(values(ca)>500)
-  mapmat.df.future <- as.data.frame(anomalies_sf)[wC.future,]
-  names(mapmat.df.future) <- c("tmeanf","tseasf","precf","cwdf")
-  Mean_ok_future <- round(apply(mapmat.df.future,2,mean,na.rm=TRUE))
-  q_ok_future <- round(apply(mapmat.df.future,2,quantile,c(0.025,0.975),na.rm=TRUE))
-  niche_ok_future <- as.data.frame(rbind(Mean_ok_future,q_ok_future))
-  setwd("~/MEGA/Artigos/baobas_article/BIOMOD")
-  write.table(niche_ok_future,paste0(spdir,"/mean_niche_with_future.txt"),sep="\t")
-  write.csv2(niche_ok_future,paste0(spdir,"/mean_niche_with_future.csv"))
-  
 }
+
+##============================================
+## Setup the cluster for parallel computations
+
+## Make a cluster with all possible cores
+n.core <- max(1,detectCores()-2)
+clust <- makeCluster(n.core)
+## Register the number of parallel workers (here all CPUs)
+registerDoParallel(clust)
+## Return number of parallel workers
+getDoParWorkers() 
+## Parallel computations
+t.start <- Sys.time() ## Start the clock
+foreach(i=1:n.species,.packages=pkg.names.clust) %dopar% run.species(i)
+## Stop the cluster
+stopCluster(clust)
+## Time computation
+t.stop <- Sys.time() ## Stop the clock
+t.diff <- difftime(t.stop,t.start,units="min")
+cat(paste0("Computation time (min): ",round(t.diff,2)),file="outputs/computation_time.txt")
+  
+
+##=======================================
+## OK until here: corrections GV 18/12/19
+## Mario, please arrange code below
+##=======================================
+
+
+##==================================
+## Calculate anomalies
+##==================================
+
+## Temperature seasonality
+## Actual
+
+setwd("~/MEGA/Artigos/baobas_article/anomalies")
+
+Xvar <- stack("./Xvar.tif") # rasters available at Vieilledent et al. 2016 --> https://doi.org/10.1111/1365-2745.12548
+
+bio4.region <- Xvar[[5]]
+
+## Mean in 2080
+setwd("~/MEGA/Artigos/baobas_article/")
+
+### Tseas
+bio4.gs.2080 <- raster("./anomalies/climproj/bio4_gs_85_2080_region.tif")
+bio4.he.2080 <- raster("./anomalies/climproj/bio4_he_85_2080_region.tif")
+bio4.no.2080 <- raster("./anomalies/climproj/bio4_no_85_2080_region.tif")
+Stack.bio4.2080 <- stack(c(bio4.gs.2080,bio4.he.2080,
+                           bio4.no.2080))
+bio4.2080 <- mean(Stack.bio4.2080)
+
+##= Annual mean temp
+## Actual
+
+bio1.region <- Xvar[[4]]  # Annual mean present
+bio1.gs.2080 <- raster("./anomalies/climproj/bio1_gs_85_2080_region.tif")
+bio1.he.2080 <- raster("./anomalies/climproj/bio1_he_85_2080_region.tif")
+bio1.no.2080 <- raster("./anomalies/climproj/bio1_no_85_2080_region.tif")
+Stack.bio1.2080 <- stack(c(bio1.gs.2080,bio1.he.2080,
+                           bio1.no.2080))
+
+bio1.2080 <- mean(Stack.bio1.2080) ### 2080 temp seas. raster
+
+## Annual mean precipitation
+
+bio12.region <- Xvar[[6]]  # Prec present
+
+bio6.gs.2080 <- raster("./anomalies/climproj/bio12_gs_85_2080_region.tif")
+bio6.he.2080 <- raster("./anomalies/climproj/bio12_he_85_2080_region.tif")
+bio6.no.2080 <- raster("./anomalies/climproj/bio12_no_85_2080_region.tif")
+Stack.bio12.2080 <- stack(c(bio6.gs.2080,bio6.he.2080,
+                            bio6.no.2080))
+bio12.2080 <- mean(Stack.bio12.2080) ### 2080 prec. raster
+
+## Climatic water deficit
+
+s_cwd_fut
+
+# configuring
+step1 <- resample(bio1.2080,s_cwd_fut,"bilinear")
+ex_2 <- extent(s_cwd_fut)
+step2 <- crop(step1,ex_2)
+step3 <- mask(step1,step2)
+
+##
+stepa <- resample(bio4.2080,s_cwd_fut,"bilinear")
+ex_2 <- extent(s_cwd_fut)
+stepb <- crop(stepa,ex_2)
+stepc <- mask(stepa,stepb)
+
+##
+
+stepd <- resample(bio12.2080,s_cwd_fut,"bilinear")
+ex_2 <- extent(s_cwd_fut)
+stepe <- crop(stepd,ex_2)
+stepf <- mask(stepd,stepe)
+anomalies_sf <- stack (step3,stepc,stepf,s_cwd_fut)
+
+names(anomalies_sf) <- c("tempf","tseasf","precf","cwdf")
+
+## Draw points in the SDA and extract future environmental variables
+# In SDA
+
+wC.anomalies <- which(values(ca)>500) 
+nC.anomalies <- length(wC.anomalies)
+Samp.anomalies <- if (nC.anomalies>1000) {sample(wC.anomalies,1000,replace=FALSE)} else {wC.anomalies}
+mapmat.df.anomalies <- as.data.frame(anomalies_sf)[Samp.anomalies,] 
+
+## table to compare current and future bioclimatic changes for each species 
+# Used this table to create density niche curves to compare future baobabs niche
+## over current distribution (ca)
+
+names(mapmat.df.anomalies) <- c("tmeanf","tseasf","precf","cwdf")
+mapmat.final <- cbind(mapmat.df.anomalies,mapmat.df)
+head(mapmat.final)
+mapmat.f <- mapmat.final[,c(1,5,2,6,3,7,4,8,9,10)]
+head(mapmat.f)
+setwd("~/MEGA/Artigos/baobas_article/BIOMOD")
+write.csv2(mapmat.f,paste0(spdir,"/niche_graph_species_compared_anomaly.csv"))
+
+#### Future niche over current SDA!!! NO ANOMALY
+
+wC.future <- which(values(ca)>500)
+mapmat.df.future <- as.data.frame(anomalies_sf)[wC.future,]
+names(mapmat.df.future) <- c("tmeanf","tseasf","precf","cwdf")
+Mean_ok_future <- round(apply(mapmat.df.future,2,mean,na.rm=TRUE))
+q_ok_future <- round(apply(mapmat.df.future,2,quantile,c(0.025,0.975),na.rm=TRUE))
+niche_ok_future <- as.data.frame(rbind(Mean_ok_future,q_ok_future))
+setwd("~/MEGA/Artigos/baobas_article/BIOMOD")
+write.table(niche_ok_future,paste0(spdir,"/mean_niche_with_future.txt"),sep="\t")
+write.csv2(niche_ok_future,paste0(spdir,"/mean_niche_with_future.csv"))
 
 # Maps for article
 
