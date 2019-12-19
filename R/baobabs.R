@@ -16,7 +16,7 @@
 Sys.unsetenv("DISPLAY")
 
 ## Libraries
-pkg <- c("curl", "rgdal", "sp", "raster", "biomod2", "foreach", "doParallel","colorRampPalette")
+pkg <- c("curl", "rgdal", "sp", "raster", "biomod2", "foreach", "doParallel")
 load.pkg <- function(x) {
   if(!require(x, character.only = T)) {
     install.packages(x)
@@ -27,7 +27,7 @@ loaded <- lapply(pkg,load.pkg)
 rm(pkg,load.pkg,loaded)
 
 ## Package names for parallel computations
-pkg.names.clust <- c("rgdal","raster","biomod2")
+pkg.names.clust <- c("rgdal","sp","raster","biomod2")
 
 ## Conditions to run some code part
 run.models <- TRUE
@@ -129,7 +129,7 @@ sp.dir <- gsub(" ",".",sp.names)
 n.species <- length(sp.names)
 
 ##==================================
-## Loop on species
+## Computation per species
 ##==================================
 
 run.species <- function (i) {
@@ -204,23 +204,23 @@ run.species <- function (i) {
                                                               # To avoid overparametrization (Merow  et al.  2013)
                                                               product=FALSE, threshold=FALSE, hinge=FALSE))
   
-  ## BIOMOD_Modeling
-  if (run.models) {
-    set.seed(1234) ## Reproducible results
-    BiomodModel <- BIOMOD_Modeling(BiomodData,
-                                   models=c("GLM","GAM","RF","MAXENT.Phillips"),
-                                   models.options=BiomodOption,
-                                   NbRunEval=5,
-                                   DataSplit=70,
-                                   VarImport=3,
-                                   models.eval.meth=c("KAPPA","TSS","ROC"),
-                                   rescal.all.models=F,
-                                   do.full.models=T, # useful for rare species, or few PrPts, but it doesnt separate data for 
-                                   # models evaluation, which lead to over-optimistic eval. scores
-                                   modeling.id="4mod") ## 4 statistical models
-  } else {
-    BiomodModel <- get(load(paste0(spdir,"/",spdir,".4mod.models.out")))
-  }
+    ## BIOMOD_Modeling
+    if (run.models) {
+      set.seed(1234) ## Reproducible results
+      BiomodModel <- BIOMOD_Modeling(BiomodData,
+                                     models=c("GLM","GAM","RF","MAXENT.Phillips"),
+                                     models.options=BiomodOption,
+                                     NbRunEval=5,
+                                     DataSplit=70,
+                                     VarImport=3,
+                                     models.eval.meth=c("KAPPA","TSS","ROC"),
+                                     rescal.all.models=F,
+                                     do.full.models=T, # useful for rare species, or few PrPts, but it doesnt separate data for 
+                                     # models evaluation, which lead to over-optimistic eval. scores
+                                     modeling.id="4mod") ## 4 statistical models
+    } else {
+      BiomodModel <- get(load(paste0(spdir,"/",spdir,".4mod.models.out")))
+    }
 
   ## Building ensemble-models
   if (run.models) {
@@ -349,7 +349,7 @@ run.species <- function (i) {
   ## Committee averaging
   # Legend specifications
   breakpoints <- c(-125,125,375,625,875,1125)
-  colors <- c(grey(seq(0.9,0.5,-0.2)),"#568203","#013220")
+  colors <- c(grey(seq(0.9,0.7,-0.2)),gcolors(3))
   a.arg <- list(at=seq(0,1000,length.out=5), labels=c("0","1","2","3","4"),cex.axis=1.5)
   l.arg <- list(text="Vote",side=2, line=0.5, cex=1.5)
   # Load predictions and update extent
@@ -371,13 +371,14 @@ run.species <- function (i) {
               options=c("COMPRESS=LZW","PREDICTOR=2"))
   
   ## Present species distribution area (km2)
-  SDA.pres <- sum(values(ca)>500,na.rm=TRUE) # Just the sum because one pixel is 1km2.
+  ## values(ca)>=500 gives vote >=2
+  SDA.pres <- sum(values(ca)>=500,na.rm=TRUE) # Just the sum because one pixel is 1km2.
   
   ##=================
   ## Ecological niche
   
   ## 95% quantiles for alt, temp, prec, tseas, cwd
-  wC <- which(values(ca)>500)
+  wC <- which(values(ca)>=500)
   niche.df <- as.data.frame(s)[wC,]
   niche.df$alt <- environ$alt[wC]
   Mean <- round(apply(niche.df,2,mean,na.rm=TRUE))
@@ -406,24 +407,24 @@ run.species <- function (i) {
   ObsData[is.na(ObsData)] <- 0
   caData <- values(ca)[cellFromXY(ca,xy=BiomodData@coord)]
   PredData <- rep(0,length(caData))
-  PredData[caData>500] <- 1
+  PredData[caData>=500] <- 1
   
-  # Committee averaging performance
-  Index <- c("ROC","ACCURACY","TSS","KAPPA")
-  Perf.ca <- data.frame(ROC=NA,OA=NA,TSS=NA,K=NA,Sen=NA,Spe=NA)
-  for (ind in 1:length(Index)) {
-    # !! Fixed.thresh must be between 500 and 749 (three models at least). If we put 500 its OK.
-    # 250-499 will select vote >= 2, 500-749 will select vote >= 3, and >= 750 will select vote >= 4.
-    v <- biomod2::Find.Optim.Stat(Stat=Index[ind],Fit=caData,Obs=ObsData,Fixed.thresh=500)
-    Perf.ca[,ind] <- v[1]
-  }
-  Perf.ca$Sen <- v[3]
-  Perf.ca$Spe <- v[4]
+  # # Committee averaging performance
+  # Index <- c("ROC","ACCURACY","TSS","KAPPA")
+  # Perf.ca <- data.frame(ROC=NA,OA=NA,TSS=NA,K=NA,Sen=NA,Spe=NA)
+  # for (ind in 1:length(Index)) {
+  #   # !! Fixed.thresh must be between 500 and 749 (three models at least). If we put 500 its OK.
+  #   # 250-499 will select vote >= 2, 500-749 will select vote >= 3, and >= 750 will select vote >= 4.
+  #   v <- biomod2::Find.Optim.Stat(Stat=Index[ind],Fit=caData,Obs=ObsData,Fixed.thresh=250)
+  #   Perf.ca[,ind] <- v[1]
+  # }
+  # Perf.ca$Sen <- v[3]
+  # Perf.ca$Spe <- v[4]
+  # write.table(Perf.ca,paste0(spdir,"/performance_ca.txt"),sep="\t")
+  
+  # Compare with our own function for accuracy indices  
+  Perf.ca <- accuracy_indices(pred=PredData,obs=ObsData,digits=3)
   write.table(Perf.ca,paste0(spdir,"/performance_ca.txt"),sep="\t")
-  
-  # Compare with our own function for accuracy indices
-  Perf.ca.2 <- accuracy_indices(pred=PredData,obs=ObsData,digits=3)
-  write.table(Perf.ca.2,paste0(spdir,"/performance_ca2.txt"),sep="\t")
   
   ## Table of results
   
@@ -437,6 +438,7 @@ run.species <- function (i) {
   ##====================
   ## Future distribution
   
+  # ## Considering RCP 45,85 and year 2050,2080
   # ## Table for changes in area
   # SDA.fut <- data.frame(area.pres=SDA.pres,
   #                       rcp=rep(c("45","85"),each=4),yr=rep(rep(c("2050","2080"),each=2),2),
@@ -482,7 +484,7 @@ run.species <- function (i) {
       values(caFut)[cellsCom] <- NA
       # Legend
       breakpoints <- seq(-125,3125,by=250)
-      colors <- c(grey(c(0.90,seq(0.7,0.45,-0.05))),gcolors(6))
+      colors <- c(grey(c(0.90,seq(0.7,0.50,-0.05))),gcolors(7))
       a.arg <- list(at=seq(0,3000,length.out=13), labels=c(0:12), cex.axis=1.2)
       l.arg <- list(text="Vote",side=2, line=0.5, cex=1.2)
       
@@ -497,7 +499,7 @@ run.species <- function (i) {
       
       # Zero-dispersal
       caZD <- caFut
-      values(caZD)[values(ca)<=500] <- 0 
+      values(caZD)[values(ca)<500] <- 0 
       pdf(paste0(spdir,"/figures/cazd_",rcp[j],"_",yr[l],".pdf"),width=6.5,height=10)
       par(mar=c(0,0,0,r.mar),cex=1.4)
       plot(caZD,col=colors,breaks=breakpoints,ext=e.map,
@@ -507,21 +509,21 @@ run.species <- function (i) {
       dev.off()
       
       # SDA (in km2)
-      SDA.fut$area.fut[SDA.fut$rcp==rcp[j] & SDA.fut$yr==yr[l] & SDA.fut$disp=="full"] <- sum(values(caFut)>1500,na.rm=TRUE)
-      SDA.fut$area.fut[SDA.fut$rcp==rcp[j] & SDA.fut$yr==yr[l] & SDA.fut$disp=="zero"] <- sum(values(caZD)>1500,na.rm=TRUE)
+      SDA.fut$area.fut[SDA.fut$rcp==rcp[j] & SDA.fut$yr==yr[l] & SDA.fut$disp=="full"] <- sum(values(caFut)>=1500,na.rm=TRUE)
+      SDA.fut$area.fut[SDA.fut$rcp==rcp[j] & SDA.fut$yr==yr[l] & SDA.fut$disp=="zero"] <- sum(values(caZD)>=1500,na.rm=TRUE)
       
       # Altitude
       # fd
       if (SDA.fut$area.fut[SDA.fut$rcp==rcp[j] & SDA.fut$yr==yr[l] & SDA.fut$disp=="full"] !=0) {
-        Alt.fut$mean.fut[SDA.fut$rcp==rcp[j] & SDA.fut$yr==yr[l] & SDA.fut$disp=="full"] <- mean(values(environ$alt)[values(caFut)>1500],na.rm=TRUE)
-        Alt.fut$q1.fut[SDA.fut$rcp==rcp[j] & SDA.fut$yr==yr[l] & SDA.fut$disp=="full"] <- quantile(values(environ$alt)[values(caFut)>1500],0.025,na.rm=TRUE)
-        Alt.fut$q2.fut[SDA.fut$rcp==rcp[j] & SDA.fut$yr==yr[l] & SDA.fut$disp=="full"] <- quantile(values(environ$alt)[values(caFut)>1500],0.975,na.rm=TRUE)
+        Alt.fut$mean.fut[SDA.fut$rcp==rcp[j] & SDA.fut$yr==yr[l] & SDA.fut$disp=="full"] <- mean(values(environ$alt)[values(caFut)>=1500],na.rm=TRUE)
+        Alt.fut$q1.fut[SDA.fut$rcp==rcp[j] & SDA.fut$yr==yr[l] & SDA.fut$disp=="full"] <- quantile(values(environ$alt)[values(caFut)>=1500],0.025,na.rm=TRUE)
+        Alt.fut$q2.fut[SDA.fut$rcp==rcp[j] & SDA.fut$yr==yr[l] & SDA.fut$disp=="full"] <- quantile(values(environ$alt)[values(caFut)>=1500],0.975,na.rm=TRUE)
       }
       # zd
       if (SDA.fut$area.fut[SDA.fut$rcp==rcp[j] & SDA.fut$yr==yr[l] & SDA.fut$disp=="zero"] !=0) {
-        Alt.fut$mean.fut[SDA.fut$rcp==rcp[j] & SDA.fut$yr==yr[l] & SDA.fut$disp=="zero"] <- mean(values(environ$alt)[values(caZD)>1500],na.rm=TRUE)
-        Alt.fut$q1.fut[SDA.fut$rcp==rcp[j] & SDA.fut$yr==yr[l] & SDA.fut$disp=="zero"] <- quantile(values(environ$alt)[values(caZD)>1500],0.025,na.rm=TRUE)
-        Alt.fut$q2.fut[SDA.fut$rcp==rcp[j] & SDA.fut$yr==yr[l] & SDA.fut$disp=="zero"] <- quantile(values(environ$alt)[values(caZD)>1500],0.975,na.rm=TRUE)
+        Alt.fut$mean.fut[SDA.fut$rcp==rcp[j] & SDA.fut$yr==yr[l] & SDA.fut$disp=="zero"] <- mean(values(environ$alt)[values(caZD)>=1500],na.rm=TRUE)
+        Alt.fut$q1.fut[SDA.fut$rcp==rcp[j] & SDA.fut$yr==yr[l] & SDA.fut$disp=="zero"] <- quantile(values(environ$alt)[values(caZD)>=1500],0.025,na.rm=TRUE)
+        Alt.fut$q2.fut[SDA.fut$rcp==rcp[j] & SDA.fut$yr==yr[l] & SDA.fut$disp=="zero"] <- quantile(values(environ$alt)[values(caZD)>=1500],0.975,na.rm=TRUE)
       }
       
       # Seasonality
@@ -564,7 +566,7 @@ run.species <- function (i) {
 ## Setup the cluster for parallel computations
 
 ## Make a cluster with all possible cores
-n.core <- max(1,detectCores()-2)
+n.core <- max(1,detectCores()-6)
 clust <- makeCluster(n.core)
 ## Register the number of parallel workers (here all CPUs)
 registerDoParallel(clust)
@@ -579,14 +581,13 @@ stopCluster(clust)
 t.stop <- Sys.time() ## Stop the clock
 t.diff <- difftime(t.stop,t.start,units="min")
 cat(paste0("Computation time (min): ",round(t.diff,2)),file="outputs/computation_time.txt")
-  
 
 ##=======================================
 ## OK until here: corrections GV 18/12/19
 ## Mario, please arrange code below
 ##=======================================
 
-
+  
 ##==================================
 ## Calculate anomalies
 ##==================================
