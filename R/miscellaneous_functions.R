@@ -4,6 +4,7 @@
 # license         :GPLv3
 # ==============================================================================
 
+# Libraries
 require(raster)
 
 # Automatic zoom
@@ -72,3 +73,10 @@ accuracy_indices <- function(pred, obs, digits=2) {
   
   return(r)
 }
+
+# Round data frame with non-numeric elements
+round_data_frame <- function(x, digits=0) {
+  data.frame(lapply(x, function(y) if(is.numeric(y)) round(y, digits) else y))
+}
+
+# End of script
