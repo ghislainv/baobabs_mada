@@ -180,7 +180,7 @@ n.mod <- length(mod)*length(rcp)*length(yr)
     }
   }
 
-setwd("C:/Program Files/Git/baobabs_mada_2/baobabs_mada")
+setwd("./baobabs_mada")
 plot(s)
 plot(sf)
 
@@ -247,7 +247,7 @@ names(anomalies_sf) <- c("tmeanf","tseasf","precf","cwdf")
 ## Draw points in the SDA and extract future environmental variables
 # In SDA
 getwd()
-setwd("C:/Program Files/Git/baobabs_mada_2/baobabs_mada")
+setwd("./baobabs_mada")
 sp.names <- c("Adansonia.digitata","Adansonia.grandidieri","Adansonia.madagascariensis","Adansonia.perrieri", 
               "Adansonia.rubrostipa","Adansonia.suarezensis","Adansonia.za")
 
@@ -1008,11 +1008,10 @@ plot.seas2 =  plot.seas2 + theme(panel.grid.major = element_blank(), panel.grid.
 ggsave(file=paste0("./outputs/a.digi_current_future_niche_comparison_in_sdapv2.pdf"),
        plot=plot.seas2,width=20,height=5)
 
-#### 1nd miv A dig cwd
+#### 1st miv A dig cwd
 
 range(a.digitata$cwd) # 662 - 920
 range(a.digitata$cwdf) # 1123 - 1940,6
-
 
 mean(a.digitata$cwd) # 822,4
 mean(a.digitata$cwdf) # 1731,32
