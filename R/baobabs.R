@@ -133,116 +133,124 @@ t.stop <- Sys.time() ## Stop the clock
 t.diff <- difftime(t.stop,t.start,units="min")
 cat(paste0("Computation time (min): ",round(t.diff,2)),file="outputs/computation_time.txt")
 
-##=========================================
-## OK until here: corrections GV 19/12/2019
-## Mario, please arrange code below
-##=========================================
-  
 ##==================================
-## Calculate anomalies
+## Compute anomalies
 ##==================================
 
-## Repeat strategy to get future climate 
+library(raster)
+library(viridis)
+library(ggplot2)
 
-mod <- c("no","he","gs") # For global climate models (GCMs): NorESM1-M, HadGEM2-ES, GISS-E2-R,  
-rcp <- c("85") # If only for RCP 85
-yr <- c("2080") # If only for 2080
-n.mod <- length(mod)*length(rcp)*length(yr)
+# Present climate
+current <- stack("data/gisdata/sdm_variables/current.tif")
+names(current) <- c(paste("tmin",1:12,sep=""),paste("tmax",1:12,sep=""),
+                    paste("prec",1:12,sep=""),paste("bio",1:19,sep=""),
+                    paste("pet",1:12,sep=""),"pet","cwd","ndm")
 
-  for (mc in 1:length(mod)) {
-    for (j in 1:length(rcp)) {
-      for (l in 1:length(yr)) {
-        
-        ## Message
-        i.mod <- (mc-1)*length(rcp)*length(yr) + (j-1)*length(yr) + l
-        cat(paste0("\n","Model ",i.mod,"/",n.mod,": ",mod[mc],"_",rcp[j],"_",yr[l],"\n"))
-        
-        ## Load climatic data
-        future <- stack(paste0(dir_var_sdm,mod[mc],"_",rcp[j],"_",yr[l],".tif"))
-        names(future) <- c(paste("tmin",1:12,sep=""),paste("tmax",1:12,sep=""),
-                           paste("prec",1:12,sep=""),paste("bio",1:19,sep=""),
-                           paste("pet",1:12,sep=""),"pet","cwd","ndm")
-        ## Stack of explicative variables
-        getwd()
-        setwd("./data/future_climate/")
-        writeRaster(future$bio1,paste0("bio01_",mod[mc],"_",rcp[j],"_",yr[l]),format='GTiff',
-                    overwrite=TRUE)
-        writeRaster(future$bio4,paste0("bio04_",mod[mc],"_",rcp[j],"_",yr[l]),format='GTiff',
-                    overwrite=TRUE)
-        writeRaster(future$bio12,paste0("bio12_",mod[mc],"_",rcp[j],"_",yr[l]),format='GTiff',
-                    overwrite=TRUE)
-        writeRaster(future$cwd,paste0("cwd_",mod[mc],"_",rcp[j],"_",yr[l]),format='GTiff',
-                    overwrite=TRUE)
-        setwd("C:/Program Files/Git/baobabs_mada_2/baobabs_mada/")
-        sf <- stack(future[[wc]]) ## 
-        names(sf) <- c("tmean","tseas","prec","cwd")
-      }
-    }
-  }
+# Future climate
+he_85_2080 <- stack("data/gisdata/sdm_variables/he_85_2080.tif")
+gs_85_2080 <- stack("data/gisdata/sdm_variables/gs_85_2080.tif")
+no_85_2080 <- stack("data/gisdata/sdm_variables/no_85_2080.tif")
+names(no_85_2080) <- names(gs_85_2080) <- names(he_85_2080) <- names(current)
 
-setwd("./baobabs_mada")
-plot(s)
-plot(sf)
+# Compute future bioclimatic variable mean and anomalies
+# Note: E(X+Y) = E(X) + E(Y) so, mean of differences = difference of the means
+var <- c("bio1", "bio4", "bio12", "cwd")
+var_85_2080 <- stack()
+ano_85_2080 <- stack()
+for (i in 1:length(var)) {
+  v <- var[i]
+  cat(paste0("Variable: ", v, "\n"))
+  v_85_2080 <- stack(he_85_2080[[v]],
+                     gs_85_2080[[v]],
+                     no_85_2080[[v]])
+  var_85_2080 <- addLayer(var_85_2080, mean(v_85_2080))
+  ano_85_2080 <- addLayer(ano_85_2080, mean(v_85_2080)-current[[v]])
+}
+var_name <- c("tmean", "tseas", "prec", "cwd")
+names(var_85_2080) <- var_name
+names(ano_85_2080) <- var_name
 
-## Temperature seasonality
+# Plot anomalies
+pdf(file="outputs/Fig1_climatic_anomalies.pdf")
 
-## Stack of explicative variables
-bio4.region <- which(names(current) %in% c("bio4"))
-bio4.region <- stack(current[[bio4.region]])
+# Setting basic theme options for plot with ggplot2
+theme_base <- theme(axis.line=element_blank(),
+										axis.text.x=element_blank(),
+										axis.text.y=element_blank(),
+										axis.ticks=element_blank(),
+										axis.title.x=element_blank(),
+										axis.title.y=element_blank(),
+										legend.position="bottom",
+										legend.title=element_blank(),
+										legend.text=element_text(size=12),
+										legend.key.height=unit(0.5,"cm"),
+										legend.key.width=unit(2,"cm"),
+										legend.spacing=grid::unit(c(0,0,0,0),"lines"),
+										plot.title=element_text(hjust=0.5),
+										plot.margin=grid::unit(c(0,0,0,0),"lines"),
+										panel.spacing=grid::unit(c(0,0,0,0),"null"),
+										plot.background=element_rect(fill="transparent"),
+										panel.background=element_rect(fill="transparent"),
+										panel.grid.major=element_blank(),
+										panel.grid.minor=element_blank(),
+										panel.border=element_blank())
 
-getwd()
+# Function to plot anomalies
+plot_anomaly <- function(r, title, viridis=list(option="A", direction=1)) {
+  rdf <- data.frame(rasterToPoints(r)) # To plot raster with geom_raster()
+  names(rdf) <- c("x", "y", "z")
+  p <- ggplot(NULL, aes(x, y)) +
+    geom_raster(data=rdf, aes(fill=z)) +
+    scale_fill_viridis_c(option=viridis$option, direction=viridis$direction) +
+    theme_bw() + theme_base + coord_fixed() +
+    labs(title=title)
+  return(p)
+}
 
-setwd("./data/future_climate/") #set your own directory to import rasters data
-
-### Future tseas
-bio4.gs.2080 <- raster("bio04_gs_85_2080.tif")
-bio4.he.2080 <- raster("bio04_he_85_2080.tif")
-bio4.no.2080 <- raster("bio04_no_85_2080.tif")
-Stack.bio4.2080 <- stack(c(bio4.gs.2080,bio4.he.2080,bio4.no.2080))
-bio4.2080 <- mean(Stack.bio4.2080)
-plot(bio4.2080) # check if its ok ;)
-
-
-##= Annual mean temp
-
-bio1.region <- which(names(current) %in% c("bio1"))
-bio1.region <- stack(current[[bio1.region]])
-
-## Future tmean
-bio1.gs.2080 <- raster("bio01_gs_85_2080.tif")
-bio1.he.2080 <- raster("bio01_he_85_2080.tif")
-bio1.no.2080 <- raster("bio01_no_85_2080.tif")
-Stack.bio1.2080 <- stack(c(bio1.gs.2080,bio1.he.2080,bio1.no.2080))
-bio1.2080 <- mean(Stack.bio1.2080)
+p1 <- plot_anomaly(r=var_85_2080[["tmean"]],
+                  viridis=list(option="B", direction=1),
+                  title="Annual mean temp.\n(°C x 10)") +
+      annotate("text",x=-Inf,y=Inf,label="a",hjust=0,vjust=1,size=10,fontface="bold")
+p2 <- plot_anomaly(r=var_85_2080[["tmean"]],
+                  viridis=list(option="B", direction=1),
+                  title="Annual mean temp.\n(°C x 10)")
+grid.arrange
 
 
-## Annual mean precipitation
-bio12.region <- which(names(current) %in% c("bio12"))
-bio12.region <- stack(current[[bio12.region]])
+# tmean
+plot(var_85_2080[["tmean"]], col=viridis_pal(option="B")(255),
+     axes=FALSE, box=FALSE, legend=TRUE, horizontal=TRUE, 
+     main="Annual mean temp.\n(°C x 10)")
+plot(ano_85_2080[["tmean"]], col=viridis_pal(option="B")(255),
+     axes=FALSE, box=FALSE, legend=TRUE,
+     main="Future anomaly\n", horizontal=TRUE)
+# tseas
+plot(var_85_2080[["tseas"]], col=viridis_pal(option="D")(255),
+     axes=FALSE, box=FALSE, legend=TRUE, horizontal=TRUE, 
+     main="Temp. seas.\n(°C sd x 100)")
+plot(ano_85_2080[["tseas"]], col=viridis_pal(option="D")(255),
+     axes=FALSE, box=FALSE, legend=TRUE,
+     main="Future anomaly\n", horizontal=TRUE)
+# precip
+plot(var_85_2080[["prec"]], col=viridis_pal(option="E", direction=-1)(255),
+     axes=FALSE, box=FALSE, legend=TRUE, horizontal=TRUE, 
+     main="Annual precipitation\n(mm/y)")
+plot(ano_85_2080[["prec"]], col=viridis_pal(option="E", direction=-1)(255),
+     axes=FALSE, box=FALSE, legend=TRUE,
+     main="Future anomaly\n", horizontal=TRUE)
+# cwd
+plot(var_85_2080[["cwd"]], col=viridis_pal(option="C")(255),
+     axes=FALSE, box=FALSE, legend=TRUE, horizontal=TRUE, 
+     main="Climatic water deficit\n(mm/y)")
+plot(ano_85_2080[["cwd"]], col=viridis_pal(option="C")(255),
+     axes=FALSE, box=FALSE, legend=TRUE,
+     main="Future anomaly\n", horizontal=TRUE)
+dev.off()
 
-## Future prec 2080
-bio12.gs.2080 <- raster("bio12_gs_85_2080.tif")
-bio12.he.2080 <- raster("bio12_he_85_2080.tif")
-bio12.no.2080 <- raster("bio12_no_85_2080.tif")
-Stack.bio12.2080 <- stack(c(bio12.gs.2080,bio12.he.2080,
-                            bio12.no.2080))
-bio12.2080 <- mean(Stack.bio12.2080) ### 2080 prec. raster
-
-## Climatic water deficit
-cwd.region <- which(names(current) %in% c("cwd"))
-cwd.region <- stack(current[[cwd.region]])
-
-# Future cwd
-cwd.gs.2080 <- raster("cwd_gs_85_2080.tif")
-cwd.he.2080 <- raster("cwd_he_85_2080.tif")
-cwd.no.2080 <- raster("cwd_no_85_2080.tif")
-Stack.cwd.2080 <- stack(c(cwd.gs.2080,cwd.he.2080,
-                            cwd.no.2080))
-cwd.2080 <- mean(Stack.cwd.2080) ### 2080 prec. raster
-
-anomalies_sf <- stack (bio1.2080,bio4.2080,bio12.2080,cwd.2080)
-names(anomalies_sf) <- c("tmeanf","tseasf","precf","cwdf")
-
+##==================================
+## Climate change in SDA
+##==================================
 
 ## Draw points in the SDA and extract future environmental variables
 # In SDA
@@ -287,102 +295,6 @@ for (l in 1: length(sp.names)) {
   
 }
 
-# Maps for article
-
-### 1 - Figure with current, delta and 2080 climatic for 4 environmental variables
-library(viridis)
-
-##= Temperature seasonality - 
-
-bio4.anomalies.pres <- bio4.region
-bio4.anomalies.pres[] <- bio4.2080[]-bio4.region[]
-
-range(bio4.anomalies.pres[],na.rm=TRUE)
-
-
-pdf("./outputs/seas_anom_chart_map.pdf",width=10,height=7)
-par(mfrow=c(1,2))
-par(cex=1.2,mar=c(0,0,4,0))## 2010
-plot(bio4.region,col=viridis_pal(option ="D")(255),
-     axes=FALSE,box=FALSE,legend=T, horizontal=T, 
-     #breaks=breakpoints2,axis.args=a.arg2, zlim=c(800,3400),
-     main="Temp.seas(°C sd x 100)")
-## Anomaly future
-par(cex=1.2,mar=c(0,0,4,0))
-plot(bio4.anomalies.pres,col=viridis_pal(option ="D")(255),
-     scale_fill_viridis_d(direction = -1),
-     axes=FALSE,box=FALSE,legend=T,
-     main="Future anomaly",horizontal=TRUE)
-dev.off()
-
-######################################
-
-###########################################
-### 2 - Annual mean temp - 
-
-## Plot present
-
-bio1.anomalies.pres <- bio1.region
-bio1.anomalies.pres[] <- bio1.2080[]-bio1.region[]
-range(bio1.anomalies.pres[],na.rm=TRUE)
-
-pdf("./outputs/tmean_anom_chart_map_ok.pdf",width=10,height=7)
-par(mfrow=c(1,2))
-par(cex=1.2,mar=c(0,0,4,0))
-plot(bio1.region,col=viridis_pal(option ="B")(255),
-     axes=FALSE,box=FALSE,legend=T, horizontal=T,
-     main="Annual Mean Temp(°Cx10)")
-## Anomaly future
-par(cex=1.2,mar=c(0,0,4,0))
-plot(bio1.anomalies.pres,col=viridis_pal(option ="B")(255),
-     axes=FALSE,box=FALSE,legend=T,
-     main="Future anomaly",horizontal=TRUE)
-dev.off()
-
-### 3 - Annual Mean Precipitation
-
-bio12.anomalies.pres <- bio12.region
-bio12.anomalies.pres[] <- bio12.2080[]-bio12.region[]
-range(bio12.anomalies.pres[],na.rm=TRUE) # different result from previous script ;/
-
-##= Plots of prec charts
-pdf("./outputs/prec_anom_chart_map3.pdf",width=10,height=7)
-par(mfrow=c(1,2))
-## 2010
-par(cex=1.2,mar=c(0,0,4,0))
-plot(bio12.region,col=viridis_pal(option ="E",direction = -1)(255),
-     axes=FALSE,box=FALSE,legend=T, horizontal=T,
-     main="Annual Precipitation (mm.y-1)")
-# Future 2080
-par(cex=1.2,mar=c(0,0,4,0))
-plot(bio12.anomalies.pres,col=viridis_pal(option ="E", direction = -1)(255),
-     axes=FALSE,box=FALSE,legend=T,
-     main="Future anomaly",horizontal=TRUE)
-dev.off()
-
-## 4 - Climatic Water Deficit
-
-##= Plots of cwd charts
-
-cwd.anomalies.pres <- cwd.region
-cwd.anomalies.pres[] <- cwd.2080[]-cwd.region[]
-range(cwd.anomalies.pres[],na.rm=TRUE)
-
-range(cwd.anomalies.pres[],na.rm=TRUE)
-
-pdf("./outputs/cwd_cwd_chart_map.pdf",width=10,height=7)
-## 2010
-par(mfrow=c(1,2))
-par(cex=1.2,mar=c(0,0,4,0))
-plot(cwd.region,col=viridis_pal(option ="C")(255),
-     axes=FALSE,box=FALSE,legend=T, horizontal=T,
-     main="Climatic Water Deficit (mm)")
-## Anomaly future
-par(cex=1.2,mar=c(0,0,4,0))
-plot(cwd.anomalies.pres,col=viridis_pal(option ="C")(255),
-     axes=FALSE,box=FALSE,legend=T,
-     main="Future anomaly",horizontal=TRUE)
-dev.off()
 
 ###################################################################################
 ######## Generating variables histograms graphs##################
@@ -1056,10 +968,9 @@ r <- raster::getData("worldclim",var="bio",res=10)
 r <- r[[c(4)]]
 names(r) <- c("Seas")
 
-getwd()
-bio4.gs.2080_world <- raster("./data/future_climate/gs85bi704.tif")
-bio4.he.2080_world <- raster("./data/future_climate/he85bi704.tif")
-bio4.no.2080_world <- raster("./data/future_climate/no85bi704.tif")
+bio4.gs.2080_world <- raster("data/global_future_climate/gs85bi704.tif")
+bio4.he.2080_world <- raster("data/global_future_climate/he85bi704.tif")
+bio4.no.2080_world <- raster("data/global_future_climate/no85bi704.tif")
 Stack.bio4.2080_world <- stack(c(bio4.gs.2080_world,bio4.he.2080_world,
                                  bio4.no.2080_world))
 bio4.2080_world <- mean(Stack.bio4.2080_world) ### 2080 temp seas. raster
@@ -1131,6 +1042,7 @@ abline(h=-23.5, lty=2, col="black")
 abline(h=23.5, lty=2, col="black")
 
 dev.off()
+
 ##===========================================================================
-## End of script :)
+## End of script    
 ##===========================================================================
