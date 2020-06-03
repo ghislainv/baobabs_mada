@@ -350,13 +350,11 @@ ggsave(filename="outputs/Fig1_climatic_anomalies.png", plot=plot_anomalies,
 
 ## Draw points in the SDA and extract future environmental variables
 # In SDA
-setwd("./baobabs_mada")
-sp.names <- c("Adansonia.digitata","Adansonia.grandidieri","Adansonia.madagascariensis","Adansonia.perrieri", 
-              "Adansonia.rubrostipa","Adansonia.suarezensis","Adansonia.za")
-for (l in 1: length(sp.names)) {
-  pred <- stack(paste0("./",sp.names[l],"/proj_current/proj_current_",sp.names[l],"_ensemble.grd"))
+
+for (i in 1: length(sp.dir)) {
+  pred <-  stack(paste0(sp.dir[i],"/proj_current/proj_current_",sp.dir[i],"_ensemble.grd"))
   ca <- pred[[1]]  
-  wC.anomalies <- which(values(ca)>500) 
+  wC.anomalies <- which(values(ca)>=500) 
   nC.anomalies <- length(wC.anomalies)
   Samp.anomalies <- if (nC.anomalies>1000) {sample(wC.anomalies,1000,replace=FALSE)} else {wC.anomalies}
   mapmat.df.anomalies <- as.data.frame(var_85_2080)[Samp.anomalies,] 
@@ -365,22 +363,23 @@ for (l in 1: length(sp.names)) {
   # Used this table to create density niche curves to compare future baobabs niche
   ## over current distribution (ca)
   names(mapmat.df.anomalies) <- c("tmeanf","tseasf","precf","cwdf")
-  mapmat.df <- read.csv(file=paste0("./",sp.names[l],"/","niche_graph_species.csv"),sep=";")
+  mapmat.df <- read.csv(file=paste0("./",sp.dir[i],"/","niche_graph_species.csv"),sep=";")
   head(mapmat.df)
   mapmat.final <- cbind(mapmat.df.anomalies,mapmat.df)
   head(mapmat.f)
   mapmat.f <- mapmat.final[,c(1,2,3,4,6,7,8,9,10,11)]
-  write.csv2(mapmat.final,paste0("./",sp.names[l],"/","niche_graph_species_compared_anomaly.csv"))
+  write.csv2(mapmat.final,paste0("./",sp.dir[i],"/","niche_graph_species_compared_anomaly.csv"))
   #### Future niche over current SDA!!! NO ANOMALY
-  wC.future <- which(values(ca)>500)
+  wC.future <- which(values(ca)>=500)
   mapmat.df.future <- as.data.frame(var_85_2080)[wC.future,]
   names(mapmat.df.future) <- c("tmeanf","tseasf","precf","cwdf")
   Mean_ok_future_fut <- round(apply(mapmat.df.anomalies,2,mean,na.rm=TRUE))
   q_ok_future_fut <- round(apply(mapmat.df.anomalies,2,quantile,c(0.025,0.975),na.rm=TRUE))
   niche_ok_future <- as.data.frame(rbind(Mean_ok_future_fut,q_ok_future_fut))
-  write.csv2(niche_ok_future,paste0("./",sp.names[l],"/","mean_niche_with_future.csv"))
+  write.csv2(niche_ok_future,paste0("./",sp.dir[i],"/","mean_niche_with_future.csv"))
   
 }
+
 ###################################################################################
 ######## Generating variables histograms graphs for all seven baobab species ######
 ###################################################################################
