@@ -394,88 +394,105 @@ database6_rubro <- read.csv(file=paste0("Adansonia.rubrostipa/","niche_graph_spe
 database7_za <- read.csv(file=paste0("Adansonia.za/","niche_graph_species.csv"), header=T,sep=";")
 data_teste <- rbind(database2_digi,database3_grand,
               database4_mada,database5_perri,database6_rubro,database1_suare,database7_za)
+quantiles <- data_teste[,c(2,3,4,5,6)]
+quantiles <- round(apply(quantiles,2,quantile,c(0.025,0.975),na.rm=TRUE)) #use it to set new plot
+head(quantiles)
+
 # Density plots ## Temp. Seasonality
 range(data_teste$tseas)
 # generate break positions
-breaks = c(848,1200,1600,2000,2400,2800,3309)
+#breaks = c(848,1200,1600,2000,2400,2800,3309)
+breaks <- c(round(seq(min(data_teste$tseas),max(data_teste$tseas),length=6)))
+
 # and labels
 labels = as.character(breaks) # labels must be the same as breaks, otherwise error
 # plot the map
 my_plot = ggplot(data_teste, aes(x=tseas, color=species)) + 
   geom_density(size=1.3)+
   scale_color_brewer(palette = "Set1") + #specific palette
-  geom_vline(xintercept = c(848, 3309), show.legend = T, colour="red", linetype="dashed") +
-  scale_x_continuous(limits = c(848, 3309), breaks = breaks, labels = labels)
-my_plot =  my_plot + theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
-                           legend.text = element_text(face= "italic", size=15),
-                           panel.background = element_blank(), axis.line = element_line(colour = "black"))+
-  labs(x="Temp. Seasonality (sd x 100ºC)", y = "Density", size=10) +
-  theme(axis.title.x = element_text(size = rel(3))) +
-  theme(axis.title.y = element_text(size = rel(3))) +
-  theme(axis.text.x = element_text(size = rel(3))) +
-  theme(axis.text.y = element_text(size = rel(3)))
-ggsave(file=paste0("./outputs/temp_seas_species.pdf"),plot=my_plot,width=20,height=5)
+  geom_vline(xintercept = range(data_teste$tseas), show.legend = T, colour="red", linetype="dashed") +
+  scale_x_continuous(limits = range(data_teste$tseas), breaks = breaks, labels = labels)
+my_plot_tseas =  my_plot + theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+                                 #legend.text = element_text(face= "italic",size=15),
+                                 legend.title=element_blank(),
+                                 panel.background = element_blank(), axis.line = element_line(colour = "black"))+
+  labs(x="Temp. Seasonality (sd x 100ºC)", y = "Density",size=5) +
+  theme(axis.title.x = element_text(size = rel(2),colour="black")) +
+  theme(axis.title.y = element_text(size = rel(2),colour="black")) +
+  theme(axis.text.x = element_text(size = rel(1.5),colour="black")) +
+  theme(axis.text.y = element_text(size = rel(1.5), colour="black")) +
+  theme(legend.position="none")
 
 # Density plots ### Annual Mean Temperature
 range(data_teste$tmean)
 # generate break positions
-breaks = c(175,200,220,240,260,275)
+breaks <- c(round(seq(min(data_teste$tmean),max(data_teste$tmean),length=6)))
 labels = as.character(breaks)
 my_plot2 = ggplot(data_teste, aes(x=tmean, color=species)) + 
   geom_density(size=1.3)+
   scale_color_brewer(palette = "Set1") + 
-  geom_vline(xintercept = c(175, 275), show.legend = F, colour="red", linetype="dashed") +
-  scale_x_continuous(limits = c(175, 275), breaks = breaks, labels = labels)
-my_plot2 =  my_plot2 + theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
-                             legend.text = element_text(face= "italic",size=15),
-                             panel.background = element_blank(), axis.line = element_line(colour = "black"))+
-  labs(x="Mean Annual Temperature (ºC x 10) ", y = "Density",size=10) +
-  labs(colour= "Species") +
-  theme(axis.title.x = element_text(size = rel(3))) +
-  theme(axis.title.y = element_text(size = rel(3))) +
-  theme(axis.text.x = element_text(size = rel(3))) +
-  theme(axis.text.y = element_text(size = rel(3)))
-ggsave(file=paste0("./outputs/annual_mean_temp_species.pdf"),plot=my_plot2,width=20,height=5)
+  geom_vline(xintercept = range(data_teste$tmean), show.legend = F, colour="red", linetype="dashed") +
+  scale_x_continuous(limits = range(data_teste$tmean), breaks = breaks, labels = labels)
+my_plot_tmean =  my_plot2 + theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+                                  #legend.text = element_text(face= "italic",size=15),
+                                  legend.title=element_blank(),
+                                  panel.background = element_blank(), axis.line = element_line(colour = "black"))+
+  labs(x="Mean Annual Temperature (ºC x 10) ", y = "Density",size=5) +
+  theme(axis.title.x = element_text(size = rel(2),colour="black")) +
+  theme(axis.title.y = element_text(size = rel(2),colour="black")) +
+  theme(axis.text.x = element_text(size = rel(1.5),colour="black")) +
+  theme(axis.text.y = element_text(size = rel(1.5), colour="black")) +
+  theme(legend.position="none")
 
 # Density plots ### Annual Mean Precipitation
 range(data_teste$prec)
 # generate break positions
-breaks = c(343,650,1000,1350,1700,2121)
+breaks <- c(round(seq(min(data_teste$prec),max(data_teste$prec),length=6)))
 labels = as.character(breaks)
 # plot and be happy ;)
 my_plot3 = ggplot(data_teste, aes(x=prec, color=species)) + geom_density(size=1.3)+
   scale_color_brewer(palette = "Set1") + 
-  geom_vline(xintercept = c(338, 2136), show.legend = F, colour="red", linetype="dashed") +
-  scale_x_continuous(limits = c(338, 2136), breaks = breaks, labels = labels)
-my_plot3 =  my_plot3 + theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
-                             legend.text = element_text(face= "italic",size=15),
+  geom_vline(xintercept = range(data_teste$prec), show.legend = F, colour="red", linetype="dashed") +
+  scale_x_continuous(limits = range(data_teste$prec), breaks = breaks, labels = labels)
+my_plot_prec =  my_plot3 + theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+                             #legend.text = element_text(face= "italic",size=15),
+                             legend.title=element_blank(),
                              panel.background = element_blank(), axis.line = element_line(colour = "black"))+
-  labs(x="Mean Annual Precipitation (mm.y-¹)", y = "Density",size=10) +
-  labs(colour= "Species")+
-  theme(axis.title.x = element_text(size = rel(3))) +
-  theme(axis.title.y = element_text(size = rel(3))) +
-  theme(axis.text.x = element_text(size = rel(3))) +
-  theme(axis.text.y = element_text(size = rel(3)))
-ggsave(file=paste0("./outputs/precipitation_species.pdf"),plot=my_plot3,width=20,height=5)
+  labs(x="Mean Annual Precipitation (mm.y-¹)", y = "Density",size=5) +
+  theme(axis.title.x = element_text(size = rel(2),colour="black")) +
+  theme(axis.title.y = element_text(size = rel(2),colour="black")) +
+  theme(axis.text.x = element_text(size = rel(1.5),colour="black")) +
+  theme(axis.text.y = element_text(size = rel(1.5), colour="black")) +
+  theme(legend.position="none")
 
 # Density plots ### Climatic Water Deficit
 range(data_teste$cwd)
 # generate break positions
-breaks = c(174,300,450,600,750,967)
+breaks <- c(round(seq(min(data_teste$cwd),max(data_teste$cwd),length=6)))
 labels = as.character(breaks)
 my_plot4 = ggplot(data_teste, aes(x=cwd, color=species)) + geom_density(size=1.3)+
   scale_color_brewer(palette = "Set1") + 
-  geom_vline(xintercept = c(174, 967), show.legend = F, colour="red", linetype="dashed") +
-  scale_x_continuous(limits = c(174, 967), breaks = breaks, labels = labels)
-my_plot4 =  my_plot4 + theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
-                             legend.text = element_text(face= "italic",size=15),
+  geom_vline(xintercept = range(data_teste$cwd), show.legend = F, colour="red", linetype="dashed") +
+  scale_x_continuous(limits = range(data_teste$cwd), breaks = breaks, labels = labels)
+my_plot_cwd =  my_plot4 + theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+                             #legend.text = element_text(face= "italic",size=15),
+                             legend.title=element_blank(),
                              panel.background = element_blank(), axis.line = element_line(colour = "black"))+
-  labs(x="Climatic Water Deficit (mm)", y = "Density",size=10) +
-  labs(colours= "Species")+
-  theme(axis.title.x = element_text(size = rel(3))) +
-  theme(axis.title.y = element_text(size = rel(3))) +
-  theme(axis.text.x = element_text(size = rel(3))) +
-  theme(axis.text.y = element_text(size = rel(3)))
+  labs(x="Climatic Water Deficit (mm)", y = "Density",size=5) +
+  theme(axis.title.x = element_text(size = rel(2),colour="black")) +
+  theme(axis.title.y = element_text(size = rel(2),colour="black")) +
+  theme(axis.text.x = element_text(size = rel(1.5),colour="black")) +
+  theme(axis.text.y = element_text(size = rel(1.5), colour="black")) +
+  theme(legend.position="none")
+  
+## Combine plots 
+lay_2 <- cbind(c(rep(seq(1,4,by=1),each=3)),
+               c(rep(seq(2,4,by=2),each=3)))
+colnames(lay_2) <-c("a","b")
+lay_2 <- subset( lay_2, select = -b )
+
+plot_densities <- grid.arrange(my_plot_tmean, my_plot_tseas, my_plot_prec, my_plot_cwd,
+                               layout_matrix=lay_2)
 ggsave(file=paste0("./outputs/climaticwd_species.pdf"),plot=my_plot4,width=20,height=5)
 
 ### Comparing bioclimatic niche of each species inside current SDA according to the 
