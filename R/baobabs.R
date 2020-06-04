@@ -503,477 +503,544 @@ range(a.suare$tseas) # 1194 - 1417
 range(a.suare$tseasf) # 1314- 1452
 mean(a.suare$tseas) # 1275,3
 mean(a.suare$tseasf) # 1374
-breaks = c(1150,1200,1250,1300,1350,1400,1450,1500)
+breaks <- c(round(seq(min(a.suare$tseas),max(a.suare$tseasf),length=8)))
 labels = as.character(breaks)
-plot.seas = ggplot(a.suare, aes(x=tseas, y=..density..)) + 
-  geom_density(aes(fill=species,color= 'tseas'), alpha=.5) + 
+
+plot.seas_suar = ggplot(a.suare, aes(x=tseas, y=..density..)) + 
+  geom_density(aes(tseas,fill=species,color= 'tseas'), alpha=.5) + 
   geom_vline(aes(xintercept=mean(tseas)),color="darkorange",linetype="solid",size=1)+
   geom_vline(aes(xintercept=quantile(tseas,0.975)),color="darkorange",linetype="dashed",size=1) +
   geom_vline(aes(xintercept=quantile(tseas,0.025)),color="darkorange",linetype="dashed",size=1) +
+  
   geom_density(aes(tseasf, fill=species,color='tseasf'),alpha=.5) +
   geom_vline(aes(xintercept=mean(tseasf)),color="black",linetype="solid",size=1)+
   geom_vline(aes(xintercept=quantile(tseasf,0.975)),color="black",linetype="dashed",size=1) +
   geom_vline(aes(xintercept=quantile(tseasf,0.025)),color="black",linetype="dashed",size=1) +
-  #geom_vline(xintercept = c(1175, 1450), colour="gray70", linetype="dashed") +
-  scale_x_continuous(limits = c(1150, 1500), breaks = breaks, labels = labels) +
+  
+  scale_x_continuous(limits = c(1180,1500), breaks = breaks, labels = labels) +
   scale_color_manual(values = c('tseas' = 'darkorange', 'tseasf' = 'black'))+
-  scale_fill_viridis(discrete=T,option="E")
-plot.seas =  plot.seas + theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
-                               legend.text = element_text(face= "italic",size=15),
+  scale_fill_viridis(alpha=1,begin= 0.65,end=0.7, discrete=T,option="D")
+
+plot.seas_suar =  plot.seas_suar + theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+                               legend.text = element_blank(),
                                panel.background = element_blank(), axis.line = element_line(colour = "black"))+
-  labs(x="Temp. Seasonality (sd x 100)", y = "Density",size=10) +
+  labs(x="Temp. Seasonality (ºC sd x 100)", y = "A. suarezensis",size=5) +
   labs(col = "") +
-  theme(axis.title.x = element_text(size = rel(3))) +
-  theme(axis.title.y = element_text(size = rel(3))) +
-  theme(axis.text.x = element_text(size = rel(3))) +
-  theme(axis.text.y = element_text(size = rel(3)))
-ggsave(file=paste0("./outputs/adan.suare_current_future_niche_comparison_in_sda_v1.pdf"),
-       plot=plot.seas,width=20,height=5)
+  theme(axis.title.x = element_text(size = rel(2),colour="black")) +
+  theme(axis.title.y = element_text(size = rel(2),colour="black",face="italic")) +
+  theme(axis.text.x = element_text(size = rel(1.75),colour="black")) +
+  theme(axis.text.y = element_text(size = rel(1.75), colour="black")) +
+  theme(legend.position="none")
+
 
 ### second importance variable - Prec
-range(a.suare$prec) # 1113 - 1516
-range(a.suare$precf) # 922.3 1312.3
-breaks = c(850,900,1000,1100,1200,1300,1400,1500,1600)
+range(a.suare$prec) # 1112 - 1523
+range(a.suare$precf) # 922.3 1327
+breaks <- c(round(seq(min(a.suare$precf),max(a.suare$prec),length=8)))
 labels = as.character(breaks)
-plot.precv2= ggplot(a.suare, aes(x=prec, y=..density..)) + 
-  geom_density(aes(fill=species,color= 'prec'), alpha=.5) + 
+
+plot.prec_suar = ggplot(a.suare, aes(x=prec, y=..density..)) + 
+  geom_density(aes(prec,fill=species,color= 'prec'), alpha=.5) + 
   geom_vline(aes(xintercept=mean(prec)),color="darkorange",linetype="solid",size=1)+
   geom_vline(aes(xintercept=quantile(prec,0.975)),color="darkorange",linetype="dashed",size=1) +
   geom_vline(aes(xintercept=quantile(prec,0.025)),color="darkorange",linetype="dashed",size=1) +
+  
   geom_density(aes(precf, fill=species,color='precf'),alpha=.5) +
   geom_vline(aes(xintercept=mean(precf)),color="black",linetype="solid",size=1)+
   geom_vline(aes(xintercept=quantile(precf,0.975)),color="black",linetype="dashed",size=1) +
   geom_vline(aes(xintercept=quantile(precf,0.025)),color="black",linetype="dashed",size=1) +
-  #geom_vline(xintercept = c(830, 1600), colour="gray70", linetype="dashed") +
-  scale_x_continuous(limits = c(850, 1600), breaks = breaks, labels = labels) +
-  scale_color_manual(values = c('prec' = 'darkorange', 'precf' = 'black'))+
-  scale_fill_viridis(discrete=T,option="E")
-plot.precv2 =  plot.precv2 + theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
-                                   legend.text = element_text(face= "italic", size=15),
-                                   panel.background = element_blank(), axis.line = element_line(colour = "black"))+
-  labs(x="Mean annual precipitation (mm.y-¹)", y = "Density",size=10) +
-  labs(col = "") +
-  theme(axis.title.x = element_text(size = rel(3))) +
-  theme(axis.title.y = element_text(size = rel(3))) +
-  theme(axis.text.x = element_text(size = rel(3))) +
-  theme(axis.text.y = element_text(size = rel(3)))
-ggsave(file=paste0("./outputs/adan.suare_current_future_niche_comparison_in_sda_42.pdf"),
-       plot=plot.precv2,width=20,height=5)
 
+  scale_x_continuous(limits = c(800,1600), breaks = breaks, labels = labels) +
+  scale_color_manual(values = c('prec' = 'darkorange', 'precf' = 'black'))+
+  scale_fill_viridis(alpha=1,begin= 0.65,end=0.7, discrete=T,option="D")
+
+plot.prec_suar =  plot.prec_suar + theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+                                   legend.text = element_blank(),
+                                   panel.background = element_blank(), axis.line = element_line(colour = "black"))+
+  
+  labs(x="Mean Annual Precipitation (mm.y-¹)", y = "",size=5) +
+  labs(col = "") +
+  theme(axis.title.x = element_text(size = rel(2),colour="black")) +
+  theme(axis.title.y = element_text(size = rel(2),colour="black",face="italic")) +
+  theme(axis.text.x = element_text(size = rel(1.75),colour="black")) +
+  theme(axis.text.y = element_text(size = rel(1.75), colour="black")) +
+  theme(legend.position="none")
+  
+   
 ################################
 # Import data_set A perrieri
 #1st importance variable - Tseas 
 a.perrieri <- read.csv(file=paste0("Adansonia.perrieri/niche_graph_species_compared_anomaly.csv"), header=T,sep=";",dec=",")
 head(a.perrieri)
-range(a.perrieri$tseas) # 890 - 1966
-range(a.perrieri$tseasf) # 1035 - 2165
-mean(a.perrieri$tseas) # 1391,5
-mean(a.perrieri$tseasf) # 11462,9
-breaks = c(800,1000,1200,1400,1600,1800,2000,2250)
+range(a.perrieri$tseas) # 916 1964
+range(a.perrieri$tseasf) # 1026.667 2179.000
+round(mean(a.perrieri$tseas)) # 1413
+round(mean(a.perrieri$tseasf)) # 1566
+breaks <- c(round(seq(min(a.perrieri$tseas),max(a.perrieri$tseasf),length=8)))
 labels = as.character(breaks)
-plot.seas = ggplot(a.perrieri, aes(x=tseas, y=..density..)) + 
+
+plot.seas_per = ggplot(a.perrieri, aes(x=tseas, y=..density..)) + 
   geom_density(aes(fill=species,color= 'tseas'), alpha=.5) + 
   geom_vline(aes(xintercept=mean(tseas)),color="darkorange",linetype="solid",size=1)+
   geom_vline(aes(xintercept=quantile(tseas,0.975)),color="darkorange",linetype="dashed",size=1) +
   geom_vline(aes(xintercept=quantile(tseas,0.025)),color="darkorange",linetype="dashed",size=1) +
+  
   geom_density(aes(tseasf, fill=species,color='tseasf'),alpha=.5) +
   geom_vline(aes(xintercept=mean(tseasf)),color="black",linetype="solid",size=1)+
   geom_vline(aes(xintercept=quantile(tseasf,0.975)),color="black",linetype="dashed",size=1) +
   geom_vline(aes(xintercept=quantile(tseasf,0.025)),color="black",linetype="dashed",size=1) +
-  #geom_vline(xintercept = c(800, 1950), colour="gray70", linetype="dashed") +
-  scale_x_continuous(limits = c(800, 2250), breaks = breaks, labels = labels) +
-  scale_color_manual(values = c('tseas' = 'darkorange', 'tseasf' = 'black'))+
-  scale_fill_viridis(discrete=T,option="E")
-plot.seas =  plot.seas + theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
-                               legend.text = element_text(face= "italic",size=15),
-                               panel.background = element_blank(), axis.line = element_line(colour = "black"))+
-  labs(x="Temp. Seasonality (sd x 100)", y = "Density",size=10) +
-  labs(col = "") +
-  theme(axis.title.x = element_text(size = rel(3))) +
-  theme(axis.title.y = element_text(size = rel(3))) +
-  theme(axis.text.x = element_text(size = rel(3))) +
-  theme(axis.text.y = element_text(size = rel(3)))
-ggsave(file=paste0("./outputs/a.perrieri_current_future_niche_comparison_in_sdap.pdf"),
-       plot=plot.seas,width=20,height=5)
 
-## 2nd Most IV A perrieri - climatic water deficit
-range(a.perrieri$cwd) # 179 - 781
-range(a.perrieri$cwdf) # 372 - 1529
-mean(a.perrieri$cwd) # 467
-mean(a.perrieri$cwdf) # 1014
-breaks = c(100,400,700,1000,1300,1600)
-labels = as.character(breaks)
-plot.cwd = ggplot(a.perrieri, aes(x=cwd, y=..density..)) + 
-  geom_density(aes(fill=species,color= 'cwd'), alpha=.5) + 
-  geom_vline(aes(xintercept=mean(cwd)),color="darkorange",linetype="solid",size=1)+
-  geom_vline(aes(xintercept=quantile(cwd,0.975)),color="darkorange",linetype="dashed",size=1) +
-  geom_vline(aes(xintercept=quantile(cwd,0.025)),color="darkorange",linetype="dashed",size=1) +
-  geom_density(aes(cwdf, fill=species,color='cwdf'),alpha=.5) +
-  geom_vline(aes(xintercept=mean(cwdf)),color="black",linetype="solid",size=1)+
-  geom_vline(aes(xintercept=quantile(cwdf,0.975)),color="black",linetype="dashed",size=1) +
-  geom_vline(aes(xintercept=quantile(cwdf,0.025)),color="black",linetype="dashed",size=1) +
-  scale_x_continuous(limits = c(100, 1600), breaks = breaks, labels = labels) +
-  scale_color_manual(values = c('cwd' = 'darkorange', 'cwdf' = 'black'))+
-  scale_fill_viridis(discrete=T,option="E")
-plot.cwd2 =  plot.cwd+ theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
-                            legend.text = element_text(face= "italic",size=15),
-                            panel.background = element_blank(), axis.line = element_line(colour = "black"))+
-  labs(x="Climatic Water Deficit (mm)", y = "Density",size=15) +
+  scale_x_continuous(limits = c(850, 2250), breaks = breaks, labels = labels) +
+  scale_color_manual(values = c('tseas' = 'darkorange', 'tseasf' = 'black'))+
+  scale_fill_viridis(alpha=1,begin= 0.65,end=0.7, discrete=T,option="D")
+
+plot.seas_perrieri =  plot.seas_per + theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+                                        legend.text = element_blank(),
+                                        panel.background = element_blank(), 
+                                        axis.line = element_line(colour = "black"))+
+  
+  labs(x="Temp. Seasonality (ºC sd x 100)",  y = "A. perrieri",size=5) +
   labs(col = "") +
-  theme(axis.title.x = element_text(size = rel(3))) +
-  theme(axis.title.y = element_text(size = rel(3))) +
-  theme(axis.text.x = element_text(size = rel(3))) +
-  theme(axis.text.y = element_text(size = rel(3)))
-ggsave(file=paste0("./outputs/a.perrieri_current_future_niche_comparison_in_sdap_v2.pdf"),
-       plot=plot.cwd2,width=20,height=5)
+  theme(axis.title.x = element_text(size = rel(2),colour="black")) +
+  theme(axis.title.y = element_text(size = rel(2),colour="black",face="italic")) +
+  theme(axis.text.x = element_text(size = rel(1.75),colour="black")) +
+  theme(axis.text.y = element_text(size = rel(1.75), colour="black")) +
+  theme(legend.position="none")
+
+## 2nd Most IV A perrieri - annual mean temperature
+
+
+breaks <- c(round(seq(min(a.perrieri$tmean),max(a.perrieri$tmeanf),length=8)))
+labels = as.character(breaks)
+
+plot.tmean_perrieri = ggplot(a.perrieri, aes(x=tmean, y=..density..)) + 
+  geom_density(aes(tmean, fill=species,color= 'tmean'), alpha=.5) + 
+  geom_vline(aes(xintercept=mean(tmean)),color="darkorange",linetype="solid",size=1)+
+  geom_vline(aes(xintercept=quantile(tmean,0.975)),color="darkorange",linetype="dashed",size=1) +
+  geom_vline(aes(xintercept=quantile(tmean,0.025)),color="darkorange",linetype="dashed",size=1) +
+  
+  geom_density(aes(tmeanf, fill=species,color='tmeanf'),alpha=.5) +
+  geom_vline(aes(xintercept=mean(tmeanf)),color="black",linetype="solid",size=1)+
+  geom_vline(aes(xintercept=quantile(tmeanf,0.975)),color="black",linetype="dashed",size=1) +
+  geom_vline(aes(xintercept=quantile(tmeanf,0.025)),color="black",linetype="dashed",size=1) +
+  scale_x_continuous(limits = c(170, 310), breaks = breaks, labels = labels) +
+  scale_color_manual(values = c('tmean' = 'darkorange', 'tmeanf' = 'black'))+
+  scale_fill_viridis(alpha=1,begin= 0.65,end=0.7, discrete=T,option="D")
+
+plot.tmean_perrieri =  plot.tmean_perrieri + theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+                                 legend.text = element_blank(),
+                                 panel.background = element_blank(), axis.line = element_line(colour = "black"))+
+  
+  labs(x="Annual Mean Temperature (ºC x 10)", y="",size=5) +
+  labs(col = "") +
+  theme(axis.title.x = element_text(size = rel(2),colour="black")) +
+  theme(axis.title.y = element_text(size = rel(2),colour="black")) +
+  theme(axis.text.x = element_text(size = rel(1.75),colour="black")) +
+  theme(axis.text.y = element_text(size = rel(1.75), colour="black")) +
+  theme(legend.position="none")
 
 ############## A.rubrostipa
 # Import dataset
 a.rubrostipa <- read.csv(file=paste0("Adansonia.rubrostipa/niche_graph_species_compared_anomaly.csv"), header=T,sep=";",dec=",")
-head(a.rubrostipa)
+
 ## 1st importance variable - Climatic Water Deficit
-range(a.rubrostipa$cwd) # 684 - 967
-range(a.rubrostipa$cwdf) # 1373 - 1979
+range(a.rubrostipa$cwd) # 706 963
+range(a.rubrostipa$cwdf) # 1330 - 1976
 mean(a.rubrostipa$cwd) # 808,8
 mean(a.rubrostipa$cwdf) # 1688,6
-breaks = c(650,810,970,1370,1690,2000)
+breaks <- c(round(seq(min(a.rubrostipa$cwd),max(a.rubrostipa$cwdf),length=8)))
 labels = as.character(breaks)
 
-plot.cwd = ggplot(a.rubrostipa, aes(x=cwd, y=..density..)) + 
+plot.cwd_rubro = ggplot(a.rubrostipa, aes(x=cwd, y=..density..)) + 
   geom_density(aes(fill=species,color= 'cwd'), alpha=.5) + 
   geom_vline(aes(xintercept=mean(cwd)),color="darkorange",linetype="solid",size=1)+
   geom_vline(aes(xintercept=quantile(cwd,0.975)),color="darkorange",linetype="dashed",size=1) +
   geom_vline(aes(xintercept=quantile(cwd,0.025)),color="darkorange",linetype="dashed",size=1) +
+  
   geom_density(aes(cwdf, fill=species,color='cwdf'),alpha=.5) +
   geom_vline(aes(xintercept=mean(cwdf)),color="black",linetype="solid",size=1)+
   geom_vline(aes(xintercept=quantile(cwdf,0.975)),color="black",linetype="dashed",size=1) +
   geom_vline(aes(xintercept=quantile(cwdf,0.025)),color="black",linetype="dashed",size=1) +
+  
   scale_x_continuous(limits = c(650, 2000), breaks = breaks, labels = labels) +
   scale_color_manual(values = c('cwd' = 'darkorange', 'cwdf' = 'black'))+
-  scale_fill_viridis(discrete=T,option="E")
-plot.cwd =  plot.cwd + theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
-                             legend.text = element_text(face= "italic",size=15),
-                             panel.background = element_blank(), axis.line = element_line(colour = "black"))+
-  labs(x="Climatic Water Deficit (mm)", y = "Density",size=10) +
+  scale_fill_viridis(alpha=1,begin= 0.65,end=0.7, discrete=T,option="D")
+
+plot.cwd_rubro =  plot.cwd_rubro + theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+                             legend.text = element_blank(),
+                             panel.background = element_blank(), 
+                             axis.line = element_line(colour = "black"))+
+  
+  labs(x="Climatic Water Deficit (mm)", y = "A. rubrostipa",size=5) +
   labs(col = "") +
-  theme(axis.title.x = element_text(size = rel(3))) +
-  theme(axis.title.y = element_text(size = rel(3))) +
-  theme(axis.text.x = element_text(size = rel(3))) +
-  theme(axis.text.y = element_text(size = rel(3)))
-ggsave(file=paste0("./outputs/a.rubrostipa_current_future_niche_comparison_in_sdapv1.pdf"),
-       plot=plot.cwd,width=20,height=5)
+  theme(axis.title.x = element_text(size = rel(2),colour="black")) +
+  theme(axis.title.y = element_text(size = rel(2),colour="black",face="italic")) +
+  theme(axis.text.x = element_text(size = rel(1.75),colour="black")) +
+  theme(axis.text.y = element_text(size = rel(1.75), colour="black")) +
+  theme(legend.position="none")
+
 
 ### 2nd Importance Variable - Tmean
-range(a.rubrostipa$tmean) # 233 272
-range(a.rubrostipa$tmeanf) # 264.3 305,6
+range(a.rubrostipa$tmean) # 234 269
+round(range(a.rubrostipa$tmeanf)) # 265 306
 mean(a.rubrostipa$tmean) # 257.8
 mean(a.rubrostipa$tmeanf) # 291.3
-breaks = c(240,260,280,300)
+breaks <- c(round(seq(min(a.rubrostipa$tmean),max(a.rubrostipa$tmeanf),length=8)))
 labels = as.character(breaks)
-plot.tmean2= ggplot(a.rubrostipa, aes(x=tmean, y=..density..)) + 
+
+plot.tmean_rubro = ggplot(a.rubrostipa, aes(x=tmean, y=..density..)) + 
   geom_density(aes(fill=species,color= 'tmean'), alpha=.5) + 
   geom_vline(aes(xintercept=mean(tmean)),color="darkorange",linetype="solid",size=1)+
   geom_vline(aes(xintercept=quantile(tmean,0.975)),color="darkorange",linetype="dashed",size=1) +
   geom_vline(aes(xintercept=quantile(tmean,0.025)),color="darkorange",linetype="dashed",size=1) +
+  
   geom_density(aes(tmeanf, fill=species,color='tmeanf'),alpha=.5) +
   geom_vline(aes(xintercept=mean(tmeanf)),color="black",linetype="solid",size=1)+
   geom_vline(aes(xintercept=quantile(tmeanf,0.975)),color="black",linetype="dashed",size=1) +
   geom_vline(aes(xintercept=quantile(tmeanf,0.025)),color="black",linetype="dashed",size=1) +
-  scale_x_continuous(limits = c(220, 320), breaks = breaks, labels = labels) +
+  
+  scale_x_continuous(limits = c(230, 320), breaks = breaks, labels = labels) +
   scale_color_manual(values = c('tmean' = 'darkorange', 'tmeanf' = 'black'))+
-  scale_fill_viridis(discrete=T,option="E")
-plot.tmean2 =  plot.tmean2 + theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
-                                   legend.text = element_text(face= "italic",size=15),
-                                   panel.background = element_blank(), axis.line = element_line(colour = "black"))+
-  labs(x="Mean Annual Temperature (ºC x 10)", y = "Density",size=10) +
+  scale_fill_viridis(alpha=1,begin= 0.65,end=0.7, discrete=T,option="D")
+
+plot.tmean_rubro =  plot.tmean_rubro + theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+                                             legend.text = element_blank(),
+                                             panel.background = element_blank(), axis.line = element_line(colour = "black"))+
+  
+  labs(x="Annual Mean Temperature (ºC x 10)", y="",size=5) +
   labs(col = "") +
-  theme(axis.title.x = element_text(size = rel(3))) +
-  theme(axis.title.y = element_text(size = rel(3))) +
-  theme(axis.text.x = element_text(size = rel(3))) +
-  theme(axis.text.y = element_text(size = rel(3)))
-ggsave(file=paste0("./outputs/a.rubrostipa_current_future_niche_comparison_in_sda_v2.pdf"),
-       plot=plot.tmean2,width=20,height=5)
+  theme(axis.title.x = element_text(size = rel(2),colour="black")) +
+  theme(axis.title.y = element_text(size = rel(2),colour="black")) +
+  theme(axis.text.x = element_text(size = rel(1.75),colour="black")) +
+  theme(axis.text.y = element_text(size = rel(1.75), colour="black")) +
+  theme(legend.position="none")
+
 
 ############## A. madagascariensis 
 ## Import dataset
 a.madagascariensis <- read.csv(file=paste0("Adansonia.madagascariensis/niche_graph_species_compared_anomaly.csv"), header=T,sep=";",dec=",")
-head(a.madagascariensis)
-tail(a.madagascariensis)
+
 # 1st importance variable - Tseas
-range(a.madagascariensis$tseas) # 913 - 2066
-range(a.madagascariensis$tseasf) # 1058 - 2066,3
-mean(a.madagascariensis$tseas) # 1497
-mean(a.madagascariensis$tseasf) # 1585
-breaks = c(900,1200,1500,1800,2100)
+range(a.madagascariensis$tseas)
+
+breaks <- c(round(seq(min(a.madagascariensis$tseas),max(a.madagascariensis$tseasf),length=8)))
 labels = as.character(breaks)
 
-plot.seas2 = ggplot(a.madagascariensis, aes(x=tseas, y=..density..)) + 
+plot.seas_mada = ggplot(a.madagascariensis, aes(x=tseas, y=..density..)) + 
   geom_density(aes(fill=species,color= 'tseas'), alpha=.5) + 
   geom_vline(aes(xintercept=mean(tseas)),color="darkorange",linetype="solid",size=1)+
   geom_vline(aes(xintercept=quantile(tseas,0.975)),color="darkorange",linetype="dashed",size=1) +
   geom_vline(aes(xintercept=quantile(tseas,0.025)),color="darkorange",linetype="dashed",size=1) +
+  
   geom_density(aes(tseasf, fill=species,color='tseasf'),alpha=.5) +
   geom_vline(aes(xintercept=mean(tseasf)),color="black",linetype="solid",size=1)+
   geom_vline(aes(xintercept=quantile(tseasf,0.975)),color="black",linetype="dashed",size=1) +
   geom_vline(aes(xintercept=quantile(tseasf,0.025)),color="black",linetype="dashed",size=1) +
-  scale_x_continuous(limits = c(800,2200), breaks = breaks, labels = labels) +
+  scale_x_continuous(limits = c(850,2120), breaks = breaks, labels = labels) +
   scale_color_manual(values = c('tseas' = 'darkorange', 'tseasf' = 'black'))+
-  scale_fill_viridis(discrete=T,option="E")
-plot.seas2 =  plot.seas2 + theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
-                                 legend.text = element_text(face= "italic",size=15),
-                                 panel.background = element_blank(), axis.line = element_line(colour = "black"))+
-  labs(x="Temp. Seasonality (ºC sd x 100)", y = "Density",size=10) +
+  scale_fill_viridis(alpha=1,begin= 0.65,end=0.7, discrete=T,option="D")
+
+plot.seas_mada =  plot.seas_mada + theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+                                         legend.text = element_blank(),
+                                         panel.background = element_blank(), 
+                                         axis.line = element_line(colour = "black"))+
+  
+  labs(x="Temp. Seasonality (ºC sd x 100)", y = "A. madagascariensis",size=5) +
   labs(col = "") +
-  theme(axis.title.x = element_text(size = rel(3))) +
-  theme(axis.title.y = element_text(size = rel(3))) +
-  theme(axis.text.x = element_text(size = rel(3))) +
-  theme(axis.text.y = element_text(size = rel(3)))
-ggsave(file=paste0("./outputs/a.mada_current_future_niche_comparison_in_sdapv1.pdf"),
-       plot=plot.seas2,width=20,height=5)
+  theme(axis.title.x = element_text(size = rel(2),colour="black")) +
+  theme(axis.title.y = element_text(size = rel(1.5),colour="black",face="italic")) +
+  theme(axis.text.x = element_text(size = rel(1.75),colour="black")) +
+  theme(axis.text.y = element_text(size = rel(1.75), colour="black")) +
+  theme(legend.position="none")
+
 
 ### 2nd importance variable - Tmean
 range(a.madagascariensis$tmean) # 248 - 275
-range(a.madagascariensis$tmeanf) # 278 - 311.6
-mean(a.madagascariensis$tmean) # 263.1
-mean(a.madagascariensis$tmeanf) # 297.2
-breaks = c(250,265,280,295,310)
+range(a.madagascariensis$tmeanf) # 278 - 311
+mean(a.madagascariensis$tmean) # 263.6
+mean(a.madagascariensis$tmeanf) # 297
+
+breaks <- c(round(seq(min(a.madagascariensis$tmean),max(a.madagascariensis$tmeanf),length=8)))
 labels = as.character(breaks)
 
-plot.mean2 = ggplot(a.madagascariensis, aes(x=tmean, y=..density..)) + 
+plot.mean_mada = ggplot(a.madagascariensis, aes(x=tmean, y=..density..)) + 
   geom_density(aes(fill=species,color= 'tmean'), alpha=.5) + 
   geom_vline(aes(xintercept=mean(tmean)),color="darkorange",linetype="solid",size=1)+
   geom_vline(aes(xintercept=quantile(tmean,0.975)),color="darkorange",linetype="dashed",size=1) +
   geom_vline(aes(xintercept=quantile(tmean,0.025)),color="darkorange",linetype="dashed",size=1) +
+  
   geom_density(aes(tmeanf, fill=species,color='tmeanf'),alpha=.5) +
   geom_vline(aes(xintercept=mean(tmeanf)),color="black",linetype="solid",size=1)+
   geom_vline(aes(xintercept=quantile(tmeanf,0.975)),color="black",linetype="dashed",size=1) +
   geom_vline(aes(xintercept=quantile(tmeanf,0.025)),color="black",linetype="dashed",size=1) +
-  #geom_vline(xintercept = c(235, 330), colour="gray70", linetype="dashed") +
-  scale_x_continuous(limits = c(235,320), breaks = breaks, labels = labels) +
+
+  scale_x_continuous(limits = c(240,320), breaks = breaks, labels = labels) +
   scale_color_manual(values = c('tmean' = 'darkorange', 'tmeanf' = 'black'))+
-  scale_fill_viridis(discrete=T,option="E")
-plot.mean2 =  plot.mean2 + theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
-                                 legend.text = element_text(face= "italic",size=15),
-                                 panel.background = element_blank(), 
-                                 axis.line = element_line(colour = "black"))+
-  labs(x="Mean Annual Temperature (ºC x 10) ", y = "Density",size=10) +
+  scale_fill_viridis(alpha=1,begin= 0.65,end=0.7, discrete=T,option="D")
+
+plot.mean_mada =  plot.mean_mada + theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+                                 legend.text = element_blank(),
+                                 panel.background = element_blank(), axis.line = element_line(colour = "black"))+
+  
+  labs(x="Annual Mean Temperature (ºC x 10)", y="",size=5) +
   labs(col = "") +
-  theme(axis.title.x = element_text(size = rel(3))) +
-  theme(axis.title.y = element_text(size = rel(3))) +
-  theme(axis.text.x = element_text(size = rel(3))) +
-  theme(axis.text.y = element_text(size = rel(3)))
-ggsave(file=paste0("./outputs/a.mada_current_future_niche_comparison_in_sdapv2.pdf"),
-       plot=plot.mean2,width=20,height=5)
+  theme(axis.title.x = element_text(size = rel(2),colour="black")) +
+  theme(axis.title.y = element_text(size = rel(2),colour="black")) +
+  theme(axis.text.x = element_text(size = rel(1.75),colour="black")) +
+  theme(axis.text.y = element_text(size = rel(1.75), colour="black")) +
+  theme(legend.position="none")
 
 ############## A. grandidieri
 ## Import dataset
 a.grandidieri <- read.csv(file=paste0("Adansonia.grandidieri/niche_graph_species_compared_anomaly.csv"), header=T,sep=";",dec=",")
 head(a.grandidieri)
+
 # 1st Importance Variable - Prec
-range(a.grandidieri$prec) # 383 - 1029
-range(a.grandidieri$precf) # 366 - 920
-mean(a.grandidieri$prec) # 750
-mean(a.grandidieri$precf) # 711
-breaks = c(350,600,750,900,1050)
+range(a.grandidieri$prec) # 437 - 998
+range(a.grandidieri$precf) # 374 - 935
+mean(a.grandidieri$prec) # 749
+mean(a.grandidieri$precf) # 706
+breaks <- c(round(seq(min(a.grandidieri$precf),max(a.grandidieri$prec),length=8)))
 labels = as.character(breaks)
 
-plot.prec = ggplot(a.grandidieri, aes(x=prec, y=..density..)) + 
+plot.prec_grand = ggplot(a.grandidieri, aes(x=prec, y=..density..)) + 
   geom_density(aes(fill=species,color= 'prec'), alpha=.5) + 
   geom_vline(aes(xintercept=mean(prec)),color="darkorange",linetype="solid",size=1)+
   geom_vline(aes(xintercept=quantile(prec,0.975)),color="darkorange",linetype="dashed",size=1) +
-  geom_vline(aes(xintercept=quantile(prec,0.025)),color="darkorange",linetype="dashed",size=1) +  
+  geom_vline(aes(xintercept=quantile(prec,0.025)),color="darkorange",linetype="dashed",size=1) + 
+  
   geom_density(aes(precf, fill=species,color='precf'),alpha=.5) +
   geom_vline(aes(xintercept=mean(precf)),color="black",linetype="solid",size=1)+
   geom_vline(aes(xintercept=quantile(precf,0.975)),color="black",linetype="dashed",size=1) +
   geom_vline(aes(xintercept=quantile(precf,0.025)),color="black",linetype="dashed",size=1) +
+  
   scale_x_continuous(limits = c(300,1100), breaks = breaks, labels = labels) +
   scale_color_manual(values = c('prec' = 'darkorange', 'precf' = 'black'))+
-  scale_fill_viridis(discrete=T,option="E")
-  plot.prec =  plot.prec + theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
-                               legend.text = element_text(face= "italic",size=15),
-                               panel.background = element_blank(), axis.line = element_line(colour = "black"))+
-  labs(x="Precipitation (mm.y-¹)", y = "Density",size=10) +
+  scale_fill_viridis(alpha=1,begin= 0.65,end=0.7, discrete=T,option="D")
+
+plot.prec_grand =  plot.prec_grand + theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+                                           legend.text = element_blank(),
+                                           panel.background = element_blank(), 
+                                           axis.line = element_line(colour = "black"))+
+  
+  labs(x="Mean Annual Precipitation (mm.y-¹)", y = "A. grandidieri",size=5) +
   labs(col = "") +
-    theme(axis.title.x = element_text(size = rel(3))) +
-    theme(axis.title.y = element_text(size = rel(3))) +
-    theme(axis.text.x = element_text(size = rel(3))) +
-    theme(axis.text.y = element_text(size = rel(3)))
-ggsave(file=paste0("./outputs/a.grandi_current_future_niche_comparison_in_sdapv1.pdf"),
-       plot=plot.prec,width=20,height=5)
+  theme(axis.title.x = element_text(size = rel(2),colour="black")) +
+  theme(axis.title.y = element_text(size = rel(2),colour="black",face="italic")) +
+  theme(axis.text.x = element_text(size = rel(1.75),colour="black")) +
+  theme(axis.text.y = element_text(size = rel(1.75), colour="black")) +
+  theme(legend.position="none")
+
 
 ## 2nd Importance Variable - Tmean
-range(a.grandidieri$tmean) # 241 - 263
+range(a.grandidieri$tmean) # 242 - 261
 range(a.grandidieri$tmeanf) # 276 297
-mean(a.grandidieri$tmean) # 250,7
-mean(a.grandidieri$tmeanf) # 286,1
-breaks = c(240,250,260,280,290,300)
+mean(a.grandidieri$tmean) # 250
+mean(a.grandidieri$tmeanf) # 285
+breaks <- c(round(seq(min(a.grandidieri$tmean),max(a.grandidieri$tmeanf),length=8)))
 labels = as.character(breaks)
 
-plot.mean2 = ggplot(a.grandidieri, aes(x=tmean, y=..density..)) + 
-  geom_density(aes(fill=species,color= 'tmean'), alpha=.5) + 
+plot.mean_grand = ggplot(a.grandidieri, aes(x=tmean, y=..density..)) + 
+  geom_density(aes(tmean,fill=species,color= 'tmean'), alpha=.5) + 
   geom_vline(aes(xintercept=mean(tmean)),color="darkorange",linetype="solid",size=1)+
   geom_vline(aes(xintercept=quantile(tmean,0.975)),color="darkorange",linetype="dashed",size=1) +
   geom_vline(aes(xintercept=quantile(tmean,0.025)),color="darkorange",linetype="dashed",size=1) +
+  
   geom_density(aes(tmeanf, fill=species,color='tmeanf'),alpha=.5) +
   geom_vline(aes(xintercept=mean(tmeanf)),color="black",linetype="solid",size=1)+
   geom_vline(aes(xintercept=quantile(tmeanf,0.975)),color="black",linetype="dashed",size=1) +
   geom_vline(aes(xintercept=quantile(tmeanf,0.025)),color="black",linetype="dashed",size=1) +
-  scale_x_continuous(limits = c(230, 310), breaks = breaks, labels = labels) +
+  scale_x_continuous(limits = c(225, 305), breaks = breaks, labels = labels) +
+  
   scale_color_manual(values = c('tmean' = 'darkorange', 'tmeanf' = 'black'))+
-  scale_fill_viridis(discrete=T,option="E")
-plot.mean2 =  plot.mean2 + theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
-                                 legend.text = element_text(face= "italic",size=15),
-                                 panel.background = element_blank(), 
-                                 axis.line = element_line(colour = "black"))+
-  labs(x="Mean Annual Temperature (ºC x 10) ", y = "Density",size=10) +
+  scale_fill_viridis(alpha=1,begin= 0.65,end=0.7, discrete=T,option="D")
+
+plot.mean_grand =  plot.mean_grand + theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+                                           legend.text = element_blank(),
+                                           panel.background = element_blank(), axis.line = element_line(colour = "black"))+
+  
+  labs(x="Annual Mean Temperature (ºC x 10)", y="",size=5) +
   labs(col = "") +
-  theme(axis.title.x = element_text(size = rel(3))) +
-  theme(axis.title.y = element_text(size = rel(3))) +
-  theme(axis.text.x = element_text(size = rel(3))) +
-  theme(axis.text.y = element_text(size = rel(3)))
-ggsave(file=paste0("./outputs/a.grand_current_future_niche_comparison_in_sdapv2.pdf"),
-       plot=plot.mean2,width=20,height=5)
+  theme(axis.title.x = element_text(size = rel(2),colour="black")) +
+  theme(axis.title.y = element_text(size = rel(2),colour="black")) +
+  theme(axis.text.x = element_text(size = rel(1.75),colour="black")) +
+  theme(axis.text.y = element_text(size = rel(1.75), colour="black")) +
+  theme(legend.position="none")
+
 
 ############## A za
 ## Import dataset
 a.za <- read.csv(file=paste0("Adansonia.za/niche_graph_species_compared_anomaly.csv"), header=T,sep=";",dec=",")
 head(a.za)
 # 1st Importance Variable - Prec
-range(a.za$prec) # 355 1635
-range(a.za$precf) # 334,1 - 1320,3
-mean(a.za$prec) # 823
-mean(a.za$precf) # 642,1
-breaks = c(300,650,850,1200,1650)
+range(a.za$prec) # 341 1827
+range(a.za$precf) # 324 1555
+
+breaks <- c(round(seq(min(a.za$precf),max(a.za$prec),length=8)))
 labels = as.character(breaks)
 
-plot.prec = ggplot(a.za, aes(x=prec, y=..density..)) + 
-  geom_density(aes(fill=species,color= 'prec'), alpha=.5) + 
+plot.prec_za = ggplot(a.za, aes(x=prec, y=..density..)) + 
+  geom_density(aes(prec,fill=species,color= 'prec'), alpha=.5) + 
   geom_vline(aes(xintercept=mean(prec)),color="darkorange",linetype="solid",size=1)+
   geom_vline(aes(xintercept=quantile(prec,0.975)),color="darkorange",linetype="dashed",size=1) +
   geom_vline(aes(xintercept=quantile(prec,0.025)),color="darkorange",linetype="dashed",size=1) +
+  
   geom_density(aes(precf, fill=species,color='precf'),alpha=.5) +
   geom_vline(aes(xintercept=mean(precf)),color="black",linetype="solid",size=1)+
   geom_vline(aes(xintercept=quantile(precf,0.975)),color="black",linetype="dashed",size=1) +
   geom_vline(aes(xintercept=quantile(precf,0.025)),color="black",linetype="dashed",size=1) +
+  
   scale_x_continuous(limits = c(200,1800), breaks = breaks, labels = labels) +
   scale_color_manual(values = c('prec' = 'darkorange', 'precf' = 'black'))+
-  scale_fill_viridis(discrete=T,option="E")
-plot.prec =  plot.prec + theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
-                               legend.text = element_text(face= "italic",size=15),
-                               panel.background = element_blank(), axis.line = element_line(colour = "black"))+
-  labs(x="Precipitation (mm.y-¹)", y = "Density",size=10) +
+  scale_fill_viridis(alpha=1,begin= 0.65,end=0.7, discrete=T,option="D")
+
+plot.prec_za =  plot.prec_za + theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+                                     legend.text = element_blank(),
+                                     panel.background = element_blank(), 
+                                     axis.line = element_line(colour = "black"))+
+  
+  labs(x="Mean Annual Precipitation (mm.y-¹)", y = "A. za",size=5) +
   labs(col = "") +
-  theme(axis.title.x = element_text(size = rel(3))) +
-  theme(axis.title.y = element_text(size = rel(3))) +
-  theme(axis.text.x = element_text(size = rel(3))) +
-  theme(axis.text.y = element_text(size = rel(3)))
-ggsave(file=paste0("./outputs/a.za_current_future_niche_comparison_in_sdapv1.pdf"),
-       plot=plot.prec,width=20,height=5)
+  theme(axis.title.x = element_text(size = rel(2),colour="black")) +
+  theme(axis.title.y = element_text(size = rel(2),colour="black",face="italic")) +
+  theme(axis.text.x = element_text(size = rel(1.75),colour="black")) +
+  theme(axis.text.y = element_text(size = rel(1.75), colour="black")) +
+  theme(legend.position="none")
 
 ## 2nd Importance Variable - Tmean
-range(a.za$tmean) # 214 275
-range(a.za$tmeanf) # 252 307
-mean(a.za$tmean) # 245,2
-mean(a.za$tmeanf) # 276,9
-breaks = c(210,240,270,310)
+range(a.za$tmean) # 215 275
+range(a.za$tmeanf) # 251 311
+mean(a.za$tmean) # 243
+mean(a.za$tmeanf) # 278
+breaks <- c(round(seq(min(a.za$tmean),max(a.za$tmeanf),length=8)))
 labels = as.character(breaks)
 
-plot.mean2 = ggplot(a.za, aes(x=tmean, y=..density..)) + 
-  geom_density(aes(fill=species,color= 'tmean'), alpha=.5) + 
+plot.mean_za = ggplot(a.za, aes(x=tmean, y=..density..)) + 
+  geom_density(aes(tmean,fill=species,color= 'tmean'), alpha=.5) + 
   geom_vline(aes(xintercept=mean(tmean)),color="darkorange",linetype="solid",size=1)+
   geom_vline(aes(xintercept=quantile(tmean,0.975)),color="darkorange",linetype="dashed",size=1) +
   geom_vline(aes(xintercept=quantile(tmean,0.025)),color="darkorange",linetype="dashed",size=1) +
+  
   geom_density(aes(tmeanf, fill=species,color='tmeanf'),alpha=.5) +
   geom_vline(aes(xintercept=mean(tmeanf)),color="black",linetype="solid",size=1)+
   geom_vline(aes(xintercept=quantile(tmeanf,0.975)),color="black",linetype="dashed",size=1) +
   geom_vline(aes(xintercept=quantile(tmeanf,0.025)),color="black",linetype="dashed",size=1) +
-  #geom_vline(xintercept = c(205, 320), colour="gray70", linetype="dashed") +
+
   scale_x_continuous(limits = c(200, 320), breaks = breaks, labels = labels) +
   scale_color_manual(values = c('tmean' = 'darkorange', 'tmeanf' = 'black'))+
-  scale_fill_viridis(discrete=T,option="E")
-plot.mean2 =  plot.mean2 + theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
-                                 legend.text = element_text(face= "italic",size=15),
-                                 panel.background = element_blank(), 
-                                 axis.line = element_line(colour = "black"))+
-  labs(x="Mean Annual Temperature (ºC x 10) ", y = "Density",size=10) +
+  scale_fill_viridis(alpha=1,begin= 0.65,end=0.7, discrete=T,option="D")
+
+plot.mean_za =  plot.mean_za + theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+                                     legend.text = element_blank(),
+                                     panel.background = element_blank(), axis.line = element_line(colour = "black"))+
+  
+  labs(x="Annual Mean Temperature (ºC x 10)", y="",size=5) +
   labs(col = "") +
-  theme(axis.title.x = element_text(size = rel(3))) +
-  theme(axis.title.y = element_text(size = rel(3))) +
-  theme(axis.text.x = element_text(size = rel(3))) +
-  theme(axis.text.y = element_text(size = rel(3)))
-ggsave(file=paste0("./outputs/a.za_current_future_niche_comparison_in_sdapv2.pdf"),
-       plot=plot.mean2,width=20,height=5)
+  theme(axis.title.x = element_text(size = rel(2),colour="black")) +
+  theme(axis.title.y = element_text(size = rel(2),colour="black")) +
+  theme(axis.text.x = element_text(size = rel(1.75),colour="black")) +
+  theme(axis.text.y = element_text(size = rel(1.75), colour="black")) +
+  theme(legend.position="none")
 
 ##############A digitata 
 ## Import dataset
 a.digitata <- read.csv(file=paste0("Adansonia.digitata/niche_graph_species_compared_anomaly.csv"), header=T,sep=";",dec=",")
 head(a.digitata)
 ## 1st Importance Variable - Climatic Water Deficit
-range(a.digitata$cwd) # 622 - 920
-range(a.digitata$cwdf) # 1229 - 1936,3
-mean(a.digitata$cwd) # 822,4
-mean(a.digitata$cwdf) # 1737,32
-breaks = c(600,820,1000,1230,1740,1940)
+range(a.digitata$cwd) # 632 - 920
+range(a.digitata$cwdf) # 1229 - 1935
+mean(a.digitata$cwd) # 822,5
+mean(a.digitata$cwdf) # 1735
+breaks <- c(round(seq(min(a.digitata$cwd),max(a.digitata$cwdf),length=8)))
 labels = as.character(breaks)
 
-plot.cwd = ggplot(a.digitata, aes(x=cwd, y=..density..)) + 
-  geom_density(aes(fill=species,color= 'cwd'), alpha=.5) + 
+plot.cwd_dig = ggplot(a.digitata, aes(x=cwd, y=..density..)) + 
+  
+  geom_density(aes(cwd,fill=species,color= 'cwd'), alpha=.5) + 
   geom_vline(aes(xintercept=mean(cwd)),color="darkorange",linetype="solid",size=1)+
   geom_vline(aes(xintercept=quantile(cwd,0.975)),color="darkorange",linetype="dashed",size=1) +
   geom_vline(aes(xintercept=quantile(cwd,0.025)),color="darkorange",linetype="dashed",size=1) +
+  
   geom_density(aes(cwdf, fill=species,color='cwdf'),alpha=.5) +
   geom_vline(aes(xintercept=mean(cwdf)),color="black",linetype="solid",size=1)+
   geom_vline(aes(xintercept=quantile(cwdf,0.975)),color="black",linetype="dashed",size=1) +
   geom_vline(aes(xintercept=quantile(cwdf,0.025)),color="black",linetype="dashed",size=1) +
-  #geom_vline(xintercept = c(650, 1950), colour="gray70", linetype="dashed") +
+
   scale_x_continuous(limits = c(600, 2000), breaks = breaks, labels = labels) +
   scale_color_manual(values = c('cwd' = 'darkorange', 'cwdf' = 'black'))+
-  scale_fill_viridis(discrete=T,option="E")
-plot.cwd =  plot.cwd + theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
-                             legend.text = element_text(face= "italic",size=15),
-                             panel.background = element_blank(), axis.line = element_line(colour = "black"))+
-  labs(x="Climatic Water Deficit (mm)", y = "Density",size=10) +
-  labs(col = "") +
-  theme(axis.title.x = element_text(size = rel(3))) +
-  theme(axis.title.y = element_text(size = rel(3))) +
-  theme(axis.text.x = element_text(size = rel(3))) +
-  theme(axis.text.y = element_text(size = rel(3)))
-ggsave(file=paste0("./outputs/a.digitata_current_future_niche_comparison_in_sdapv1.pdf"),
-       plot=plot.cwd,width=20,height=5)
+  scale_fill_viridis(alpha=1,begin= 0.65,end=0.7, discrete=T,option="D")
+
+  plot.cwd_dig =  plot.cwd_dig + theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+                                        legend.text = element_blank(),
+                                        panel.background = element_blank(), 
+                                        axis.line = element_line(colour = "black"))+
+    
+  labs(x="Climatic Water Deficit (mm)", y = "A. digitata",size=5) +
+         labs(col = "") +
+         theme(axis.title.x = element_text(size = rel(2),colour="black")) +
+         theme(axis.title.y = element_text(size = rel(2),colour="black",face="italic")) +
+         theme(axis.text.x = element_text(size = rel(1.75),colour="black")) +
+         theme(axis.text.y = element_text(size = rel(1.75), colour="black")) +
+         theme(legend.position="none")
 
 ##2nd Importance Variable - Tseas
 
 # range tseas 
-range(a.digitata$tseas) # 848 2482
-range(a.digitata$tseasf) # 1023,33 2035
+range(a.digitata$tseas) # 847 1867
+range(a.digitata$tseasf) # 1050 2040 
 mean(a.digitata$tseas) # 1531
 mean(a.digitata$tseasf) # 1572,4
-breaks = c(840,1100,1400,1700,2050)
+breaks <- c(round(seq(min(a.digitata$tseas),max(a.digitata$tseasf),length=8)))
 labels = as.character(breaks)
 
-plot.seas2 = ggplot(a.digitata, na.rm=T, aes(x=tseas, y=..density..)) + 
-  geom_density(aes(fill=species,color= 'tseas'), alpha=.5, na.rm=T) + 
+plot.seas_dig = ggplot(a.digitata, na.rm=T, aes(x=tseas, y=..density..)) + 
+  
+  geom_density(aes(tseas, fill=species,color= 'tseas'), alpha=.5, na.rm=T) + 
   geom_vline(aes(xintercept=mean(tseas)),color="darkorange",linetype="solid",size=1)+
   geom_vline(aes(xintercept=quantile(tseas,0.975)),color="darkorange",linetype="dashed",size=1) +
   geom_vline(aes(xintercept=quantile(tseas,0.025)),color="darkorange",linetype="dashed",size=1) +
   geom_density(aes(tseasf, fill=species,color='tseasf'),alpha=.5) +
+  
   geom_vline(aes(xintercept=mean(tseasf)),color="black",linetype="solid",size=1)+
   geom_vline(aes(xintercept=quantile(tseasf,0.975)),color="black",linetype="dashed",size=1) +
   geom_vline(aes(xintercept=quantile(tseasf,0.025)),color="black",linetype="dashed",size=1) +
-  scale_x_continuous(limits = c(750,2600), breaks = breaks, labels = labels) +
+  scale_x_continuous(limits = c(750,2100), breaks = breaks, labels = labels) +
+  
   scale_color_manual(values = c('tseas' = 'darkorange', 'tseasf' = 'black'))+
-  scale_fill_viridis(discrete=T,option="E")
-plot.seas2 =  plot.seas2 + theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
-                                 legend.text = element_text(face= "italic",size=15),
-                                 panel.background = element_blank(), axis.line = element_line(colour = "black"))+
-  labs(x="Temp. Seasonality (ºC  sd x 100)", y = "Density",size=10) +
+  scale_fill_viridis(alpha=1,begin= 0.65,end=0.7, discrete=T,option="D")
+
+  plot.seas_dig =  plot.seas_dig + theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+                                       legend.text = element_blank(),
+                                       panel.background = element_blank(), axis.line = element_line(colour = "black"))+
+  
+  labs(x="Temp. Seasonality (ºC sd x 100)",y="",size=5) +
   labs(col = "") +
-  theme(axis.title.x = element_text(size = rel(3))) +
-  theme(axis.title.y = element_text(size = rel(3))) +
-  theme(axis.text.x = element_text(size = rel(3))) +
-  theme(axis.text.y = element_text(size = rel(3)))
-ggsave(file=paste0("./outputs/a.digi_current_future_niche_comparison_in_sdapv2.pdf"),
-       plot=plot.seas2,width=20,height=5)
+  theme(axis.title.x = element_text(size = rel(2),colour="black")) +
+  theme(axis.title.y = element_text(size = rel(2),colour="black")) +
+  theme(axis.text.x = element_text(size = rel(1.75),colour="black")) +
+  theme(axis.text.y = element_text(size = rel(1.75), colour="black")) +
+  theme(legend.position="none")
+
+## Combine plots 
+lay_3 <- rbind(c(rep(seq(1,2,by=1),each=3)),
+               c(rep(seq(3,4,by=1),each=3)),
+               c(rep(seq(5,6,by=1),each=3)),
+               c(rep(seq(7,8,by=1),each=3)),
+               c(rep(seq(9,10,by=1),each=3)),
+               c(rep(seq(11,12,by=1),each=3)),
+               c(rep(seq(13,14,by=1),each=3)))
+
+plot_densities_curves <- grid.arrange(plot.cwd_dig,plot.seas_dig,
+                                      plot.prec_grand,plot.mean_grand,
+                                      plot.seas_mada,plot.mean_mada,
+                                      plot.seas_perrieri,plot.tmean_perrieri,
+                                      plot.cwd_rubro,plot.tmean_rubro,
+                                      plot.seas_suar, plot.prec_suar,
+                                      plot.prec_za,plot.mean_za,
+                                      layout_matrix=lay_3)
+
+ggsave(file=paste0("./outputs/all_species_current_future_niche_comparison.pdf"),
+       plot=plot_densities_curves,width=18,height=15,dpi="print")
 
 #######################################################################
 ### World Seasonality Map
