@@ -470,7 +470,7 @@ my_plot4 = ggplot(data_teste, aes(x=cwd, color=species)) + geom_density(size=1.3
   geom_vline(xintercept = range(data_teste$cwd), show.legend = F, colour="red", linetype="dashed") +
   scale_x_continuous(limits = range(data_teste$cwd), breaks = breaks, labels = labels)
 my_plot_cwd =  my_plot4 + theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
-                             #legend.text = element_text(face= "italic",size=15),
+                             legend.text = element_text(face= "italic",size=15),
                              legend.title=element_blank(),
                              panel.background = element_blank(), axis.line = element_line(colour = "black"))+
   labs(x="Climatic Water Deficit (mm)", y = "Density",size=5) +
