@@ -1042,6 +1042,8 @@ plot_densities_curves <- grid.arrange(plot.cwd_dig,plot.seas_dig,
 ggsave(file=paste0("./outputs/all_species_current_future_niche_comparison.pdf"),
        plot=plot_densities_curves,width=18,height=15,dpi="print")
 
+ggsave(file=paste0("./outputs/all_species_current_future_niche_comparison.png"),
+       plot=plot_densities_curves,width=18,height=15,dpi="print")
 #######################################################################
 ### World Seasonality Map
 #######################################################################
