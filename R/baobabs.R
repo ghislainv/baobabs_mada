@@ -369,6 +369,7 @@ for (i in 1: length(sp.dir)) {
   head(mapmat.f)
   mapmat.f <- mapmat.final[,c(1,2,3,4,6,7,8,9,10,11)]
   write.csv2(mapmat.final,paste0("./",sp.dir[i],"/","niche_graph_species_compared_anomaly.csv"))
+  
   #### Future niche over current SDA!!! NO ANOMALY
   wC.future <- which(values(ca)>=500)
   mapmat.df.future <- as.data.frame(var_85_2080)[wC.future,]
@@ -400,9 +401,7 @@ head(quantiles)
 # Density plots ## Temp. Seasonality
 range(data_teste$tseas)
 # generate break positions
-#breaks = c(848,1200,1600,2000,2400,2800,3309)
 breaks <- c(round(seq(min(data_teste$tseas),max(data_teste$tseas),length=6)))
-
 # and labels
 labels = as.character(breaks) # labels must be the same as breaks, otherwise error
 # plot the map
@@ -417,13 +416,12 @@ my_plot_tseas =  my_plot + theme(panel.grid.major = element_blank(), panel.grid.
                                  panel.background = element_blank(), axis.line = element_line(colour = "black"))+
   labs(x="Temp. Seasonality (sd x 100ºC)", y = "Density",size=5) +
   theme(axis.title.x = element_text(size = rel(2),colour="black")) +
-  theme(axis.title.y = element_text(size = rel(2),colour="black")) +
+  theme(axis.title.y = element_text(size = rel(1),colour="black")) +
   theme(axis.text.x = element_text(size = rel(1.5),colour="black")) +
   theme(axis.text.y = element_text(size = rel(1.5), colour="black")) +
   theme(legend.position="none")
 
 # Density plots ### Annual Mean Temperature
-range(data_teste$tmean)
 # generate break positions
 breaks <- c(round(seq(min(data_teste$tmean),max(data_teste$tmean),length=6)))
 labels = as.character(breaks)
@@ -438,13 +436,12 @@ my_plot_tmean =  my_plot2 + theme(panel.grid.major = element_blank(), panel.grid
                                   panel.background = element_blank(), axis.line = element_line(colour = "black"))+
   labs(x="Mean Annual Temperature (ºC x 10) ", y = "Density",size=5) +
   theme(axis.title.x = element_text(size = rel(2),colour="black")) +
-  theme(axis.title.y = element_text(size = rel(2),colour="black")) +
+  theme(axis.title.y = element_text(size = rel(1),colour="black")) +
   theme(axis.text.x = element_text(size = rel(1.5),colour="black")) +
   theme(axis.text.y = element_text(size = rel(1.5), colour="black")) +
   theme(legend.position="none")
 
 # Density plots ### Annual Mean Precipitation
-range(data_teste$prec)
 # generate break positions
 breaks <- c(round(seq(min(data_teste$prec),max(data_teste$prec),length=6)))
 labels = as.character(breaks)
@@ -459,13 +456,12 @@ my_plot_prec =  my_plot3 + theme(panel.grid.major = element_blank(), panel.grid.
                              panel.background = element_blank(), axis.line = element_line(colour = "black"))+
   labs(x="Mean Annual Precipitation (mm.y-¹)", y = "Density",size=5) +
   theme(axis.title.x = element_text(size = rel(2),colour="black")) +
-  theme(axis.title.y = element_text(size = rel(2),colour="black")) +
+  theme(axis.title.y = element_text(size = rel(1),colour="black")) +
   theme(axis.text.x = element_text(size = rel(1.5),colour="black")) +
   theme(axis.text.y = element_text(size = rel(1.5), colour="black")) +
   theme(legend.position="none")
 
 # Density plots ### Climatic Water Deficit
-range(data_teste$cwd)
 # generate break positions
 breaks <- c(round(seq(min(data_teste$cwd),max(data_teste$cwd),length=6)))
 labels = as.character(breaks)
@@ -479,10 +475,10 @@ my_plot_cwd =  my_plot4 + theme(panel.grid.major = element_blank(), panel.grid.m
                              panel.background = element_blank(), axis.line = element_line(colour = "black"))+
   labs(x="Climatic Water Deficit (mm)", y = "Density",size=5) +
   theme(axis.title.x = element_text(size = rel(2),colour="black")) +
-  theme(axis.title.y = element_text(size = rel(2),colour="black")) +
+  theme(axis.title.y = element_text(size = rel(1),colour="black")) +
   theme(axis.text.x = element_text(size = rel(1.5),colour="black")) +
   theme(axis.text.y = element_text(size = rel(1.5), colour="black")) +
-  theme(legend.position="none")
+  theme(legend.position="right")
   
 ## Combine plots 
 lay_2 <- cbind(c(rep(seq(1,4,by=1),each=3)),
@@ -492,7 +488,10 @@ lay_2 <- subset( lay_2, select = -b )
 
 plot_densities <- grid.arrange(my_plot_tmean, my_plot_tseas, my_plot_prec, my_plot_cwd,
                                layout_matrix=lay_2)
-ggsave(file=paste0("./outputs/climaticwd_species.pdf"),plot=my_plot4,width=20,height=5)
+ggsave(filename="outputs/Fig1_climatic_anomalies.pdf", plot=plot_densities,
+       width=8, height=10, dpi="print")
+ggsave(filename="outputs/Fig1_climatic_anomalies.png", plot=plot_densities,
+       width=8, height=10, dpi="print")
 
 ### Comparing bioclimatic niche of each species inside current SDA according to the 
 ### most important variables ######
