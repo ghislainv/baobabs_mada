@@ -57,6 +57,9 @@ run.species <- function (i, run.models=TRUE) {
   ## Save "d" as data-frame
   dir.create(paste0(spdir,"/figures"),recursive=TRUE)
   write.table(d@data,file=paste0(spdir,"/figures/presences.txt"),sep="\t",row.names=FALSE)
+  ## Save "p" as data-frame
+  points_occurs <- as.data.frame(p)
+  write.table(points_occurs,file=paste0(spdir,"/function_ready.txt"),sep="\t",row.names=FALSE)
   
   ## Extent for species distribution area maps
   ext <- fun.extent(p,s)
@@ -353,6 +356,9 @@ run.species <- function (i, run.models=TRUE) {
       l.arg <- list(text="Vote",side=2, line=0.5, cex=1.2)
       
       # Plot (Committee Averaging Full Dispersal)
+      writeRaster(caFut,paste0(spdir,"/caFut.tif"),datatype="INT2S",
+                  overwrite=TRUE,
+                  options=c("COMPRESS=LZW","PREDICTOR=2"))
       pdf(paste0(spdir,"/figures/cafd_",rcp[j],"_",yr[l],".pdf"),width=6.5,height=10)
       par(mar=c(0,0,0,r.mar),cex=1.4)
       plot(caFut,col=colors,breaks=breakpoints,ext=e.map,
@@ -364,6 +370,9 @@ run.species <- function (i, run.models=TRUE) {
       # Zero-dispersal
       caZD <- caFut
       values(caZD)[values(ca)<500] <- 0 
+      writeRaster(caZD,paste0(spdir,"/caZD.tif"),datatype="INT2S",
+                  overwrite=TRUE,
+                  options=c("COMPRESS=LZW","PREDICTOR=2"))
       pdf(paste0(spdir,"/figures/cazd_",rcp[j],"_",yr[l],".pdf"),width=6.5,height=10)
       par(mar=c(0,0,0,r.mar),cex=1.4)
       plot(caZD,col=colors,breaks=breakpoints,ext=e.map,
