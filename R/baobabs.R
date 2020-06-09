@@ -1492,6 +1492,55 @@ ggsave(file=paste0("./outputs/anomaly_world_chart.pdf"),
 ggsave(file=paste0("./outputs/anomaly_world_chart.png"),
        plot=plot_world_anomaly,width=11,height=8,dpi="print")
 
+##### Generating study tables
+
+## area chance
+digitata <- read.table(paste0("Adansonia.digitata/sda_fut.txt"), header=T,sep="\t")
+grandidieri <- read.table(paste0("Adansonia.grandidieri/sda_fut.txt"), header=T,sep="\t")
+mada <- read.table(paste0("Adansonia.madagascariensis/sda_fut.txt"), header=T,sep="\t")
+perrieri <- read.table(paste0("Adansonia.perrieri/sda_fut.txt"), header=T,sep="\t")
+rubrostipa <- read.table(paste0("Adansonia.rubrostipa/sda_fut.txt"), header=T,sep="\t")
+suare <- read.table(paste0("Adansonia.suarezensis/sda_fut.txt"), header=T,sep="\t")
+za <- read.table(paste0("Adansonia.za/sda_fut.txt"), header=T,sep="\t")
+
+species <- rep(c("A. digitata","A. grandidieri","A. madagascariensis", 
+                 "A. perrieri", "A. rubrostipa","A. suarezensis",
+                 "A. za"),each=2)
+all_species <- rbind(digitata,grandidieri,mada,perrieri,rubrostipa,suare,za)
+all_species <- cbind(species,all_species)
+
+## altitudinal change
+digitata_alt <- read.table(paste0("Adansonia.digitata/alt_fut.txt"), header=T,sep="\t")
+grandidieri_alt <- read.table(paste0("Adansonia.grandidieri/alt_fut.txt"), header=T,sep="\t")
+mada_alt <- read.table(paste0("Adansonia.madagascariensis/alt_fut.txt"), header=T,sep="\t")
+perrieri_alt <- read.table(paste0("Adansonia.perrieri/alt_fut.txt"), header=T,sep="\t")
+rubrostipa_alt <- read.table(paste0("Adansonia.rubrostipa/alt_fut.txt"), header=T,sep="\t")
+suare_alt <- read.table(paste0("Adansonia.suarezensis/alt_fut.txt"), header=T,sep="\t")
+za_alt <- read.table(paste0("Adansonia.za/alt_fut.txt"), header=T,sep="\t")
+
+all_species_alt <- rbind(digitata_alt,grandidieri_alt,mada_alt,
+                         perrieri_alt,rubrostipa_alt,suare_alt,za_alt)
+
+all_species_cool <- cbind(all_species,all_species_alt)
+
+final_table1 <- subset(all_species_cool, select = -c(3,4,9:13,15,16))
+
+colnames(final_table1)<- c("Baobab species","SDAp (km²)","Dispersal",
+                           "SDAf (km²)","Change SDApf (%)","Current altitude mean (m)",
+                           "Future altitude mean (m)","Altitude range shift (%)")
+
+write.table(final_table1,paste0("./outputs/table1.txt"),sep="\t")
+
+### importance variable table
+write.table(VarImp,paste0(spdir,"/varimp.txt"),sep="\t")
+
+digitata_vi <- read.table(paste0("Adansonia.digitata/varimp.txt"), header=T,sep="\t")
+grandidieri_vi <- read.table(paste0("Adansonia.grandidieri/varimp.txt"), header=T,sep="\t")
+mada_vi <- read.table(paste0("Adansonia.madagascariensis/varimp.txt"), header=T,sep="\t")
+perrieri_vi <- read.table(paste0("Adansonia.perrieri/varimp.txt"), header=T,sep="\t")
+rubrostipa_vi <- read.table(paste0("Adansonia.rubrostipa/varimp.txt"), header=T,sep="\t")
+suare_vi <- read.table(paste0("Adansonia.suarezensis/varimp.txt"), header=T,sep="\t")
+za_vi <- read.table(paste0("Adansonia.za/varimp.txt"), header=T,sep="\t")
 ##===========================================================================
 ## End of script - Have a Nice Day and Enjoy The View
 ##===========================================================================
