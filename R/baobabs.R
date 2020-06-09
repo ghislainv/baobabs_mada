@@ -1342,87 +1342,156 @@ ggsave(file=paste0("./outputs/threat.png"),
 
 
 library(maptools)
-data("wrld_simpl")
+
 
 r <- raster::getData("worldclim",var="bio",res=10)
 r <- r[[c(4)]]
 names(r) <- c("Seas")
+bio4.he.2080_world <- getData('CMIP5', var='bio', res=10, rcp=85, model='HE', year=70)
+bio4.he.2080_world <- bio4.he.2080_world[[c(4)]]
 
-bio4.gs.2080_world <- raster("data/global_future_climate/gs85bi704.tif")
-bio4.he.2080_world <- raster("data/global_future_climate/he85bi704.tif")
-bio4.no.2080_world <- raster("data/global_future_climate/no85bi704.tif")
+bio4.gs.2080_world <- getData('CMIP5', var='bio', res=10, rcp=85, model='GS', year=70)
+bio4.gs.2080_world <- bio4.gs.2080_world[[c(4)]]
+
+bio4.no.2080_world <- getData('CMIP5', var='bio', res=10, rcp=85, model='NO', year=70)
+bio4.no.2080_world <- bio4.no.2080_world[[c(4)]]
+
 Stack.bio4.2080_world <- stack(c(bio4.gs.2080_world,bio4.he.2080_world,
                                  bio4.no.2080_world))
+
 bio4.2080_world <- mean(Stack.bio4.2080_world) ### 2080 temp seas. raster
-crs(bio4.2080_world) <- "+proj=utm +zone=38 +south +datum=WGS84 +units=m +no_defs +ellps=WGS84 +towgs84=0,0,0"
-crs(wrld_simpl) <- "+proj=utm +zone=38 +south +datum=WGS84 +units=m +no_defs +ellps=WGS84 +towgs84=0,0,0"
 
-## Plot present
+# set the tropical range current and future 
+## future
+wp <-extent(c(-180, 180, -23.5, 23.5))
+future_ws <- crop(bio4.2080_world,wp)
+crs(future_ws) <- "+proj=utm +zone=38 +south +datum=WGS84 +units=m +no_defs +ellps=WGS84 +towgs84=0,0,0"
 
-bio4.anomalies.pres_world <- r
-bio4.anomalies.pres_world[] <- bio4.2080_world[]-r[]
+## current
+Stack.bio4.current_worldcrop <- crop(r,wp)
+crs(Stack.bio4.current_worldcrop) <- "+proj=utm +zone=38 +south +datum=WGS84 +units=m +no_defs +ellps=WGS84 +towgs84=0,0,0"
 
-pdf("./outputs/tseas_world_3_charts.pdf",width=15,height=10) # all mapas
-par(mfrow=c(3,1))
-plot(r,col=viridis_pal(option ="E")(255),xlim=c(-90,160),
-     ylim=c(-23.5,23.5),
-     ##maxpixels=50000,
-     axes=FALSE,box=FALSE,legend=T, horizontal=T, 
-     #breaks=breakpoints2,axis.args=a.arg2, zlim=c(800,3400),
-     main="Temperature seasonality (sd x 100)")
-plot(wrld_simpl, add=T)
-abline(h=0,lty=1,col="black") #equator solid line
-abline(h=-23.5, lty=2, col="black")
-abline(h=23.5, lty=2, col="black")
+current_ws <- Stack.bio4.current_worldcrop
+bio4.anomalies.pres_world[] <- future_ws[]-current_ws[]
 
-## Anomaly future
-breakpoints <- c(-640,-600,-560,-520,-480,-440,-400,-360,-320,-280,
-                 -240,-200,-160,-120,-80,-40,-30,-20,-10,
-                 0,
-                 55,110,165,210,265,320,375,430,485,540,
-                 595,650,705,760,815,870,925,980,1035,1090,
-                 1145,1200)
-colors <- c("#00204DFF", "#002251FF","#002860FF","#002F6FFF","#00336FFF","#07366EFF",
-            "#1D3B6DFF", "#2A406CFF","#34456BFF","#3C4A6BFF","#444F6BFF","#4C546CFF",
-            "#52596CFF", "#5F636EFF","#656870FF","#888579FF","#807E79FF","#848279FF",
-            "#868379FF",
-            "gray70",
-            "#BFB06EFF","#C2B36DFF","#C6B66BFF","#CCBA69FF","#D0BE67FF","#D5C364FF",
-            "#DDC95FFF","#E0CB5EFF","#E2CD5CFF","#E4CF5BFF","#E7D259FF","#EAD357FF",
-            "#ECD555FF","#F0D852FF","#F2DA50FF","#F4DC4EFF","#F7DF4BFF","#FAE149FF",
-            "#FDE346FF","#FFE544FF","#FFE742FF","#FFEA46FF")
+## Setting basic theme options for plot with ggplot2
+theme_base_final <- theme(
+  ## Axis
+  axis.line=element_blank(),
+  axis.text=element_blank(),
+  axis.ticks=element_blank(),
+  axis.title=element_blank(),
+  ## Legend
+  legend.position="bottom",
+  legend.title=element_blank(),
+  legend.text=element_text(size=12),
+  legend.key.height=unit(0.5,"line"),
+  legend.key.width=unit(2.5,"line"),
+  legend.box.background=element_blank(),
+  ## Plot
+  plot.title=element_text(hjust=0.5,size=14),
+  plot.background=element_rect(fill="transparent"),
+  ## Panel
+  panel.background=element_rect(fill="transparent"),
+  panel.grid.major=element_blank(),
+  panel.grid.minor=element_blank(),
+  panel.border=element_blank(),
+  ## Margins
+  plot.margin=unit(c(0,0,0,0),units="line"),
+  legend.margin=margin(c(0,0,0,0),unit="line"),
+  legend.box.margin=margin(c(0,0,0,0)),
+  legend.box.spacing=unit(0,units="line")
+)
 
-a.arg <- list(at=seq(-800,1200,length.out=11), 
-              labels=c("-800","-600","-400","-200","0","200",
-                       "400","600","800","1000","1200"))
-#pdf("./outputs/seas_world_anomaly.pdf",width=5,height=20) # all mapas
+## Function to plot anomalies
+plot_anomaly_ws <- function(r, title, label="x") {
+  rdf <- data.frame(rasterToPoints(r)) # To plot raster with geom_raster()
+  names(rdf) <- c("x", "y", "z")
+  p <- ggplot(NULL, aes(x, y)) +
+    geom_tile(data=rdf, aes(fill=z)) +
+    theme_bw() + theme_base_final +
+    geom_hline(yintercept = 0,linetype = "dashed") +
+    coord_fixed(xlim=c(-130,180), ylim=c(-23.5,23.5)) +
+    annotate("text",x=-100,y=5,label=label,hjust=1,vjust=0,size=5) +
+    scale_y_continuous(expand=c(0,0)) +
+    scale_x_continuous(expand=c(0,0)) +
+    labs(title=title)
+  return(p)
+}
 
-plot(bio4.anomalies.pres_world,col=colors, 
-     breaks=breakpoints, axis.arg=a.arg, zlim=c(-640,1200),xlim=c(-90,160),
-     ylim=c(-23.5,23.5),
-     axes=FALSE,box=FALSE,legend=T,
-     main="Future Climatic Anomaly",horizontal=TRUE)
-plot(wrld_simpl, add=T)
-abline(h=0,lty=1,col="black") #equator solid line
-abline(h=-23.5, lty=2, col="black")
-abline(h=23.5, lty=2, col="black")
+## Rescale function for legend color
+rescale <- function(x,from.min,from.max,to.min=0,to.max=1) {
+  a <- from.min; b <- from.max; c <- to.min; d <- to.max
+  int <- (b*c-a*d)/(b-a) ; slope <- (d-c)/(b-a)
+  return(int+slope*x)
+}
+
+## Color scales
+## current world seasonality
+col_scale_var_cur_ws <- scale_fill_gradientn(
+  colours=viridis(255, option="B", direction=1),
+  na.value="transparent",
+  values=rescale(seq(0,7600,l=255),0,7600),
+  limits=c(0,7600),
+  breaks=seq(0,7600,l=6),
+  labels=seq(0,7600,l=6)
+)
 
 
-### 2080 climate
 
-plot(bio4.2080_world,col=viridis_pal(option ="E")(255),xlim=c(-90,160),
-     ylim=c(-23.5,23.5),
-     ##maxpixels=50000,
-     axes=FALSE,box=FALSE,legend=T, horizontal=T, 
-     #breaks=breakpoints,axis.args=a.arg, #zlim=c(800,3400),
-     main="Future Temperature Seasonality (sd x 100)")
-plot(wrld_simpl, add=T)
-abline(h=0,lty=1,col="black") #equator solid line
-abline(h=-23.5, lty=2, col="black")
-abline(h=23.5, lty=2, col="black")
+## Color scales
+## future world seasonality
+col_scale_var_fut_ws <- scale_fill_gradientn(
+  colours=viridis(255, option="B", direction=1),
+  na.value="transparent",
+  values=rescale(seq(100,8200,l=255),100,8200),
+  limits=c(0,8200),
+  breaks=seq(0,8200,l=6),
+  labels=seq(0,8200,l=6)
+)
 
-dev.off()
+## Color scales
+## anomaly world seasonality
+col_scale_var_anomws <- scale_fill_gradientn(
+  colours=viridis(255, option="C", direction=1),
+  na.value="transparent",
+  values=rescale(seq(-700,1000,l=255),-700,1000),
+  limits=c(-700,1000),
+  breaks=c(-700,-350, 0, 350, 700, 1000),
+  labels=c(-700,-350, 0, 350, 700, 1000)
+)
+
+# Current ws
+cur_ws <- plot_anomaly_ws(r=current_ws, label="(a)",
+                      title="Temperature Seasonality (ºC sd x 100)") + col_scale_var_cur_ws
+                      
+# Future anomaly
+ano_ws <- plot_anomaly_ws(r=bio4.anomalies.pres_world, label="(b)",
+                          title="Future Climatic Anomaly") + col_scale_var_anomws
+
+# future seasonality
+fut_ws <- plot_anomaly_ws(r=future_ws, label="(c)",
+                          title="Temperature Seasonality (ºC sd x 100) - 2080") + col_scale_var_fut_ws
+
+## Combine plots
+lay_6 <- rbind(c(rep(seq(1,1,by=1),each=3)),
+               c(rep(seq(1,1,by=1),each=3)),
+               c(rep(seq(1,1,by=1),each=3)),
+               c(rep(seq(2,2,by=1),each=3)),
+               c(rep(seq(2,2,by=1),each=3)),
+               c(rep(seq(2,2,by=1),each=3)),
+               c(rep(seq(3,3,by=1),each=3)),
+               c(rep(seq(3,3,by=1),each=3)),
+               c(rep(seq(3,3,by=1),each=3)))
+
+plot_world_anomaly <- grid.arrange(cur_ws, ano_ws, fut_ws,layout_matrix=lay_6)
+
+ggsave(file=paste0("./outputs/anomaly_world_chart.pdf"),
+       plot=plot_world_anomaly,width=11,height=8,dpi="print")
+
+ggsave(file=paste0("./outputs/anomaly_world_chart.png"),
+       plot=plot_world_anomaly,width=11,height=8,dpi="print")
 
 ##===========================================================================
-## End of script    
+## End of script - Have a Nice Day and Enjoy The View
 ##===========================================================================
