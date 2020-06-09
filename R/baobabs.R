@@ -1044,6 +1044,298 @@ ggsave(file=paste0("./outputs/all_species_current_future_niche_comparison.pdf"),
 
 ggsave(file=paste0("./outputs/all_species_current_future_niche_comparison.png"),
        plot=plot_densities_curves,width=18,height=15,dpi="print")
+
+######################################################################
+###### baobaobs vulnerability to climate change 
+#####################################################################
+sps <- c("Adansonia.digitata","Adansonia.grandidieri","Adansonia.madagascariensis",
+         "Adansonia.perrieri","Adansonia.rubrostipa","Adansonia.suarezensis","Adansonia.za")
+
+## Setting basic theme options for plot with ggplot2
+theme_base_3 <- theme(
+  ## Axis
+  axis.line=element_blank(),
+  axis.text=element_blank(),
+  axis.ticks=element_blank(),
+  axis.title=element_blank(),
+  ## Legend
+  legend.position="bottom",
+  legend.title=element_blank(), #add Vote for bottom species
+  legend.text=element_text(size=10),
+  legend.key.height=unit(0.5,"line"),
+  legend.key.width=unit(1.2,"line"),
+  legend.box.background=element_blank(),
+  ## Plot
+  plot.title=element_text(hjust=0.7,size=12),
+  plot.background=element_rect(fill="transparent"),
+  ## Panel
+  panel.background=element_rect(fill="transparent"),
+  panel.grid.major=element_blank(),
+  panel.grid.minor=element_blank(),
+  panel.border=element_blank(),
+  ## Margins
+  plot.margin=unit(c(0,0,0,0),units="line"),
+  legend.margin=margin(c(0,0,0,0),unit="line"),
+  legend.box.margin=margin(c(0,0,0,0)),
+  legend.box.spacing=unit(0,units="line")
+)
+
+## Function to plot climate change scenarios (current RCP 4.5 and RCP 8.5)
+plot_anomaly_2 <- function(r, title, label="x") {
+  rdf <- data.frame(rasterToPoints(r)) # To plot raster with geom_raster()
+  names(rdf) <- c("x", "y", "z")
+  p <- ggplot(NULL, aes(x, y)) +
+    geom_tile(data=rdf, aes(fill=z)) +
+    theme_bw() + theme_base_3 +
+    coord_fixed(xlim=c(313000,1090000), ylim=c(7167000,8676000)) +
+    annotate("text",x=600000,y=8500000,label=label,hjust=1,vjust=0,size=5) +
+    scale_y_continuous(expand=c(0,0)) +
+    scale_x_continuous(expand=c(0,0)) +
+    labs(title=title) 
+    return(p)
+}
+
+## Function to plot altitude range with current points
+plot_anomaly_alt <- function(m,n,title, label="x") {
+    rdf <- data.frame(rasterToPoints(m)) # To plot raster with geom_raster()
+    names(rdf) <- c("x", "y", "z")
+    rdf2 <- as.data.frame(n)
+     ang <-  ggplot(NULL, aes(x,y)) + 
+      geom_tile(data=rdf, aes(fill=z)) +
+      geom_point(data=rdf2, shape=1, aes(x,y), color="black", size=2)+
+      theme_bw() + theme_base_3 +
+      coord_fixed(xlim=c(313000,1090000), ylim=c(7167000,8676000)) +
+      annotate("text",x=600000,y=8500000,label=label,hjust=1,vjust=0,size=5) +
+      scale_y_continuous(expand=c(0,0)) +
+      scale_x_continuous(expand=c(0,0)) +
+      labs(title=title)
+    return(ang)
+}
+
+## Color scales future
+col_scale_var_test_fut <- scale_fill_gradientn(
+  colours = c(grey(c(0.90,seq(0.7,0.50,-0.05))),gcolors(7)),
+  na.value="transparent",
+  values=rescale(seq(0,3000),0,3000),
+  limits=c(0,3000),
+  breaks= seq(0,3000,by=500),
+  labels= c(0,2,4,6,8,10,12)
+)
+
+## Color scales pres
+col_scale_var_test_pres <- scale_fill_gradientn(
+  colours = c(grey(c(0.90,seq(0.9,0.7,-0.2))),gcolors(3)),
+  na.value="transparent",
+  values=rescale(seq(0,1000),0,1000),
+  limits=c(0,1000),
+  breaks= seq(0,1000,by=250),
+  labels= c(0,1,2,3,4)
+)
+
+# altitude map presence points all species
+## Presence points and altitude
+# Legend specifications
+
+col_scale_var_test_alt <- scale_fill_gradientn(
+  colours = terrain.colors(255)[255:1],
+  na.value="transparent",
+  values=rescale(seq(0,3000),0,3000),
+  limits=c(0,3000),
+  breaks= seq(0,3000,by=1000),
+  labels= seq(0,3000,by=1000)
+)
+
+# Ploting
+# non threatened
+a_za <- read.table(paste0("Adansonia.za/function_ready.txt"), header=T,sep="\t")
+a_digi <- read.table(paste0("Adansonia.digitata/function_ready.txt"), header=T,sep="\t")
+a_grand <- read.table(paste0("Adansonia.grandidieri/function_ready.txt"), header=T,sep="\t")
+#threatened
+a_mada <- read.table(paste0("Adansonia.madagascariensis/function_ready.txt"), header=T,sep="\t")
+a_perri <- read.table(paste0("Adansonia.perrieri/function_ready.txt"), header=T,sep="\t")
+a_rubro <- read.table(paste0("Adansonia.rubrostipa/function_ready.txt"), header=T,sep="\t")
+a_suare <- read.table(paste0("Adansonia.suarezensis/function_ready.txt"), header=T,sep="\t")
+
+# non threatened
+a1 <- plot_anomaly_alt(m=environ$alt,n=a_digi,label="(a)",
+                     title="Presence Points\nAltitudinal range (m)") + col_scale_var_test_alt
+e2 <- plot_anomaly_alt(m=environ$alt,n=a_grand,label="(e)",
+                       title="") + col_scale_var_test_alt
+i3 <- plot_anomaly_alt(m=environ$alt,n=a_za,label="(i)",
+                       title="") + col_scale_var_test_alt
+
+# threatened species
+a1t <- plot_anomaly_alt(m=environ$alt,n=a_mada,label="(a)",
+                       title="Presence Points\nAltitudinal range (m)") + col_scale_var_test_alt
+e2t <- plot_anomaly_alt(m=environ$alt,n=a_perri,label="(e)",
+                       title="") + col_scale_var_test_alt
+i3t <- plot_anomaly_alt(m=environ$alt,n=a_rubro,label="(i)",
+                       title="") + col_scale_var_test_alt
+m4t <- plot_anomaly_alt(m=environ$alt,n=a_suare,label="(m)",
+                       title="") + col_scale_var_test_alt
+
+# Load predictions and update extent present
+# non threatened 
+pred_dig <- stack(paste0("Adansonia.digitata/proj_current/proj_current_Adansonia.digitata_ensemble.grd"))
+ca_dig <- pred_dig[[1]]
+pred_gran <- stack(paste0("Adansonia.grandidieri/proj_current/proj_current_Adansonia.grandidieri_ensemble.grd"))
+ca_gran <- pred_gran[[1]]
+pred_za <- stack(paste0("Adansonia.za/proj_current/proj_current_Adansonia.za_ensemble.grd"))
+ca_za <- pred_za[[1]]
+
+# threatened 
+pred_mada <- stack(paste0("Adansonia.madagascariensis/proj_current/proj_current_Adansonia.madagascariensis_ensemble.grd"))
+ca_mada <- pred_mada[[1]]
+pred_perri <- stack(paste0("Adansonia.perrieri/proj_current/proj_current_Adansonia.perrieri_ensemble.grd"))
+ca_perri <- pred_perri[[1]]
+pred_rubro <- stack(paste0("Adansonia.rubrostipa/proj_current/proj_current_Adansonia.rubrostipa_ensemble.grd"))
+ca_rubro <- pred_rubro[[1]]
+pred_suare <- stack(paste0("Adansonia.suarezensis/proj_current/proj_current_Adansonia.suarezensis_ensemble.grd"))
+ca_suare <- pred_suare[[1]]
+
+# non threatened
+b1 <- plot_anomaly_2(r=ca_dig,label="(b)",
+                     title="Current\n  Distribution") + col_scale_var_test_pres
+f2 <- plot_anomaly_2(r=ca_gran,label="(f)",
+                     title="") + col_scale_var_test_pres
+j3 <- plot_anomaly_2(r=ca_za,label="(j)",
+                     title="") + col_scale_var_test_pres
+# threatened 
+b1t <- plot_anomaly_2(r=ca_mada,label="(b)",
+                     title="Current\n  Distribution") + col_scale_var_test_pres
+f2t <- plot_anomaly_2(r=ca_perri,label="(f)",
+                     title="") + col_scale_var_test_pres
+j3t <- plot_anomaly_2(r=ca_rubro,label="(j)",
+                     title="") + col_scale_var_test_pres
+n4t <- plot_anomaly_2(r=ca_suare,label="(n)",
+                      title="") + col_scale_var_test_pres
+
+################## Future maps
+# Non threatened
+cafut_dig <- raster(paste0("Adansonia.digitata/caFut.tif"))
+cafut_gran <- raster(paste0("Adansonia.grandidieri/caFut.tif"))
+cafut_za <- raster(paste0("Adansonia.za/caFut.tif"))
+
+caZD_dig <- raster(paste0("Adansonia.digitata/caZD.tif"))
+caZD_gran <- raster(paste0("Adansonia.grandidieri/caZD.tif"))
+caZD_za <- raster(paste0("Adansonia.za/caZD.tif"))
+
+# threatened 
+cafut_mada <- raster(paste0("Adansonia.madagascariensis/caFut.tif"))
+cafut_perri <- raster(paste0("Adansonia.perrieri/caFut.tif"))
+cafut_rubro <- raster(paste0("Adansonia.rubrostipa/caFut.tif"))
+cafut_suare <- raster(paste0("Adansonia.suarezensis/caFut.tif"))
+
+caZD_mada <- raster(paste0("Adansonia.madagascariensis/caZD.tif"))
+caZD_perri <- raster(paste0("Adansonia.perrieri/caZD.tif"))
+caZD_rubro <- raster(paste0("Adansonia.rubrostipa/caZD.tif"))
+caZD_suare <- raster(paste0("Adansonia.suarezensis/caZD.tif"))
+
+# non threatened 
+c1 <- plot_anomaly_2(r=cafut_dig, label="(c)",
+                     title="Full Dispersal\nRCP 8.5 2080") + col_scale_var_test_fut
+
+g2 <- plot_anomaly_2(r=cafut_gran, label="(g)",
+                     title="") + col_scale_var_test_fut
+
+k3 <- plot_anomaly_2(r=cafut_za, label="(k)",
+                     title="") + col_scale_var_test_fut
+
+
+d1 <- plot_anomaly_2(r=caZD_dig, label="(d)",
+                     title="Zero Dispersal\nRCP 8.5 2080") + col_scale_var_test_fut
+
+h2 <- plot_anomaly_2(r=caZD_gran, label="(h)",
+                     title="") + col_scale_var_test_fut
+
+l3 <- plot_anomaly_2(r=caZD_za, label="(l)",
+                     title="") + col_scale_var_test_fut
+# threatened
+
+c1t <- plot_anomaly_2(r=cafut_mada, label="(c)",
+                     title="Full Dispersal\nRCP 8.5 2080") + col_scale_var_test_fut
+
+g2t <- plot_anomaly_2(r=cafut_perri, label="(g)",
+                     title="") + col_scale_var_test_fut
+
+k3t <- plot_anomaly_2(r=cafut_rubro, label="(k)",
+                     title="") + col_scale_var_test_fut
+
+o4t <- plot_anomaly_2(r=cafut_suare, label="(o)",
+                      title="") + col_scale_var_test_fut
+
+### Zero Dispersial
+
+d1t <- plot_anomaly_2(r=caZD_mada, label="(d)",
+                     title="Zero Dispersal\nRCP 8.5 2080") + col_scale_var_test_fut
+
+h2t <- plot_anomaly_2(r=caZD_perri, label="(h)",
+                     title="") + col_scale_var_test_fut
+
+l3t <- plot_anomaly_2(r=caZD_rubro, label="(l)",
+                     title="") + col_scale_var_test_fut
+
+p4t <- plot_anomaly_2(r=caZD_suare, label="(p)",
+                      title="") + col_scale_var_test_fut
+
+## Non threatened legend name
+
+
+tgrob_dig <- textGrob("A. digitata",rot=90, gp=gpar(cex=1.25,fontface="italic"),
+                    hjust=0.5, vjust=0.5)
+tgrob_gran <- textGrob("A. grandidieri",rot=90, gp=gpar(cex=1.25,fontface="italic"),
+                       hjust=0.5, vjust=0.5)
+tgrob_za <- textGrob("A. za",rot=90, gp=gpar(cex=1.25,fontface="italic"),
+                     hjust=0.5, vjust=0.5)
+
+## Combine plots
+lay_4 <- rbind(c(1,rep(seq(4,7,by=1),each=3)),
+               c(1,rep(seq(4,7,by=1),each=3)),
+               c(2,rep(seq(8,11,by=1),each=3)),
+               c(2,rep(seq(8,11,by=1),each=3)),
+               c(3,rep(seq(12,15,by=1),each=3)),
+               c(3,rep(seq(12,15,by=1),each=3)))
+
+plot_baobabs <- grid.arrange(tgrob_dig, tgrob_gran, tgrob_za,
+                             a1,b1,c1,d1,e2,f2,g2,h2,
+                             i3,j3,k3,l3,layout_matrix=lay_4)
+
+ggsave(file=paste0("./outputs/non_threat.pdf"),
+       plot=plot_baobabs,width=11,height=8,dpi="print")
+
+ggsave(file=paste0("./outputs/non_threat.png"),
+       plot=plot_baobabs,width=11,height=8,dpi="print")
+
+
+## Threatened legend name
+tgrob_mada <- textGrob("A. madagascariensis",rot=90, gp=gpar(cex=1.25,fontface="italic"),
+                     hjust=0.5, vjust=0.5)
+tgrob_perri <- textGrob("A. perrieri",rot=90, gp=gpar(cex=1.25,fontface="italic"),
+                       hjust=0.5, vjust=0.5)
+tgrob_rubro <- textGrob("A. rubrostipa",rot=90, gp=gpar(cex=1.25,fontface="italic"),
+                      hjust=0.5, vjust=0.5)
+tgrob_suare <- textGrob("A. suarezensis",rot=90, gp=gpar(cex=1.25,fontface="italic"),
+                        hjust=0.5, vjust=0.5)
+## Combine plots
+lay_5 <- rbind(c(1,rep(seq(5,8,by=1),each=3)),
+               c(1,rep(seq(5,8,by=1),each=3)),
+               c(2,rep(seq(9,12,by=1),each=3)),
+               c(2,rep(seq(9,12,by=1),each=3)),
+               c(3,rep(seq(13,16,by=1),each=3)),
+               c(3,rep(seq(13,16,by=1),each=3)),
+               c(4,rep(seq(17,20,by=1),each=3)),
+               c(4,rep(seq(17,20,by=1),each=3)))
+
+plot_baobabs_threatened <- grid.arrange(tgrob_mada, tgrob_perri, tgrob_rubro,tgrob_suare,
+                             a1t,b1t,c1t,d1t,e2t,f2t,g2t,h2t,
+                             i3t,j3t,k3t,l3t,m4t,n4t,o4t,p4t,layout_matrix=lay_5)
+
+ggsave(file=paste0("./outputs/threat.pdf"),
+       plot=plot_baobabs_threatened,width=8,height=7,dpi="print")
+
+ggsave(file=paste0("./outputs/threat.png"),
+       plot=plot_baobabs_threatened,width=11,height=8,dpi="print")
+
 #######################################################################
 ### World Seasonality Map
 #######################################################################
