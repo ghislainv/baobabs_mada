@@ -1541,6 +1541,73 @@ perrieri_vi <- read.table(paste0("Adansonia.perrieri/varimp.txt"), header=T,sep=
 rubrostipa_vi <- read.table(paste0("Adansonia.rubrostipa/varimp.txt"), header=T,sep="\t")
 suare_vi <- read.table(paste0("Adansonia.suarezensis/varimp.txt"), header=T,sep="\t")
 za_vi <- read.table(paste0("Adansonia.za/varimp.txt"), header=T,sep="\t")
+
+all_species_vi <- rbind(digitata_vi,grandidieri_vi,mada_vi,
+                         perrieri_vi,rubrostipa_vi,suare_vi,za_vi)
+
+tablevi <- data.frame("Species" = c("A. digitata","A. grandidieri","A. madagascariensis", 
+                                    "A. perrieri", "A. rubrostipa","A. suarezensis",
+                                    "A. za"), "Mean Annual Temperature(°C)" = c(3,2,2,2,2,3,3), 
+                                    "Temperature Seasonality(°C)" = c(2,3,1,1,4,1,3),
+                                    "Precipitation(mm)" = c(4,1,3,4,4,2,1),
+                                    "Climatic Water Deficit(mm)" = c(1,4,4,3,1,4,4))
+write.table(tablevi,paste0("./outputs/table2vi.txt"),sep="\t")
+
+#### Table 3 with performance indexes
+
+suare_dig <- read.table(paste0("Adansonia.digitata/performance_ca.txt"), header=T,sep="\t")
+suare_grandi <- read.table(paste0("Adansonia.grandidieri/performance_ca.txt"), header=T,sep="\t")
+suare_mada <- read.table(paste0("Adansonia.madagascariensis/performance_ca.txt"), header=T,sep="\t")
+suare_perri <- read.table(paste0("Adansonia.perrieri/performance_ca.txt"), header=T,sep="\t")
+suare_rubro <- read.table(paste0("Adansonia.rubrostipa/performance_ca.txt"), header=T,sep="\t")
+suare_suare <- read.table(paste0("Adansonia.suarezensis/performance_ca.txt"), header=T,sep="\t")
+suare_za <- read.table(paste0("Adansonia.za/performance_ca.txt"), header=T,sep="\t")
+ca_species <- rbind(suare_dig,suare_grandi,suare_mada,suare_perri,suare_rubro,
+                    suare_suare,suare_za)
+
+rownames(ca_species) <- c("A. digitata","A. grandidieri","A. madagascariensis", 
+                            "A. perrieri", "A. rubrostipa","A. suarezensis","A. za")
+
+only_sen_spe_tss <- subset(ca_species, select=c("Sen", "Spe","TSS"))
+
+write.table(only_sen_spe_tss,paste0("./outputs/table3_performance_ready.txt"),sep="\t")
+
+
+####### #### Table A2 with performance indexes
+
+perf_dig <- read.table(paste0("Adansonia.digitata/current_model_evaluation.txt"), header=T,sep="\t")
+perf_grand <- read.table(paste0("Adansonia.grandidieri/current_model_evaluation.txt"), header=T,sep="\t")
+perf_mada <- read.table(paste0("Adansonia.madagascariensis/current_model_evaluation.txt"), header=T,sep="\t")
+perf_perri <- read.table(paste0("Adansonia.perrieri/current_model_evaluation.txt"), header=T,sep="\t")
+perf_rubro <- read.table(paste0("Adansonia.rubrostipa/current_model_evaluation.txt"), header=T,sep="\t")
+perf_suare <- read.table(paste0("Adansonia.suarezensis/current_model_evaluation.txt"), header=T,sep="\t")
+perf_za <- read.table(paste0("Adansonia.za/current_model_evaluation.txt"), header=T,sep="\t")
+tail(perf_za)
+
+perf_species <- rbind(perf_dig,perf_grand,perf_mada,perf_perri,perf_rubro,
+                    perf_suare,perf_za)
+
+# using subset function
+newdata <- subset(perf_species, Index == "Testing.data",
+                  select=c(wIndex,Model, Run, Value))
+
+## to calculate mean of the 5 runs
+newdata <- newdata %>%
+  filter(wIndex != 'KAPPA') %>%
+  select(1:4) #omit tempcol in output
+
+## remove Full run
+newdatap <- newdata %>%
+  filter(Run != 'Full') %>%
+  select(1:4)
+newdatap$species <- rep(c("A. digitata","A. grandidieri","A. madagascariensis", 
+                            "A. perrieri", "A. rubrostipa","A. suarezensis","A. za"),each=30)
+
+### To calculate mean over the full dataset
+newdataf <- newdata[newdata$Run == 'Full', ]
+newdataf$species <- rep(c("A. digitata","A. grandidieri","A. madagascariensis", 
+                          "A. perrieri", "A. rubrostipa","A. suarezensis","A. za"),each=6)
+
 ##===========================================================================
 ## End of script - Have a Nice Day and Enjoy The View
 ##===========================================================================
