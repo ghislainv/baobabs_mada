@@ -1601,12 +1601,21 @@ newdatap <- newdata %>%
   filter(Run != 'Full') %>%
   select(1:4)
 newdatap$species <- rep(c("A. digitata","A. grandidieri","A. madagascariensis", 
-                            "A. perrieri", "A. rubrostipa","A. suarezensis","A. za"),each=30)
+                            "A. perrieri", "A. rubrostipa","A. suarezensis","A. za")
+                        ,each=30) # 40 with Maxent
+partial_final <-  aggregate(Value~species + wIndex + Model, FUN=mean, data=newdatap)
+
+
+write.table(partial_final,paste0("./outputs/tableA2_performance_partial.txt"),sep="\t")
 
 ### To calculate mean over the full dataset
 newdataf <- newdata[newdata$Run == 'Full', ]
 newdataf$species <- rep(c("A. digitata","A. grandidieri","A. madagascariensis", 
-                          "A. perrieri", "A. rubrostipa","A. suarezensis","A. za"),each=6)
+                          "A. perrieri", "A. rubrostipa","A. suarezensis","A. za")
+                        ,each=6) # 8 with Maxent
+full_final <-  aggregate(Value~species + wIndex + Model, FUN=mean, data=newdataf)
+
+write.table(full_final,paste0("./outputs/tableA2_performance_full.txt"),sep="\t")
 
 ##===========================================================================
 ## End of script - Have a Nice Day and Enjoy The View
