@@ -305,7 +305,7 @@ col_scale_ano_cwd <- scale_fill_gradientn(
 ## Plot anomalies for each climatic variable
 ## tmean
 p1 <- plot_anomaly(r=var_85_2080[["tmean"]], label="a",
-                   title="Temperature\n(°C x 10)") +
+                   title="Temperature\n(C x 10)") +
     col_scale_var_tmean
 p2 <- plot_anomaly(r=ano_85_2080[["tmean"]], label="a'",
                    title="") +
@@ -341,6 +341,7 @@ tgrob_fut <- textGrob("Future anomaly\n(RCP 8.5, 2085)",
 plot_anomalies <- grid.arrange(tgrob_pres, tgrob_fut,
                                p1, p2, p3, p4, p5, p6, p7, p8,
                                layout_matrix=lay)
+
 ggsave(filename="outputs/Fig1_climatic_anomalies.png", plot=plot_anomalies,
        width=8, height=7, dpi="print")
 
@@ -366,9 +367,9 @@ for (i in 1: length(sp.dir)) {
   mapmat.df <- read.csv(file=paste0("./",sp.dir[i],"/","niche_graph_species.csv"),sep=";")
   head(mapmat.df)
   mapmat.final <- cbind(mapmat.df.anomalies,mapmat.df)
-  head(mapmat.f)
   mapmat.f <- mapmat.final[,c(1,2,3,4,6,7,8,9,10,11)]
   write.csv2(mapmat.final,paste0("./",sp.dir[i],"/","niche_graph_species_compared_anomaly.csv"))
+  write.table(mapmat.final,paste0("./",sp.dir[i],"/niche_graph_species_compared_anomaly.csv"),sep="\t")
   
   #### Future niche over current SDA!!! NO ANOMALY
   wC.future <- which(values(ca)>=500)
@@ -378,6 +379,7 @@ for (i in 1: length(sp.dir)) {
   q_ok_future_fut <- round(apply(mapmat.df.anomalies,2,quantile,c(0.025,0.975),na.rm=TRUE))
   niche_ok_future <- as.data.frame(rbind(Mean_ok_future_fut,q_ok_future_fut))
   write.csv2(niche_ok_future,paste0("./",sp.dir[i],"/","mean_niche_with_future.csv"))
+  write.table(niche_ok_future,paste0("./",sp.dir[i],"/mean_niche_with_future.txt"),sep="\t")
   
 }
 
@@ -1390,7 +1392,7 @@ Stack.bio4.current_worldcrop <- crop(r,wp)
 crs(Stack.bio4.current_worldcrop) <- "+proj=utm +zone=38 +south +datum=WGS84 +units=m +no_defs +ellps=WGS84 +towgs84=0,0,0"
 
 current_ws <- Stack.bio4.current_worldcrop
-bio4.anomalies.pres_world[] <- future_ws[]-current_ws[]
+Stack.bio4.current_worldcrop[] <- future_ws[]-current_ws[]
 
 ## Setting basic theme options for plot with ggplot2
 theme_base_final <- theme(
@@ -1456,7 +1458,6 @@ col_scale_var_cur_ws <- scale_fill_gradientn(
 )
 
 
-
 ## Color scales
 ## future world seasonality
 col_scale_var_fut_ws <- scale_fill_gradientn(
@@ -1484,7 +1485,7 @@ cur_ws <- plot_anomaly_ws(r=current_ws, label="(a)",
                       title="Temperature Seasonality (ºC sd x 100)") + col_scale_var_cur_ws
                       
 # Future anomaly
-ano_ws <- plot_anomaly_ws(r=bio4.anomalies.pres_world, label="(b)",
+ano_ws <- plot_anomaly_ws(r=Stack.bio4.current_worldcrop, label="(b)",
                           title="Future Climatic Anomaly") + col_scale_var_anomws
 
 # future seasonality
@@ -1512,7 +1513,7 @@ ggsave(file=paste0("./outputs/anomaly_world_chart.png"),
 
 ##### Generating study tables
 
-## area chance
+## area change
 digitata <- read.table(paste0("Adansonia.digitata/sda_fut.txt"), header=T,sep="\t")
 grandidieri <- read.table(paste0("Adansonia.grandidieri/sda_fut.txt"), header=T,sep="\t")
 mada <- read.table(paste0("Adansonia.madagascariensis/sda_fut.txt"), header=T,sep="\t")
@@ -1549,9 +1550,8 @@ colnames(final_table1)<- c("Baobab species","SDAp (km²)","Dispersal",
 
 write.table(final_table1,paste0("./outputs/table1.txt"),sep="\t")
 
+############################
 ### importance variable table
-write.table(VarImp,paste0(spdir,"/varimp.txt"),sep="\t")
-
 digitata_vi <- read.table(paste0("Adansonia.digitata/varimp.txt"), header=T,sep="\t")
 grandidieri_vi <- read.table(paste0("Adansonia.grandidieri/varimp.txt"), header=T,sep="\t")
 mada_vi <- read.table(paste0("Adansonia.madagascariensis/varimp.txt"), header=T,sep="\t")
@@ -1559,6 +1559,7 @@ perrieri_vi <- read.table(paste0("Adansonia.perrieri/varimp.txt"), header=T,sep=
 rubrostipa_vi <- read.table(paste0("Adansonia.rubrostipa/varimp.txt"), header=T,sep="\t")
 suare_vi <- read.table(paste0("Adansonia.suarezensis/varimp.txt"), header=T,sep="\t")
 za_vi <- read.table(paste0("Adansonia.za/varimp.txt"), header=T,sep="\t")
+
 
 all_species_vi <- rbind(digitata_vi,grandidieri_vi,mada_vi,
                          perrieri_vi,rubrostipa_vi,suare_vi,za_vi)
@@ -1600,7 +1601,6 @@ perf_perri <- read.table(paste0("Adansonia.perrieri/current_model_evaluation.txt
 perf_rubro <- read.table(paste0("Adansonia.rubrostipa/current_model_evaluation.txt"), header=T,sep="\t")
 perf_suare <- read.table(paste0("Adansonia.suarezensis/current_model_evaluation.txt"), header=T,sep="\t")
 perf_za <- read.table(paste0("Adansonia.za/current_model_evaluation.txt"), header=T,sep="\t")
-tail(perf_za)
 
 perf_species <- rbind(perf_dig,perf_grand,perf_mada,perf_perri,perf_rubro,
                     perf_suare,perf_za)
@@ -1618,9 +1618,12 @@ newdata <- newdata %>%
 newdatap <- newdata %>%
   filter(Run != 'Full') %>%
   select(1:4)
+
+newdatap <- newdata[newdata$Run != 'Full', ]
+
 newdatap$species <- rep(c("A. digitata","A. grandidieri","A. madagascariensis", 
                             "A. perrieri", "A. rubrostipa","A. suarezensis","A. za")
-                        ,each=30) # 40 with Maxent
+                        ,each=60) 
 partial_final <-  aggregate(Value~species + wIndex + Model, FUN=mean, data=newdatap)
 
 
@@ -1630,7 +1633,7 @@ write.table(partial_final,paste0("./outputs/tableA2_performance_partial.txt"),se
 newdataf <- newdata[newdata$Run == 'Full', ]
 newdataf$species <- rep(c("A. digitata","A. grandidieri","A. madagascariensis", 
                           "A. perrieri", "A. rubrostipa","A. suarezensis","A. za")
-                        ,each=6) # 8 with Maxent
+                        ,each=12)
 full_final <-  aggregate(Value~species + wIndex + Model, FUN=mean, data=newdataf)
 
 write.table(full_final,paste0("./outputs/tableA2_performance_full.txt"),sep="\t")
@@ -1640,37 +1643,37 @@ write.table(full_final,paste0("./outputs/tableA2_performance_full.txt"),sep="\t"
 nichesf_dig <- read.table(paste0("Adansonia.digitata/mean_niche_with_future.txt"), header=T,sep="\t")
 nichesc_dig <- read.table(paste0("Adansonia.digitata/niche.txt"), header=T,sep="\t")
 niches_dig <- cbind(nichesf_dig,nichesc_dig)
-niches_dig$species <- rep(c("A. digitata"),each=3) # 8 with Maxent
+niches_dig$species <- rep(c("A. digitata"),each=3)
 
 nichesf_grand <- read.table(paste0("Adansonia.grandidieri/mean_niche_with_future.txt"), header=T,sep="\t")
 nichesc_grand <- read.table(paste0("Adansonia.grandidieri/niche.txt"), header=T,sep="\t")
 niches_grand <- cbind(nichesf_grand,nichesc_grand)
-niches_grand$species <- rep(c("A. grandidieri"),each=3) # 8 with Maxent
+niches_grand$species <- rep(c("A. grandidieri"),each=3)
 
 nichesf_mada <- read.table(paste0("Adansonia.madagascariensis/mean_niche_with_future.txt"), header=T,sep="\t")
 nichesc_mada <- read.table(paste0("Adansonia.madagascariensis/niche.txt"), header=T,sep="\t")
 niches_mada <- cbind(nichesf_mada,nichesc_mada)
-niches_mada$species <- rep(c("A. madagascariensis"),each=3) # 8 with Maxent
+niches_mada$species <- rep(c("A. madagascariensis"),each=3)
 
 nichesf_perri <- read.table(paste0("Adansonia.perrieri/mean_niche_with_future.txt"), header=T,sep="\t")
 nichesc_perri <- read.table(paste0("Adansonia.perrieri/niche.txt"), header=T,sep="\t")
 niches_perri <- cbind(nichesf_perri,nichesc_perri)
-niches_perri$species <- rep(c("A. perrieri"),each=3) # 8 with Maxent
+niches_perri$species <- rep(c("A. perrieri"),each=3)
 
 nichesf_rubro <- read.table(paste0("Adansonia.rubrostipa/mean_niche_with_future.txt"), header=T,sep="\t")
 nichesc_rubro <- read.table(paste0("Adansonia.rubrostipa/niche.txt"), header=T,sep="\t")
 niches_rubro <- cbind(nichesf_rubro,nichesc_rubro)
-niches_rubro$species <- rep(c("A. rubrostipa"),each=3) # 8 with Maxent
+niches_rubro$species <- rep(c("A. rubrostipa"),each=3)
 
 nichesf_suare <- read.table(paste0("Adansonia.suarezensis/mean_niche_with_future.txt"), header=T,sep="\t")
 nichesc_suare <- read.table(paste0("Adansonia.suarezensis/niche.txt"), header=T,sep="\t")
 niches_suare <- cbind(nichesf_suare,nichesc_suare)
-niches_suare$species <- rep(c("A. suarezensis"),each=3) # 8 with Maxent
+niches_suare$species <- rep(c("A. suarezensis"),each=3)
 
 nichesf_za <- read.table(paste0("Adansonia.za/mean_niche_with_future.txt"), header=T,sep="\t")
 nichesc_za <- read.table(paste0("Adansonia.za/niche.txt"), header=T,sep="\t")
 niches_za <- cbind(nichesf_za,nichesc_za)
-niches_za$species <- rep(c("A. za"),each=3) # 8 with Maxent
+niches_za$species <- rep(c("A. za"),each=3)
 
 all_niches <- cbind(niches_dig,niches_grand,niches_mada,niches_perri,
                     niches_rubro,niches_suare,niches_za)
