@@ -1061,12 +1061,12 @@ theme_base_3 <- theme(
   ## Legend
   legend.position="bottom",
   legend.title=element_blank(), #add Vote for bottom species
-  legend.text=element_text(size=10),
+  legend.text=element_text(size=11),
   legend.key.height=unit(0.5,"line"),
   legend.key.width=unit(1.2,"line"),
   legend.box.background=element_blank(),
   ## Plot
-  plot.title=element_text(hjust=0.7,size=12),
+  plot.title=element_text(hjust=0.5,size=13),
   plot.background=element_rect(fill="transparent"),
   ## Panel
   panel.background=element_rect(fill="transparent"),
@@ -1141,8 +1141,8 @@ col_scale_var_test_alt <- scale_fill_gradientn(
   na.value="transparent",
   values=rescale(seq(0,3000),0,3000),
   limits=c(0,3000),
-  breaks= seq(0,3000,by=1000),
-  labels= seq(0,3000,by=1000)
+  breaks= seq(0,3000,by=1500),
+  labels= seq(0,3000,by=1500)
 )
 
 # Ploting
@@ -1158,19 +1158,26 @@ a_suare <- read.table(paste0("Adansonia.suarezensis/function_ready.txt"), header
 
 # non threatened
 a1 <- plot_anomaly_alt(m=environ$alt,n=a_digi,label="(a)",
-                     title="Presence Points\nAltitudinal range (m)") + col_scale_var_test_alt
+                     title="Presence Points\nAltitudinal range (m)") + 
+  col_scale_var_test_alt
+
 e2 <- plot_anomaly_alt(m=environ$alt,n=a_grand,label="(e)",
                        title="") + col_scale_var_test_alt
+
 i3 <- plot_anomaly_alt(m=environ$alt,n=a_za,label="(i)",
                        title="") + col_scale_var_test_alt
 
 # threatened species
 a1t <- plot_anomaly_alt(m=environ$alt,n=a_mada,label="(a)",
-                       title="Presence Points\nAltitudinal range (m)") + col_scale_var_test_alt
+                       title="Presence Points\nAltitudinal range (m)") + 
+  col_scale_var_test_alt
+
 e2t <- plot_anomaly_alt(m=environ$alt,n=a_perri,label="(e)",
                        title="") + col_scale_var_test_alt
+
 i3t <- plot_anomaly_alt(m=environ$alt,n=a_rubro,label="(i)",
                        title="") + col_scale_var_test_alt
+
 m4t <- plot_anomaly_alt(m=environ$alt,n=a_suare,label="(m)",
                        title="") + col_scale_var_test_alt
 
@@ -1195,18 +1202,25 @@ ca_suare <- pred_suare[[1]]
 
 # non threatened
 b1 <- plot_anomaly_2(r=ca_dig,label="(b)",
-                     title="Current\n  Distribution") + col_scale_var_test_pres
+                     title="Current\nDistribution/Votes") + 
+  col_scale_var_test_pres
+
 f2 <- plot_anomaly_2(r=ca_gran,label="(f)",
                      title="") + col_scale_var_test_pres
+
 j3 <- plot_anomaly_2(r=ca_za,label="(j)",
                      title="") + col_scale_var_test_pres
 # threatened 
 b1t <- plot_anomaly_2(r=ca_mada,label="(b)",
-                     title="Current\n  Distribution") + col_scale_var_test_pres
+                     title="Current\nDistribution/Votes") + 
+  col_scale_var_test_pres
+
 f2t <- plot_anomaly_2(r=ca_perri,label="(f)",
                      title="") + col_scale_var_test_pres
+
 j3t <- plot_anomaly_2(r=ca_rubro,label="(j)",
                      title="") + col_scale_var_test_pres
+
 n4t <- plot_anomaly_2(r=ca_suare,label="(n)",
                       title="") + col_scale_var_test_pres
 
@@ -1233,7 +1247,8 @@ caZD_suare <- raster(paste0("Adansonia.suarezensis/caZD.tif"))
 
 # non threatened 
 c1 <- plot_anomaly_2(r=cafut_dig, label="(c)",
-                     title="Full Dispersal\nRCP 8.5 2080") + col_scale_var_test_fut
+                     title="Full Dispersal\nRCP 8.5 2080/Votes") +
+  col_scale_var_test_fut
 
 g2 <- plot_anomaly_2(r=cafut_gran, label="(g)",
                      title="") + col_scale_var_test_fut
@@ -1241,9 +1256,9 @@ g2 <- plot_anomaly_2(r=cafut_gran, label="(g)",
 k3 <- plot_anomaly_2(r=cafut_za, label="(k)",
                      title="") + col_scale_var_test_fut
 
-
 d1 <- plot_anomaly_2(r=caZD_dig, label="(d)",
-                     title="Zero Dispersal\nRCP 8.5 2080") + col_scale_var_test_fut
+                     title="Zero Dispersal\nRCP 8.5 2080/Votes") + 
+  col_scale_var_test_fut
 
 h2 <- plot_anomaly_2(r=caZD_gran, label="(h)",
                      title="") + col_scale_var_test_fut
@@ -1253,7 +1268,8 @@ l3 <- plot_anomaly_2(r=caZD_za, label="(l)",
 # threatened
 
 c1t <- plot_anomaly_2(r=cafut_mada, label="(c)",
-                     title="Full Dispersal\nRCP 8.5 2080") + col_scale_var_test_fut
+                     title="Full Dispersal\nRCP 8.5 2080/Votes") + 
+  col_scale_var_test_fut
 
 g2t <- plot_anomaly_2(r=cafut_perri, label="(g)",
                      title="") + col_scale_var_test_fut
@@ -1267,7 +1283,8 @@ o4t <- plot_anomaly_2(r=cafut_suare, label="(o)",
 ### Zero Dispersial
 
 d1t <- plot_anomaly_2(r=caZD_mada, label="(d)",
-                     title="Zero Dispersal\nRCP 8.5 2080") + col_scale_var_test_fut
+                     title="Zero Dispersal\nRCP 8.5 2080/Votes") + 
+  col_scale_var_test_fut
 
 h2t <- plot_anomaly_2(r=caZD_perri, label="(h)",
                      title="") + col_scale_var_test_fut
@@ -1280,13 +1297,13 @@ p4t <- plot_anomaly_2(r=caZD_suare, label="(p)",
 
 ## Non threatened legend name
 
-
 tgrob_dig <- textGrob("A. digitata",rot=90, gp=gpar(cex=1.25,fontface="italic"),
-                    hjust=0.5, vjust=0.5)
+                    hjust=0.5, vjust=4)
 tgrob_gran <- textGrob("A. grandidieri",rot=90, gp=gpar(cex=1.25,fontface="italic"),
-                       hjust=0.5, vjust=0.5)
+                       hjust=0.5, vjust=4)
 tgrob_za <- textGrob("A. za",rot=90, gp=gpar(cex=1.25,fontface="italic"),
-                     hjust=0.5, vjust=0.5)
+                     hjust=0, vjust=4)
+
 
 ## Combine plots
 lay_4 <- rbind(c(1,rep(seq(4,7,by=1),each=3)),
@@ -1295,27 +1312,28 @@ lay_4 <- rbind(c(1,rep(seq(4,7,by=1),each=3)),
                c(2,rep(seq(8,11,by=1),each=3)),
                c(3,rep(seq(12,15,by=1),each=3)),
                c(3,rep(seq(12,15,by=1),each=3)))
+               
 
 plot_baobabs <- grid.arrange(tgrob_dig, tgrob_gran, tgrob_za,
                              a1,b1,c1,d1,e2,f2,g2,h2,
                              i3,j3,k3,l3,layout_matrix=lay_4)
 
 ggsave(file=paste0("./outputs/non_threat.pdf"),
-       plot=plot_baobabs,width=11,height=8,dpi="print")
+       plot=plot_baobabs,width=11,height=10,dpi="print")
 
 ggsave(file=paste0("./outputs/non_threat.png"),
-       plot=plot_baobabs,width=11,height=8,dpi="print")
+       plot=plot_baobabs,width=9,height=10,dpi="print")
 
 
 ## Threatened legend name
 tgrob_mada <- textGrob("A. madagascariensis",rot=90, gp=gpar(cex=1.25,fontface="italic"),
-                     hjust=0.5, vjust=0.5)
+                     hjust=0.5, vjust=4)
 tgrob_perri <- textGrob("A. perrieri",rot=90, gp=gpar(cex=1.25,fontface="italic"),
-                       hjust=0.5, vjust=0.5)
+                       hjust=0.5, vjust=4)
 tgrob_rubro <- textGrob("A. rubrostipa",rot=90, gp=gpar(cex=1.25,fontface="italic"),
-                      hjust=0.5, vjust=0.5)
+                      hjust=0.5, vjust=4)
 tgrob_suare <- textGrob("A. suarezensis",rot=90, gp=gpar(cex=1.25,fontface="italic"),
-                        hjust=0.5, vjust=0.5)
+                        hjust=0.5, vjust=4)
 ## Combine plots
 lay_5 <- rbind(c(1,rep(seq(5,8,by=1),each=3)),
                c(1,rep(seq(5,8,by=1),each=3)),
@@ -1330,11 +1348,11 @@ plot_baobabs_threatened <- grid.arrange(tgrob_mada, tgrob_perri, tgrob_rubro,tgr
                              a1t,b1t,c1t,d1t,e2t,f2t,g2t,h2t,
                              i3t,j3t,k3t,l3t,m4t,n4t,o4t,p4t,layout_matrix=lay_5)
 
-ggsave(file=paste0("./outputs/threat.pdf"),
-       plot=plot_baobabs_threatened,width=8,height=7,dpi="print")
+#ggsave(file=paste0("./outputs/threat.pdf"),
+ #      plot=plot_baobabs_threatened,width=11,height=10,dpi="print")
 
 ggsave(file=paste0("./outputs/threat.png"),
-       plot=plot_baobabs_threatened,width=11,height=8,dpi="print")
+       plot=plot_baobabs_threatened,width=9,height=10,dpi="print")
 
 #######################################################################
 ### World Seasonality Map
@@ -1617,6 +1635,48 @@ full_final <-  aggregate(Value~species + wIndex + Model, FUN=mean, data=newdataf
 
 write.table(full_final,paste0("./outputs/tableA2_performance_full.txt"),sep="\t")
 
+############# Table A3 
+
+nichesf_dig <- read.table(paste0("Adansonia.digitata/mean_niche_with_future.txt"), header=T,sep="\t")
+nichesc_dig <- read.table(paste0("Adansonia.digitata/niche.txt"), header=T,sep="\t")
+niches_dig <- cbind(nichesf_dig,nichesc_dig)
+niches_dig$species <- rep(c("A. digitata"),each=3) # 8 with Maxent
+
+nichesf_grand <- read.table(paste0("Adansonia.grandidieri/mean_niche_with_future.txt"), header=T,sep="\t")
+nichesc_grand <- read.table(paste0("Adansonia.grandidieri/niche.txt"), header=T,sep="\t")
+niches_grand <- cbind(nichesf_grand,nichesc_grand)
+niches_grand$species <- rep(c("A. grandidieri"),each=3) # 8 with Maxent
+
+nichesf_mada <- read.table(paste0("Adansonia.madagascariensis/mean_niche_with_future.txt"), header=T,sep="\t")
+nichesc_mada <- read.table(paste0("Adansonia.madagascariensis/niche.txt"), header=T,sep="\t")
+niches_mada <- cbind(nichesf_mada,nichesc_mada)
+niches_mada$species <- rep(c("A. madagascariensis"),each=3) # 8 with Maxent
+
+nichesf_perri <- read.table(paste0("Adansonia.perrieri/mean_niche_with_future.txt"), header=T,sep="\t")
+nichesc_perri <- read.table(paste0("Adansonia.perrieri/niche.txt"), header=T,sep="\t")
+niches_perri <- cbind(nichesf_perri,nichesc_perri)
+niches_perri$species <- rep(c("A. perrieri"),each=3) # 8 with Maxent
+
+nichesf_rubro <- read.table(paste0("Adansonia.rubrostipa/mean_niche_with_future.txt"), header=T,sep="\t")
+nichesc_rubro <- read.table(paste0("Adansonia.rubrostipa/niche.txt"), header=T,sep="\t")
+niches_rubro <- cbind(nichesf_rubro,nichesc_rubro)
+niches_rubro$species <- rep(c("A. rubrostipa"),each=3) # 8 with Maxent
+
+nichesf_suare <- read.table(paste0("Adansonia.suarezensis/mean_niche_with_future.txt"), header=T,sep="\t")
+nichesc_suare <- read.table(paste0("Adansonia.suarezensis/niche.txt"), header=T,sep="\t")
+niches_suare <- cbind(nichesf_suare,nichesc_suare)
+niches_suare$species <- rep(c("A. suarezensis"),each=3) # 8 with Maxent
+
+nichesf_za <- read.table(paste0("Adansonia.za/mean_niche_with_future.txt"), header=T,sep="\t")
+nichesc_za <- read.table(paste0("Adansonia.za/niche.txt"), header=T,sep="\t")
+niches_za <- cbind(nichesf_za,nichesc_za)
+niches_za$species <- rep(c("A. za"),each=3) # 8 with Maxent
+
+all_niches <- cbind(niches_dig,niches_grand,niches_mada,niches_perri,
+                    niches_rubro,niches_suare,niches_za)
+
+write.table(all_niches,paste0("./outputs/tableA3_niches_fut_cur_comparison.txt"),sep="\t")
+
 ##===========================================================================
-## End of script - Have a Nice Day and Enjoy The View
+## End of script - Have a Nice Day and Enjoy The View  and go for a hike
 ##===========================================================================
