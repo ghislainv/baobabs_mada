@@ -1352,7 +1352,7 @@ plot_baobabs_threatened <- grid.arrange(tgrob_mada, tgrob_perri, tgrob_rubro,tgr
  #      plot=plot_baobabs_threatened,width=11,height=10,dpi="print")
 
 ggsave(file=paste0("./outputs/threat.png"),
-       plot=plot_baobabs_threatened,width=9,height=10,dpi="print")
+       plot=plot_baobabs_threatened,width=9,height=12,dpi="print")
 
 #######################################################################
 ### World Seasonality Map
