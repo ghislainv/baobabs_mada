@@ -304,30 +304,30 @@ col_scale_ano_cwd <- scale_fill_gradientn(
 
 ## Plot anomalies for each climatic variable
 ## tmean
-p1 <- plot_anomaly(r=var_85_2080[["tmean"]], label="a",
-                   title="Temperature\n(C x 10)") +
+p1 <- plot_anomaly(r=var_85_2080[["tmean"]], label="(a)",
+                   title="Temperature\n(°C x 10)") +
     col_scale_var_tmean
-p2 <- plot_anomaly(r=ano_85_2080[["tmean"]], label="a'",
+p2 <- plot_anomaly(r=ano_85_2080[["tmean"]], label="(a')",
                    title="") +
     col_scale_ano_tmean
-p3 <- plot_anomaly(r=var_85_2080[["tseas"]], label="b",
+p3 <- plot_anomaly(r=var_85_2080[["tseas"]], label="(b)",
                    title="T. seasonality\n(°C sd x 100)") +
     col_scale_var_tseas
-p4 <- plot_anomaly(r=ano_85_2080[["tseas"]], label="b'",
+p4 <- plot_anomaly(r=ano_85_2080[["tseas"]], label="(b')",
                    title="") +
     col_scale_ano_tseas
 ## prec
-p5 <- plot_anomaly(r=var_85_2080[["prec"]], label="c",
+p5 <- plot_anomaly(r=var_85_2080[["prec"]], label="(c)",
                    title="Precipitation\n(mm/y)") +
     col_scale_var_prec
-p6 <- plot_anomaly(r=ano_85_2080[["prec"]], label="c'",
+p6 <- plot_anomaly(r=ano_85_2080[["prec"]], label="(c')",
                    title="") +
     col_scale_ano_prec
 ## cwd
-p7 <- plot_anomaly(r=var_85_2080[["cwd"]], label="d",
+p7 <- plot_anomaly(r=var_85_2080[["cwd"]], label="(d)",
                    title="Climatic water deficit\n(mm/y)") +
     col_scale_var_cwd
-p8 <- plot_anomaly(r=ano_85_2080[["cwd"]], label="d'",
+p8 <- plot_anomaly(r=ano_85_2080[["cwd"]], label="(d')",
                    title="") +
     col_scale_ano_cwd
 
@@ -369,7 +369,7 @@ for (i in 1: length(sp.dir)) {
   mapmat.final <- cbind(mapmat.df.anomalies,mapmat.df)
   mapmat.f <- mapmat.final[,c(1,2,3,4,6,7,8,9,10,11)]
   write.csv2(mapmat.final,paste0("./",sp.dir[i],"/","niche_graph_species_compared_anomaly.csv"))
-  write.table(mapmat.final,paste0("./",sp.dir[i],"/niche_graph_species_compared_anomaly.csv"),sep="\t")
+  write.table(mapmat.final,paste0("./",sp.dir[i],"/niche_graph_species_compared_anomaly.txt"),sep="\t")
   
   #### Future niche over current SDA!!! NO ANOMALY
   wC.future <- which(values(ca)>=500)
@@ -398,7 +398,6 @@ data_teste <- rbind(database2_digi,database3_grand,
               database4_mada,database5_perri,database6_rubro,database1_suare,database7_za)
 quantiles <- data_teste[,c(2,3,4,5,6)]
 quantiles <- round(apply(quantiles,2,quantile,c(0.025,0.975),na.rm=TRUE)) #use it to set new plot
-head(quantiles)
 
 # Density plots ## Temp. Seasonality
 range(data_teste$tseas)
@@ -490,9 +489,9 @@ lay_2 <- subset( lay_2, select = -b )
 
 plot_densities <- grid.arrange(my_plot_tmean, my_plot_tseas, my_plot_prec, my_plot_cwd,
                                layout_matrix=lay_2)
-ggsave(filename="outputs/Fig1_climatic_anomalies.pdf", plot=plot_densities,
+ggsave(filename="outputs/Fig_ap1_sps_niche.pdf", plot=plot_densities,
        width=8, height=10, dpi="print")
-ggsave(filename="outputs/Fig1_climatic_anomalies.png", plot=plot_densities,
+ggsave(filename="outputs/Fig_ap1_sps_niche.png", plot=plot_densities,
        width=8, height=10, dpi="print")
 
 ### Comparing bioclimatic niche of each species inside current SDA according to the 
@@ -502,9 +501,9 @@ ggsave(filename="outputs/Fig1_climatic_anomalies.png", plot=plot_densities,
 a.suare <- read.csv(file=paste0("Adansonia.suarezensis/niche_graph_species_compared_anomaly.csv"), header=T,sep=";",dec=",")
 # 1st importance variable - Tseas
 range(a.suare$tseas) # 1194 - 1417 
-range(a.suare$tseasf) # 1314- 1452
+range(a.suare$tseasf) # 1307- 1552
 mean(a.suare$tseas) # 1275,3
-mean(a.suare$tseasf) # 1374
+mean(a.suare$tseasf) # 1390
 breaks <- c(round(seq(min(a.suare$tseas),max(a.suare$tseasf),length=8)))
 labels = as.character(breaks)
 
@@ -536,8 +535,8 @@ plot.seas_suar =  plot.seas_suar + theme(panel.grid.major = element_blank(), pan
 
 
 ### second importance variable - Prec
-range(a.suare$prec) # 1112 - 1523
-range(a.suare$precf) # 922.3 1327
+range(a.suare$prec) # 1113 - 1522
+range(a.suare$precf) # 922.3 1325
 breaks <- c(round(seq(min(a.suare$precf),max(a.suare$prec),length=8)))
 labels = as.character(breaks)
 
@@ -574,10 +573,10 @@ plot.prec_suar =  plot.prec_suar + theme(panel.grid.major = element_blank(), pan
 #1st importance variable - Tseas 
 a.perrieri <- read.csv(file=paste0("Adansonia.perrieri/niche_graph_species_compared_anomaly.csv"), header=T,sep=";",dec=",")
 head(a.perrieri)
-range(a.perrieri$tseas) # 916 1964
-range(a.perrieri$tseasf) # 1026.667 2179.000
-round(mean(a.perrieri$tseas)) # 1413
-round(mean(a.perrieri$tseasf)) # 1566
+range(a.perrieri$tseas) # 890 1966
+range(a.perrieri$tseasf) # 1011.333 2179.000
+round(mean(a.perrieri$tseas)) # 1392
+round(mean(a.perrieri$tseasf)) # 1535
 breaks <- c(round(seq(min(a.perrieri$tseas),max(a.perrieri$tseasf),length=8)))
 labels = as.character(breaks)
 
@@ -609,31 +608,31 @@ plot.seas_perrieri =  plot.seas_per + theme(panel.grid.major = element_blank(), 
   theme(axis.text.y = element_text(size = rel(1.75), colour="black")) +
   theme(legend.position="none")
 
-## 2nd Most IV A perrieri - annual mean temperature
+## 2nd Most IV A perrieri - climatic water deficit
 
 
-breaks <- c(round(seq(min(a.perrieri$tmean),max(a.perrieri$tmeanf),length=8)))
+breaks <- c(round(seq(min(a.perrieri$cwd),max(a.perrieri$cwdf),length=8)))
 labels = as.character(breaks)
 
-plot.tmean_perrieri = ggplot(a.perrieri, aes(x=tmean, y=..density..)) + 
-  geom_density(aes(tmean, fill=species,color= 'tmean'), alpha=.5) + 
-  geom_vline(aes(xintercept=mean(tmean)),color="darkorange",linetype="solid",size=1)+
-  geom_vline(aes(xintercept=quantile(tmean,0.975)),color="darkorange",linetype="dashed",size=1) +
-  geom_vline(aes(xintercept=quantile(tmean,0.025)),color="darkorange",linetype="dashed",size=1) +
+plot.cwd_perrieri = ggplot(a.perrieri, aes(x=cwd, y=..density..)) + 
+  geom_density(aes(cwd, fill=species,color= 'cwd'), alpha=.5) + 
+  geom_vline(aes(xintercept=mean(cwd)),color="darkorange",linetype="solid",size=1)+
+  geom_vline(aes(xintercept=quantile(cwd,0.975)),color="darkorange",linetype="dashed",size=1) +
+  geom_vline(aes(xintercept=quantile(cwd,0.025)),color="darkorange",linetype="dashed",size=1) +
   
-  geom_density(aes(tmeanf, fill=species,color='tmeanf'),alpha=.5) +
-  geom_vline(aes(xintercept=mean(tmeanf)),color="black",linetype="solid",size=1)+
-  geom_vline(aes(xintercept=quantile(tmeanf,0.975)),color="black",linetype="dashed",size=1) +
-  geom_vline(aes(xintercept=quantile(tmeanf,0.025)),color="black",linetype="dashed",size=1) +
-  scale_x_continuous(limits = c(170, 310), breaks = breaks, labels = labels) +
-  scale_color_manual(values = c('tmean' = 'darkorange', 'tmeanf' = 'black'))+
+  geom_density(aes(cwdf, fill=species,color='cwdf'),alpha=.5) +
+  geom_vline(aes(xintercept=mean(cwdf)),color="black",linetype="solid",size=1)+
+  geom_vline(aes(xintercept=quantile(cwdf,0.975)),color="black",linetype="dashed",size=1) +
+  geom_vline(aes(xintercept=quantile(cwdf,0.025)),color="black",linetype="dashed",size=1) +
+  scale_x_continuous(limits = c(150, 1700), breaks = breaks, labels = labels) +
+  scale_color_manual(values = c('cwd' = 'darkorange', 'cwdf' = 'black'))+
   scale_fill_viridis(alpha=1,begin= 0.65,end=0.7, discrete=T,option="D")
 
-plot.tmean_perrieri =  plot.tmean_perrieri + theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+plot.cwd_perrieri =  plot.cwd_perrieri + theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
                                  legend.text = element_blank(),
                                  panel.background = element_blank(), axis.line = element_line(colour = "black"))+
   
-  labs(x="Annual Mean Temperature (ºC x 10)", y="",size=5) +
+  labs(x="Climatic Water Deficit (mm)", y="",size=5) +
   labs(col = "") +
   theme(axis.title.x = element_text(size = rel(2),colour="black")) +
   theme(axis.title.y = element_text(size = rel(2),colour="black")) +
@@ -646,10 +645,10 @@ plot.tmean_perrieri =  plot.tmean_perrieri + theme(panel.grid.major = element_bl
 a.rubrostipa <- read.csv(file=paste0("Adansonia.rubrostipa/niche_graph_species_compared_anomaly.csv"), header=T,sep=";",dec=",")
 
 ## 1st importance variable - Climatic Water Deficit
-range(a.rubrostipa$cwd) # 706 963
-range(a.rubrostipa$cwdf) # 1330 - 1976
+range(a.rubrostipa$cwd) # 684 967
+range(a.rubrostipa$cwdf) # 1331 - 2027
 mean(a.rubrostipa$cwd) # 808,8
-mean(a.rubrostipa$cwdf) # 1688,6
+mean(a.rubrostipa$cwdf) # 1678,3
 breaks <- c(round(seq(min(a.rubrostipa$cwd),max(a.rubrostipa$cwdf),length=8)))
 labels = as.character(breaks)
 
@@ -683,8 +682,8 @@ plot.cwd_rubro =  plot.cwd_rubro + theme(panel.grid.major = element_blank(), pan
 
 
 ### 2nd Importance Variable - Tmean
-range(a.rubrostipa$tmean) # 234 269
-round(range(a.rubrostipa$tmeanf)) # 265 306
+range(a.rubrostipa$tmean) # 233 272
+round(range(a.rubrostipa$tmeanf)) # 264 309
 mean(a.rubrostipa$tmean) # 257.8
 mean(a.rubrostipa$tmeanf) # 291.3
 breaks <- c(round(seq(min(a.rubrostipa$tmean),max(a.rubrostipa$tmeanf),length=8)))
@@ -724,6 +723,7 @@ a.madagascariensis <- read.csv(file=paste0("Adansonia.madagascariensis/niche_gra
 
 # 1st importance variable - Tseas
 range(a.madagascariensis$tseas)
+range(a.madagascariensis$tseasf)
 
 breaks <- c(round(seq(min(a.madagascariensis$tseas),max(a.madagascariensis$tseasf),length=8)))
 labels = as.character(breaks)
@@ -757,10 +757,10 @@ plot.seas_mada =  plot.seas_mada + theme(panel.grid.major = element_blank(), pan
 
 
 ### 2nd importance variable - Tmean
-range(a.madagascariensis$tmean) # 248 - 275
-range(a.madagascariensis$tmeanf) # 278 - 311
-mean(a.madagascariensis$tmean) # 263.6
-mean(a.madagascariensis$tmeanf) # 297
+range(a.madagascariensis$tmean) # 244 - 275
+range(a.madagascariensis$tmeanf) # 275 - 310
+mean(a.madagascariensis$tmean) # 262
+mean(a.madagascariensis$tmeanf) # 296
 
 breaks <- c(round(seq(min(a.madagascariensis$tmean),max(a.madagascariensis$tmeanf),length=8)))
 labels = as.character(breaks)
@@ -795,11 +795,11 @@ plot.mean_mada =  plot.mean_mada + theme(panel.grid.major = element_blank(), pan
 ############## A. grandidieri
 ## Import dataset
 a.grandidieri <- read.csv(file=paste0("Adansonia.grandidieri/niche_graph_species_compared_anomaly.csv"), header=T,sep=";",dec=",")
-head(a.grandidieri)
+
 
 # 1st Importance Variable - Prec
-range(a.grandidieri$prec) # 437 - 998
-range(a.grandidieri$precf) # 374 - 935
+range(a.grandidieri$prec) # 383 - 1029
+range(a.grandidieri$precf) # 377 - 949
 mean(a.grandidieri$prec) # 749
 mean(a.grandidieri$precf) # 706
 breaks <- c(round(seq(min(a.grandidieri$precf),max(a.grandidieri$prec),length=8)))
@@ -835,8 +835,8 @@ plot.prec_grand =  plot.prec_grand + theme(panel.grid.major = element_blank(), p
 
 
 ## 2nd Importance Variable - Tmean
-range(a.grandidieri$tmean) # 242 - 261
-range(a.grandidieri$tmeanf) # 276 297
+range(a.grandidieri$tmean) # 241 - 263
+range(a.grandidieri$tmeanf) # 274 299
 mean(a.grandidieri$tmean) # 250
 mean(a.grandidieri$tmeanf) # 285
 breaks <- c(round(seq(min(a.grandidieri$tmean),max(a.grandidieri$tmeanf),length=8)))
@@ -875,8 +875,8 @@ plot.mean_grand =  plot.mean_grand + theme(panel.grid.major = element_blank(), p
 a.za <- read.csv(file=paste0("Adansonia.za/niche_graph_species_compared_anomaly.csv"), header=T,sep=";",dec=",")
 head(a.za)
 # 1st Importance Variable - Prec
-range(a.za$prec) # 341 1827
-range(a.za$precf) # 324 1555
+range(a.za$prec) # 355 1635
+range(a.za$precf) # 321 1549
 
 breaks <- c(round(seq(min(a.za$precf),max(a.za$prec),length=8)))
 labels = as.character(breaks)
@@ -910,8 +910,8 @@ plot.prec_za =  plot.prec_za + theme(panel.grid.major = element_blank(), panel.g
   theme(legend.position="none")
 
 ## 2nd Importance Variable - Tmean
-range(a.za$tmean) # 215 275
-range(a.za$tmeanf) # 251 311
+range(a.za$tmean) # 214 275
+range(a.za$tmeanf) # 250 311
 mean(a.za$tmean) # 243
 mean(a.za$tmeanf) # 278
 breaks <- c(round(seq(min(a.za$tmean),max(a.za$tmeanf),length=8)))
@@ -949,10 +949,10 @@ plot.mean_za =  plot.mean_za + theme(panel.grid.major = element_blank(), panel.g
 a.digitata <- read.csv(file=paste0("Adansonia.digitata/niche_graph_species_compared_anomaly.csv"), header=T,sep=";",dec=",")
 head(a.digitata)
 ## 1st Importance Variable - Climatic Water Deficit
-range(a.digitata$cwd) # 632 - 920
-range(a.digitata$cwdf) # 1229 - 1935
-mean(a.digitata$cwd) # 822,5
-mean(a.digitata$cwdf) # 1735
+range(a.digitata$cwd) # 625 - 920
+range(a.digitata$cwdf) # 1207 - 2011
+mean(a.digitata$cwd) # 801
+mean(a.digitata$cwdf) # 1679
 breaks <- c(round(seq(min(a.digitata$cwd),max(a.digitata$cwdf),length=8)))
 labels = as.character(breaks)
 
@@ -988,10 +988,10 @@ plot.cwd_dig = ggplot(a.digitata, aes(x=cwd, y=..density..)) +
 ##2nd Importance Variable - Tseas
 
 # range tseas 
-range(a.digitata$tseas) # 847 1867
-range(a.digitata$tseasf) # 1050 2040 
-mean(a.digitata$tseas) # 1531
-mean(a.digitata$tseasf) # 1572,4
+range(a.digitata$tseas) # 889 2486
+range(a.digitata$tseasf) # 1045 2571 
+mean(a.digitata$tseas) # 1524
+mean(a.digitata$tseasf) # 1626,4
 breaks <- c(round(seq(min(a.digitata$tseas),max(a.digitata$tseasf),length=8)))
 labels = as.character(breaks)
 
@@ -1006,7 +1006,7 @@ plot.seas_dig = ggplot(a.digitata, na.rm=T, aes(x=tseas, y=..density..)) +
   geom_vline(aes(xintercept=mean(tseasf)),color="black",linetype="solid",size=1)+
   geom_vline(aes(xintercept=quantile(tseasf,0.975)),color="black",linetype="dashed",size=1) +
   geom_vline(aes(xintercept=quantile(tseasf,0.025)),color="black",linetype="dashed",size=1) +
-  scale_x_continuous(limits = c(750,2100), breaks = breaks, labels = labels) +
+  scale_x_continuous(limits = c(750,2600), breaks = breaks, labels = labels) +
   
   scale_color_manual(values = c('tseas' = 'darkorange', 'tseasf' = 'black'))+
   scale_fill_viridis(alpha=1,begin= 0.65,end=0.7, discrete=T,option="D")
@@ -1035,7 +1035,7 @@ lay_3 <- rbind(c(rep(seq(1,2,by=1),each=3)),
 plot_densities_curves <- grid.arrange(plot.cwd_dig,plot.seas_dig,
                                       plot.prec_grand,plot.mean_grand,
                                       plot.seas_mada,plot.mean_mada,
-                                      plot.seas_perrieri,plot.tmean_perrieri,
+                                      plot.seas_perrieri,plot.cwd_perrieri,
                                       plot.cwd_rubro,plot.tmean_rubro,
                                       plot.seas_suar, plot.prec_suar,
                                       plot.prec_za,plot.mean_za,
@@ -1359,11 +1359,7 @@ ggsave(file=paste0("./outputs/threat.png"),
 #######################################################################
 ### World Seasonality Map
 #######################################################################
-
-
 library(maptools)
-
-
 r <- raster::getData("worldclim",var="bio",res=10)
 r <- r[[c(4)]]
 names(r) <- c("Seas")
@@ -1566,10 +1562,10 @@ all_species_vi <- rbind(digitata_vi,grandidieri_vi,mada_vi,
 
 tablevi <- data.frame("Species" = c("A. digitata","A. grandidieri","A. madagascariensis", 
                                     "A. perrieri", "A. rubrostipa","A. suarezensis",
-                                    "A. za"), "Mean Annual Temperature(°C)" = c(3,2,2,2,2,3,3), 
-                                    "Temperature Seasonality(°C)" = c(2,3,1,1,4,1,3),
-                                    "Precipitation(mm)" = c(4,1,3,4,4,2,1),
-                                    "Climatic Water Deficit(mm)" = c(1,4,4,3,1,4,4))
+                                    "A. za"), "Mean Annual Temperature" = c(3,2,2,3,2,4,2), 
+                                    "Temperature Seasonality" = c(2,3,1,1,4,1,3),
+                                    "Precipitation" = c(4,1,3,4,3,2,1),
+                                    "Climatic Water Deficit" = c(1,4,4,2,1,4,4))
 write.table(tablevi,paste0("./outputs/table2vi.txt"),sep="\t")
 
 #### Table 3 with performance indexes
@@ -1609,25 +1605,21 @@ perf_species <- rbind(perf_dig,perf_grand,perf_mada,perf_perri,perf_rubro,
 newdata <- subset(perf_species, Index == "Testing.data",
                   select=c(wIndex,Model, Run, Value))
 
-## to calculate mean of the 5 runs
-newdata <- newdata %>%
-  filter(wIndex != 'KAPPA') %>%
-  select(1:4) #omit tempcol in output
-
-## remove Full run
-newdatap <- newdata %>%
-  filter(Run != 'Full') %>%
-  select(1:4)
 
 newdatap <- newdata[newdata$Run != 'Full', ]
 
 newdatap$species <- rep(c("A. digitata","A. grandidieri","A. madagascariensis", 
                             "A. perrieri", "A. rubrostipa","A. suarezensis","A. za")
                         ,each=60) 
+
 partial_final <-  aggregate(Value~species + wIndex + Model, FUN=mean, data=newdatap)
+## to calculate mean of the 5 runs
+
+partial_final1 <- partial_final %>%
+  filter(wIndex != 'KAPPA')#omit tempcol in output
 
 
-write.table(partial_final,paste0("./outputs/tableA2_performance_partial.txt"),sep="\t")
+write.table(partial_final1,paste0("./outputs/tableA2_performance_partial.txt"),sep="\t")
 
 ### To calculate mean over the full dataset
 newdataf <- newdata[newdata$Run == 'Full', ]
@@ -1635,8 +1627,10 @@ newdataf$species <- rep(c("A. digitata","A. grandidieri","A. madagascariensis",
                           "A. perrieri", "A. rubrostipa","A. suarezensis","A. za")
                         ,each=12)
 full_final <-  aggregate(Value~species + wIndex + Model, FUN=mean, data=newdataf)
+full_final1 <- full_final %>%
+  filter(wIndex != 'KAPPA')#omit tempcol in output
 
-write.table(full_final,paste0("./outputs/tableA2_performance_full.txt"),sep="\t")
+write.table(full_final1,paste0("./outputs/tableA2_performance_full.txt"),sep="\t")
 
 ############# Table A3 
 
