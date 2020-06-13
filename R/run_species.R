@@ -88,7 +88,8 @@ run.species <- function (i, run.models=TRUE) {
                                                   myFormula=NULL, 
                                                   family=binomial(link="logit")),
                                          RF=list(do.classif=TRUE, ntree=500),
-                                         MAXENT.Phillips=list(path_to_maxent.jar=paste0(getwd(), "/maxent"),
+                                         MAXENT.Phillips=list(path_to_maxent.jar=paste0(getwd(), "/maxent"), 
+                                          #attention with path to Maxent, Rserver may not works. Try to set your own path in your PC
                                                               visible=FALSE, maximumiterations=500,
                                                               memory_allocated=512,
                                                               # To avoid overparametrization (Merow  et al.  2013)
