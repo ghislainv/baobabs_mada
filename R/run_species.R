@@ -50,10 +50,15 @@ run.species <- function (i, run.models=TRUE) {
   wcomp <- which(complete.cases(data.xy))
   
   ## Transform as a SpatialPointsDataFrame and SpatialPoints (for presence only)
+  ##d <- SpatialPointsDataFrame(coords=Coords.presence[wcomp,], data=data.xy[wcomp,],
+    ##                          proj4string=CRS("+init=epsg:32738"))
+      ## doesn't work anymore
   d <- SpatialPointsDataFrame(coords=Coords.presence[wcomp,], data=data.xy[wcomp,],
-                              proj4string=CRS("+init=epsg:32738"))
+                              proj4string=CRS("+proj=utm +zone=38 +south +datum=WGS84 +units=m +no_defs +type=crs")) # correct new way
   
   p <- SpatialPoints(d) ## This is used for presence-only data
+  #PROJ.6 must define CRS for "p" otherwise it won't work
+  crs(p)  <- "+proj=utm +zone=38 +south +datum=WGS84 +units=m +no_defs +type=crs"
   ## Save "d" as data-frame
   dir.create(paste0(spdir,"/figures"),recursive=TRUE)
   write.table(d@data,file=paste0(spdir,"/figures/presences.txt"),sep="\t",row.names=FALSE)
