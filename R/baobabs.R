@@ -1468,12 +1468,12 @@ col_scale_var_fut_ws <- scale_fill_gradientn(
 ## Color scales
 ## anomaly world seasonality
 col_scale_var_anomws <- scale_fill_gradientn(
-  colours=viridis(255, option="C", direction=1),
+  colours=c(viridis(255, option="C", direction=1),rep(grey(0.5),3)),
   na.value="transparent",
-  values=rescale(seq(-700,1000,l=255),-700,1000),
+  values=rescale(c(seq(0.01,1000,l=255),-700,0),-700,1000),
   limits=c(-700,1000),
-  breaks=c(-700,-350, 0, 350, 700, 1000),
-  labels=c(-700,-350, 0, 350, 700, 1000)
+  breaks=c(seq(0,1000,l=3),-700, -350),
+  labels=c(seq(0,1000,l=3),-700, -350)
 )
 
 # Current ws
