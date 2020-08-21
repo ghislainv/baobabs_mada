@@ -98,23 +98,6 @@ source("R/data_baobabs.R")
 df.orig <- read.csv(file=paste0(dir_baobabs,"data_Adansonia.csv"),header=TRUE,sep=",")
 ## Make a SpatialPointsDataFrame object
 coords <- cbind(df.orig$Long,df.orig$Lat)
-## see POJ.6 style here – thanks god https://www.gaia-gis.it/fossil/libspatialite/wiki?name=PROJ.6
-df.sp <- SpatialPointsDataFrame(coords,data=df.orig,proj4string=CRS("+proj=longlat +south +datum=WGS84 +no_defs +type=crs"))
-#df.sp <- SpatialPointsDataFrame(coords,data=df.orig,proj4string=CRS("+init=epsg:4326"))
-## Reproject into UTM 38S - SET exactly as "s" raster created above
-df.sp <- spTransform(df.sp,CRS("+proj=utm +zone=38 +south +datum=WGS84 +units=m +no_defs +type=crs"))
-## Only for Baoabab data: change species names
-df.sp$Species <- gsub("A_","Adansonia ",df.sp$Species)
-# Species
-sp.names <- levels(as.factor(df.sp$Species)) # Sorted in alphabetical order
-sp.dir <- gsub(" ",".",sp.names)
-n.species <- length(sp.names)
-
-source("R/data_baobabs.R")
-## Load dataset
-df.orig <- read.csv(file=paste0(dir_baobabs,"data_Adansonia.csv"),header=TRUE,sep=",")
-## Make a SpatialPointsDataFrame object
-coords <- cbind(df.orig$Long,df.orig$Lat)
 ## see PROJ.6 style here – thanks universe! https://www.gaia-gis.it/fossil/libspatialite/wiki?name=PROJ.6
 df.sp <- SpatialPointsDataFrame(coords,data=df.orig,proj4string=CRS("+proj=longlat +south +datum=WGS84 +no_defs +type=crs")) # lat long here proj!
 #df.sp <- SpatialPointsDataFrame(coords,data=df.orig,proj4string=CRS("+init=epsg:4326")) # our old version
@@ -362,7 +345,8 @@ plot_anomalies <- grid.arrange(tgrob_pres, tgrob_fut,
 
 ggsave(filename="outputs/Fig1_climatic_anomalies.png", plot=plot_anomalies,
        width=8, height=7, dpi="print")
-
+ggsave(filename="outputs/Fig1_climatic_anomalies.pdf", plot=plot_anomalies,
+       width=8, height=7, dpi="print")
 ##==================================
 ## Climate change in SDA
 ##==================================
@@ -425,10 +409,11 @@ breaks <- c(round(seq(min(data_teste$tseas),max(data_teste$tseas),length=6)))
 labels = as.character(breaks) # labels must be the same as breaks, otherwise error
 # plot the map
 my_plot = ggplot(data_teste, aes(x=tseas, color=species)) + 
-  geom_density(size=1.3)+
+  geom_density(size=1.3) +
   scale_color_brewer(palette = "Set1") + #specific palette
   geom_vline(xintercept = range(data_teste$tseas), show.legend = T, colour="red", linetype="dashed") +
-  scale_x_continuous(limits = range(data_teste$tseas), breaks = breaks, labels = labels)
+  scale_x_continuous(limits = range(data_teste$tseas), breaks = breaks, labels = labels) +
+  scale_y_continuous(labels = scales::number_format(accuracy = 0.001))
 my_plot_tseas =  my_plot + theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
                                  #legend.text = element_text(face= "italic",size=15),
                                  legend.title=element_blank(),
@@ -439,18 +424,21 @@ my_plot_tseas =  my_plot + theme(panel.grid.major = element_blank(), panel.grid.
   theme(axis.text.x = element_text(size = rel(1.5),colour="black")) +
   theme(axis.text.y = element_text(size = rel(1.5), colour="black")) +
   theme(legend.position="none")
+  
 
 # Density plots ### Annual Mean Temperature
 # generate break positions
+library(lemon)
 breaks <- c(round(seq(min(data_teste$tmean),max(data_teste$tmean),length=6)))
 labels = as.character(breaks)
 my_plot2 = ggplot(data_teste, aes(x=tmean, color=species)) + 
-  geom_density(size=1.3)+
+  geom_density(size=1.3) +
   scale_color_brewer(palette = "Set1") + 
   geom_vline(xintercept = range(data_teste$tmean), show.legend = F, colour="red", linetype="dashed") +
-  scale_x_continuous(limits = range(data_teste$tmean), breaks = breaks, labels = labels)
-my_plot_tmean =  my_plot2 + theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
-                                  #legend.text = element_text(face= "italic",size=15),
+  scale_x_continuous(limits = range(data_teste$tmean), breaks = breaks, labels = labels) +
+  scale_y_continuous(labels = scales::number_format(accuracy = 0.001))
+  my_plot_tmean =  my_plot2 + theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+                                  legend.text = element_text(face= "italic",size=12),
                                   legend.title=element_blank(),
                                   panel.background = element_blank(), axis.line = element_line(colour = "black"))+
   labs(x="Mean Annual Temperature (ºC x 10) ", y = "Density",size=5) +
@@ -458,14 +446,16 @@ my_plot_tmean =  my_plot2 + theme(panel.grid.major = element_blank(), panel.grid
   theme(axis.title.y = element_text(size = rel(1),colour="black")) +
   theme(axis.text.x = element_text(size = rel(1.5),colour="black")) +
   theme(axis.text.y = element_text(size = rel(1.5), colour="black")) +
-  theme(legend.position="none")
+  theme(legend.key.size = unit(0.5, "cm"))
+my_plot_tmean <- reposition_legend(my_plot_tmean, 'top left', offset = 0.002)
 
 # Density plots ### Annual Mean Precipitation
 # generate break positions
 breaks <- c(round(seq(min(data_teste$prec),max(data_teste$prec),length=6)))
 labels = as.character(breaks)
 # plot and be happy ;)
-my_plot3 = ggplot(data_teste, aes(x=prec, color=species)) + geom_density(size=1.3)+
+my_plot3 = ggplot(data_teste, aes(x=prec, color=species)) +
+  geom_density(size=1.3) +
   scale_color_brewer(palette = "Set1") + 
   geom_vline(xintercept = range(data_teste$prec), show.legend = F, colour="red", linetype="dashed") +
   scale_x_continuous(limits = range(data_teste$prec), breaks = breaks, labels = labels)
@@ -484,12 +474,13 @@ my_plot_prec =  my_plot3 + theme(panel.grid.major = element_blank(), panel.grid.
 # generate break positions
 breaks <- c(round(seq(min(data_teste$cwd),max(data_teste$cwd),length=6)))
 labels = as.character(breaks)
-my_plot4 = ggplot(data_teste, aes(x=cwd, color=species)) + geom_density(size=1.3)+
+my_plot4 = ggplot(data_teste, aes(x=cwd, color=species)) + 
+  geom_density(size=1.3) +
   scale_color_brewer(palette = "Set1") + 
   geom_vline(xintercept = range(data_teste$cwd), show.legend = F, colour="red", linetype="dashed") +
   scale_x_continuous(limits = range(data_teste$cwd), breaks = breaks, labels = labels)
 my_plot_cwd =  my_plot4 + theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
-                             legend.text = element_text(face= "italic",size=15),
+                             #legend.text = element_text(face= "italic",size=15),
                              legend.title=element_blank(),
                              panel.background = element_blank(), axis.line = element_line(colour = "black"))+
   labs(x="Climatic Water Deficit (mm)", y = "Density",size=5) +
@@ -497,7 +488,7 @@ my_plot_cwd =  my_plot4 + theme(panel.grid.major = element_blank(), panel.grid.m
   theme(axis.title.y = element_text(size = rel(1),colour="black")) +
   theme(axis.text.x = element_text(size = rel(1.5),colour="black")) +
   theme(axis.text.y = element_text(size = rel(1.5), colour="black")) +
-  theme(legend.position="right")
+  theme(legend.position="none")
   
 ## Combine plots 
 lay_2 <- cbind(c(rep(seq(1,4,by=1),each=3)),
@@ -508,9 +499,9 @@ lay_2 <- subset( lay_2, select = -b )
 plot_densities <- grid.arrange(my_plot_tmean, my_plot_tseas, my_plot_prec, my_plot_cwd,
                                layout_matrix=lay_2)
 ggsave(filename="outputs/Fig_ap1_sps_niche.pdf", plot=plot_densities,
-       width=8, height=10, dpi="print")
+       width=8, height=11, dpi="print")
 ggsave(filename="outputs/Fig_ap1_sps_niche.png", plot=plot_densities,
-       width=8, height=10, dpi="print")
+       width=8, height=11, dpi="print")
 
 ### Comparing bioclimatic niche of each species inside current SDA according to the 
 ### most important variables ######
