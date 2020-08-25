@@ -347,6 +347,7 @@ ggsave(filename="outputs/Fig1_climatic_anomalies.png", plot=plot_anomalies,
        width=8, height=7, dpi="print")
 ggsave(filename="outputs/Fig1_climatic_anomalies.pdf", plot=plot_anomalies,
        width=8, height=7, dpi="print")
+
 ##==================================
 ## Climate change in SDA
 ##==================================
@@ -409,7 +410,7 @@ breaks <- c(round(seq(min(data_teste$tseas),max(data_teste$tseas),length=6)))
 labels = as.character(breaks) # labels must be the same as breaks, otherwise error
 # plot the map
 my_plot = ggplot(data_teste, aes(x=tseas, color=species)) + 
-  geom_density(size=1.3) +
+  geom_density(size=1.3)+
   scale_color_brewer(palette = "Set1") + #specific palette
   geom_vline(xintercept = range(data_teste$tseas), show.legend = T, colour="red", linetype="dashed") +
   scale_x_continuous(limits = range(data_teste$tseas), breaks = breaks, labels = labels) +
@@ -432,7 +433,7 @@ library(lemon)
 breaks <- c(round(seq(min(data_teste$tmean),max(data_teste$tmean),length=6)))
 labels = as.character(breaks)
 my_plot2 = ggplot(data_teste, aes(x=tmean, color=species)) + 
-  geom_density(size=1.3) +
+  geom_density(size=1.3)+
   scale_color_brewer(palette = "Set1") + 
   geom_vline(xintercept = range(data_teste$tmean), show.legend = F, colour="red", linetype="dashed") +
   scale_x_continuous(limits = range(data_teste$tmean), breaks = breaks, labels = labels) +
@@ -447,15 +448,14 @@ my_plot2 = ggplot(data_teste, aes(x=tmean, color=species)) +
   theme(axis.text.x = element_text(size = rel(1.5),colour="black")) +
   theme(axis.text.y = element_text(size = rel(1.5), colour="black")) +
   theme(legend.key.size = unit(0.5, "cm"))
-my_plot_tmean <- reposition_legend(my_plot_tmean, 'top left', offset = 0.002)
+my_plot_tmean <- reposition_legend(my_plot_tmean, 'top left', offset = 0.05)
 
-# Density plots ### Annual Mean Precipitation
+  # Density plots ### Annual Mean Precipitation
 # generate break positions
 breaks <- c(round(seq(min(data_teste$prec),max(data_teste$prec),length=6)))
 labels = as.character(breaks)
 # plot and be happy ;)
-my_plot3 = ggplot(data_teste, aes(x=prec, color=species)) +
-  geom_density(size=1.3) +
+my_plot3 = ggplot(data_teste, aes(x=prec, color=species)) + geom_density(size=1.3)+
   scale_color_brewer(palette = "Set1") + 
   geom_vline(xintercept = range(data_teste$prec), show.legend = F, colour="red", linetype="dashed") +
   scale_x_continuous(limits = range(data_teste$prec), breaks = breaks, labels = labels)
@@ -474,8 +474,7 @@ my_plot_prec =  my_plot3 + theme(panel.grid.major = element_blank(), panel.grid.
 # generate break positions
 breaks <- c(round(seq(min(data_teste$cwd),max(data_teste$cwd),length=6)))
 labels = as.character(breaks)
-my_plot4 = ggplot(data_teste, aes(x=cwd, color=species)) + 
-  geom_density(size=1.3) +
+my_plot4 = ggplot(data_teste, aes(x=cwd, color=species)) + geom_density(size=1.3)+
   scale_color_brewer(palette = "Set1") + 
   geom_vline(xintercept = range(data_teste$cwd), show.legend = F, colour="red", linetype="dashed") +
   scale_x_continuous(limits = range(data_teste$cwd), breaks = breaks, labels = labels)
@@ -509,10 +508,10 @@ ggsave(filename="outputs/Fig_ap1_sps_niche.png", plot=plot_densities,
 # Import data_set
 a.suare <- read.csv(file=paste0("Adansonia.suarezensis/niche_graph_species_compared_anomaly.csv"), header=T,sep=";",dec=",")
 # 1st importance variable - Tseas
-range(a.suare$tseas) # 1194 - 1417 
-range(a.suare$tseasf) # 1307- 1552
+range(a.suare$tseas) # 1197 - 1471 
+range(a.suare$tseasf) # 1314- 1589
 mean(a.suare$tseas) # 1275,3
-mean(a.suare$tseasf) # 1390
+mean(a.suare$tseasf) # 1398
 breaks <- c(round(seq(min(a.suare$tseas),max(a.suare$tseasf),length=8)))
 labels = as.character(breaks)
 
@@ -527,7 +526,8 @@ plot.seas_suar = ggplot(a.suare, aes(x=tseas, y=..density..)) +
   geom_vline(aes(xintercept=quantile(tseasf,0.975)),color="black",linetype="dashed",size=1) +
   geom_vline(aes(xintercept=quantile(tseasf,0.025)),color="black",linetype="dashed",size=1) +
   
-  scale_x_continuous(limits = c(1180,1500), breaks = breaks, labels = labels) +
+  scale_x_continuous(limits = c(1150,1600), breaks = breaks, labels = labels) +
+  scale_y_continuous(labels = scales::number_format(accuracy = 0.001)) +
   scale_color_manual(values = c('tseas' = 'darkorange', 'tseasf' = 'black'))+
   scale_fill_viridis(alpha=1,begin= 0.65,end=0.7, discrete=T,option="D")
 
@@ -561,6 +561,7 @@ plot.prec_suar = ggplot(a.suare, aes(x=prec, y=..density..)) +
   geom_vline(aes(xintercept=quantile(precf,0.025)),color="black",linetype="dashed",size=1) +
 
   scale_x_continuous(limits = c(800,1600), breaks = breaks, labels = labels) +
+  scale_y_continuous(labels = scales::number_format(accuracy = 0.001)) +
   scale_color_manual(values = c('prec' = 'darkorange', 'precf' = 'black'))+
   scale_fill_viridis(alpha=1,begin= 0.65,end=0.7, discrete=T,option="D")
 
@@ -582,8 +583,8 @@ plot.prec_suar =  plot.prec_suar + theme(panel.grid.major = element_blank(), pan
 #1st importance variable - Tseas 
 a.perrieri <- read.csv(file=paste0("Adansonia.perrieri/niche_graph_species_compared_anomaly.csv"), header=T,sep=";",dec=",")
 head(a.perrieri)
-range(a.perrieri$tseas) # 890 1966
-range(a.perrieri$tseasf) # 1011.333 2179.000
+range(a.perrieri$tseas) # 860 1958
+range(a.perrieri$tseasf) # 1040 2177
 round(mean(a.perrieri$tseas)) # 1392
 round(mean(a.perrieri$tseasf)) # 1535
 breaks <- c(round(seq(min(a.perrieri$tseas),max(a.perrieri$tseasf),length=8)))
@@ -600,7 +601,8 @@ plot.seas_per = ggplot(a.perrieri, aes(x=tseas, y=..density..)) +
   geom_vline(aes(xintercept=quantile(tseasf,0.975)),color="black",linetype="dashed",size=1) +
   geom_vline(aes(xintercept=quantile(tseasf,0.025)),color="black",linetype="dashed",size=1) +
 
-  scale_x_continuous(limits = c(850, 2250), breaks = breaks, labels = labels) +
+  scale_x_continuous(limits = c(800, 2250), breaks = breaks, labels = labels) +
+  scale_y_continuous(labels = scales::number_format(accuracy = 0.001)) +
   scale_color_manual(values = c('tseas' = 'darkorange', 'tseasf' = 'black'))+
   scale_fill_viridis(alpha=1,begin= 0.65,end=0.7, discrete=T,option="D")
 
@@ -633,7 +635,9 @@ plot.cwd_perrieri = ggplot(a.perrieri, aes(x=cwd, y=..density..)) +
   geom_vline(aes(xintercept=mean(cwdf)),color="black",linetype="solid",size=1)+
   geom_vline(aes(xintercept=quantile(cwdf,0.975)),color="black",linetype="dashed",size=1) +
   geom_vline(aes(xintercept=quantile(cwdf,0.025)),color="black",linetype="dashed",size=1) +
-  scale_x_continuous(limits = c(150, 1700), breaks = breaks, labels = labels) +
+  
+  scale_x_continuous(limits = c(30, 1700), breaks = breaks, labels = labels) +
+  scale_y_continuous(labels = scales::number_format(accuracy = 0.001)) +
   scale_color_manual(values = c('cwd' = 'darkorange', 'cwdf' = 'black'))+
   scale_fill_viridis(alpha=1,begin= 0.65,end=0.7, discrete=T,option="D")
 
@@ -654,8 +658,8 @@ plot.cwd_perrieri =  plot.cwd_perrieri + theme(panel.grid.major = element_blank(
 a.rubrostipa <- read.csv(file=paste0("Adansonia.rubrostipa/niche_graph_species_compared_anomaly.csv"), header=T,sep=";",dec=",")
 
 ## 1st importance variable - Climatic Water Deficit
-range(a.rubrostipa$cwd) # 684 967
-range(a.rubrostipa$cwdf) # 1331 - 2027
+range(a.rubrostipa$cwd) # 682 964
+range(a.rubrostipa$cwdf) # 1339 - 2045
 mean(a.rubrostipa$cwd) # 808,8
 mean(a.rubrostipa$cwdf) # 1678,3
 breaks <- c(round(seq(min(a.rubrostipa$cwd),max(a.rubrostipa$cwdf),length=8)))
@@ -672,7 +676,8 @@ plot.cwd_rubro = ggplot(a.rubrostipa, aes(x=cwd, y=..density..)) +
   geom_vline(aes(xintercept=quantile(cwdf,0.975)),color="black",linetype="dashed",size=1) +
   geom_vline(aes(xintercept=quantile(cwdf,0.025)),color="black",linetype="dashed",size=1) +
   
-  scale_x_continuous(limits = c(650, 2000), breaks = breaks, labels = labels) +
+  scale_x_continuous(limits = c(650, 2100), breaks = breaks, labels = labels) +
+  scale_y_continuous(labels = scales::number_format(accuracy = 0.001)) +
   scale_color_manual(values = c('cwd' = 'darkorange', 'cwdf' = 'black'))+
   scale_fill_viridis(alpha=1,begin= 0.65,end=0.7, discrete=T,option="D")
 
@@ -710,6 +715,7 @@ plot.tmean_rubro = ggplot(a.rubrostipa, aes(x=tmean, y=..density..)) +
   geom_vline(aes(xintercept=quantile(tmeanf,0.025)),color="black",linetype="dashed",size=1) +
   
   scale_x_continuous(limits = c(230, 320), breaks = breaks, labels = labels) +
+  scale_y_continuous(labels = scales::number_format(accuracy = 0.001)) +
   scale_color_manual(values = c('tmean' = 'darkorange', 'tmeanf' = 'black'))+
   scale_fill_viridis(alpha=1,begin= 0.65,end=0.7, discrete=T,option="D")
 
@@ -731,8 +737,8 @@ plot.tmean_rubro =  plot.tmean_rubro + theme(panel.grid.major = element_blank(),
 a.madagascariensis <- read.csv(file=paste0("Adansonia.madagascariensis/niche_graph_species_compared_anomaly.csv"), header=T,sep=";",dec=",")
 
 # 1st importance variable - Tseas
-range(a.madagascariensis$tseas)
-range(a.madagascariensis$tseasf)
+range(a.madagascariensis$tseas) # 931 2088
+range(a.madagascariensis$tseasf) # 1070.000 2150.667
 
 breaks <- c(round(seq(min(a.madagascariensis$tseas),max(a.madagascariensis$tseasf),length=8)))
 labels = as.character(breaks)
@@ -747,7 +753,8 @@ plot.seas_mada = ggplot(a.madagascariensis, aes(x=tseas, y=..density..)) +
   geom_vline(aes(xintercept=mean(tseasf)),color="black",linetype="solid",size=1)+
   geom_vline(aes(xintercept=quantile(tseasf,0.975)),color="black",linetype="dashed",size=1) +
   geom_vline(aes(xintercept=quantile(tseasf,0.025)),color="black",linetype="dashed",size=1) +
-  scale_x_continuous(limits = c(850,2120), breaks = breaks, labels = labels) +
+  scale_x_continuous(limits = c(850,2200), breaks = breaks, labels = labels) +
+  scale_y_continuous(labels = scales::number_format(accuracy = 0.001)) +
   scale_color_manual(values = c('tseas' = 'darkorange', 'tseasf' = 'black'))+
   scale_fill_viridis(alpha=1,begin= 0.65,end=0.7, discrete=T,option="D")
 
@@ -786,6 +793,7 @@ plot.mean_mada = ggplot(a.madagascariensis, aes(x=tmean, y=..density..)) +
   geom_vline(aes(xintercept=quantile(tmeanf,0.025)),color="black",linetype="dashed",size=1) +
 
   scale_x_continuous(limits = c(240,320), breaks = breaks, labels = labels) +
+  scale_y_continuous(labels = scales::number_format(accuracy = 0.001)) +
   scale_color_manual(values = c('tmean' = 'darkorange', 'tmeanf' = 'black'))+
   scale_fill_viridis(alpha=1,begin= 0.65,end=0.7, discrete=T,option="D")
 
@@ -805,10 +813,9 @@ plot.mean_mada =  plot.mean_mada + theme(panel.grid.major = element_blank(), pan
 ## Import dataset
 a.grandidieri <- read.csv(file=paste0("Adansonia.grandidieri/niche_graph_species_compared_anomaly.csv"), header=T,sep=";",dec=",")
 
-
 # 1st Importance Variable - Prec
-range(a.grandidieri$prec) # 383 - 1029
-range(a.grandidieri$precf) # 377 - 949
+range(a.grandidieri$prec) # 380 1040
+range(a.grandidieri$precf) # 332 - 965
 mean(a.grandidieri$prec) # 749
 mean(a.grandidieri$precf) # 706
 breaks <- c(round(seq(min(a.grandidieri$precf),max(a.grandidieri$prec),length=8)))
@@ -826,6 +833,7 @@ plot.prec_grand = ggplot(a.grandidieri, aes(x=prec, y=..density..)) +
   geom_vline(aes(xintercept=quantile(precf,0.025)),color="black",linetype="dashed",size=1) +
   
   scale_x_continuous(limits = c(300,1100), breaks = breaks, labels = labels) +
+  scale_y_continuous(labels = scales::number_format(accuracy = 0.001)) +
   scale_color_manual(values = c('prec' = 'darkorange', 'precf' = 'black'))+
   scale_fill_viridis(alpha=1,begin= 0.65,end=0.7, discrete=T,option="D")
 
@@ -861,8 +869,9 @@ plot.mean_grand = ggplot(a.grandidieri, aes(x=tmean, y=..density..)) +
   geom_vline(aes(xintercept=mean(tmeanf)),color="black",linetype="solid",size=1)+
   geom_vline(aes(xintercept=quantile(tmeanf,0.975)),color="black",linetype="dashed",size=1) +
   geom_vline(aes(xintercept=quantile(tmeanf,0.025)),color="black",linetype="dashed",size=1) +
-  scale_x_continuous(limits = c(225, 305), breaks = breaks, labels = labels) +
   
+  scale_x_continuous(limits = c(225, 305), breaks = breaks, labels = labels) +
+  scale_y_continuous(labels = scales::number_format(accuracy = 0.001)) +
   scale_color_manual(values = c('tmean' = 'darkorange', 'tmeanf' = 'black'))+
   scale_fill_viridis(alpha=1,begin= 0.65,end=0.7, discrete=T,option="D")
 
@@ -884,8 +893,8 @@ plot.mean_grand =  plot.mean_grand + theme(panel.grid.major = element_blank(), p
 a.za <- read.csv(file=paste0("Adansonia.za/niche_graph_species_compared_anomaly.csv"), header=T,sep=";",dec=",")
 head(a.za)
 # 1st Importance Variable - Prec
-range(a.za$prec) # 355 1635
-range(a.za$precf) # 321 1549
+range(a.za$prec) # 355 1849
+range(a.za$precf) # 352 1489
 
 breaks <- c(round(seq(min(a.za$precf),max(a.za$prec),length=8)))
 labels = as.character(breaks)
@@ -901,7 +910,8 @@ plot.prec_za = ggplot(a.za, aes(x=prec, y=..density..)) +
   geom_vline(aes(xintercept=quantile(precf,0.975)),color="black",linetype="dashed",size=1) +
   geom_vline(aes(xintercept=quantile(precf,0.025)),color="black",linetype="dashed",size=1) +
   
-  scale_x_continuous(limits = c(200,1800), breaks = breaks, labels = labels) +
+  scale_x_continuous(limits = c(200,1950), breaks = breaks, labels = labels) +
+  scale_y_continuous(labels = scales::number_format(accuracy = 0.001)) +
   scale_color_manual(values = c('prec' = 'darkorange', 'precf' = 'black'))+
   scale_fill_viridis(alpha=1,begin= 0.65,end=0.7, discrete=T,option="D")
 
@@ -938,6 +948,7 @@ plot.mean_za = ggplot(a.za, aes(x=tmean, y=..density..)) +
   geom_vline(aes(xintercept=quantile(tmeanf,0.025)),color="black",linetype="dashed",size=1) +
 
   scale_x_continuous(limits = c(200, 320), breaks = breaks, labels = labels) +
+  scale_y_continuous(labels = scales::number_format(accuracy = 0.001)) +
   scale_color_manual(values = c('tmean' = 'darkorange', 'tmeanf' = 'black'))+
   scale_fill_viridis(alpha=1,begin= 0.65,end=0.7, discrete=T,option="D")
 
@@ -977,7 +988,8 @@ plot.cwd_dig = ggplot(a.digitata, aes(x=cwd, y=..density..)) +
   geom_vline(aes(xintercept=quantile(cwdf,0.975)),color="black",linetype="dashed",size=1) +
   geom_vline(aes(xintercept=quantile(cwdf,0.025)),color="black",linetype="dashed",size=1) +
 
-  scale_x_continuous(limits = c(600, 2000), breaks = breaks, labels = labels) +
+  scale_x_continuous(limits = c(600, 2100), breaks = breaks, labels = labels) +
+  scale_y_continuous(labels = scales::number_format(accuracy = 0.001)) +
   scale_color_manual(values = c('cwd' = 'darkorange', 'cwdf' = 'black'))+
   scale_fill_viridis(alpha=1,begin= 0.65,end=0.7, discrete=T,option="D")
 
@@ -998,7 +1010,7 @@ plot.cwd_dig = ggplot(a.digitata, aes(x=cwd, y=..density..)) +
 
 # range tseas 
 range(a.digitata$tseas) # 889 2486
-range(a.digitata$tseasf) # 1045 2571 
+range(a.digitata$tseasf) # 1045 2593
 mean(a.digitata$tseas) # 1524
 mean(a.digitata$tseasf) # 1626,4
 breaks <- c(round(seq(min(a.digitata$tseas),max(a.digitata$tseasf),length=8)))
@@ -1015,8 +1027,8 @@ plot.seas_dig = ggplot(a.digitata, na.rm=T, aes(x=tseas, y=..density..)) +
   geom_vline(aes(xintercept=mean(tseasf)),color="black",linetype="solid",size=1)+
   geom_vline(aes(xintercept=quantile(tseasf,0.975)),color="black",linetype="dashed",size=1) +
   geom_vline(aes(xintercept=quantile(tseasf,0.025)),color="black",linetype="dashed",size=1) +
-  scale_x_continuous(limits = c(750,2600), breaks = breaks, labels = labels) +
-  
+  scale_x_continuous(limits = c(800,2700), breaks = breaks, labels = labels) +
+  scale_y_continuous(labels = scales::number_format(accuracy = 0.001)) +
   scale_color_manual(values = c('tseas' = 'darkorange', 'tseasf' = 'black'))+
   scale_fill_viridis(alpha=1,begin= 0.65,end=0.7, discrete=T,option="D")
 
@@ -1359,8 +1371,8 @@ plot_baobabs_threatened <- grid.arrange(tgrob_mada, tgrob_perri, tgrob_rubro,tgr
                              a1t,b1t,c1t,d1t,e2t,f2t,g2t,h2t,
                              i3t,j3t,k3t,l3t,m4t,n4t,o4t,p4t,layout_matrix=lay_5)
 
-#ggsave(file=paste0("./outputs/threat.pdf"),
- #      plot=plot_baobabs_threatened,width=11,height=10,dpi="print")
+ggsave(file=paste0("./outputs/threat.pdf"),
+       plot=plot_baobabs_threatened,width=11,height=10,dpi="print")
 
 ggsave(file=paste0("./outputs/threat.png"),
        plot=plot_baobabs_threatened,width=9,height=12,dpi="print")
@@ -1684,5 +1696,5 @@ all_niches <- cbind(niches_dig,niches_grand,niches_mada,niches_perri,
 write.table(all_niches,paste0("./outputs/tableA3_niches_fut_cur_comparison.txt"),sep="\t")
 
 ##===========================================================================
-## End of script - Have a Nice Day and Enjoy The View  and go for a hike
+## End of script - Have a Nice Day and Enjoy The View and go for a hike!
 ##===========================================================================
