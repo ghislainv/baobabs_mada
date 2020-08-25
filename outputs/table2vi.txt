@@ -1,0 +1,8 @@
+"Species"	"Mean.Annual.Temperature"	"Temperature.Seasonality"	"Precipitation"	"Climatic.Water.Deficit"
+"1"	"A. digitata"	3	2	4	1
+"2"	"A. grandidieri"	2	3	1	4
+"3"	"A. madagascariensis"	2	1	3	4
+"4"	"A. perrieri"	3	1	4	2
+"5"	"A. rubrostipa"	2	4	3	1
+"6"	"A. suarezensis"	4	1	2	4
+"7"	"A. za"	2	3	1	4

@@ -1,0 +1,15 @@
+"Baobab species"	"SDAp (km²)"	"Dispersal"	"SDAf (km²)"	"Change SDApf (%)"	"Current altitude mean (m)"	"Future altitude mean (m)"	"Altitude range shift (%)"
+"1"	"A. digitata"	47872	"full"	194447	306	76	195	119
+"2"	"A. digitata"	47872	"zero"	47017	-2	76	77	1
+"11"	"A. grandidieri"	27651	"full"	118907	330	135	365	230
+"21"	"A. grandidieri"	27651	"zero"	27591	0	135	135	0
+"12"	"A. madagascariensis"	92311	"full"	62881	-32	105	263	158
+"22"	"A. madagascariensis"	92311	"zero"	26878	-71	105	102	-3
+"13"	"A. perrieri"	15559	"full"	0	-100	432	NA	NA
+"23"	"A. perrieri"	15559	"zero"	0	-100	432	NA	NA
+"14"	"A. rubrostipa"	74194	"full"	44833	-40	77	428	351
+"24"	"A. rubrostipa"	74194	"zero"	11488	-85	77	82	5
+"15"	"A. suarezensis"	4820	"full"	0	-100	224	NA	NA
+"25"	"A. suarezensis"	4820	"zero"	0	-100	224	NA	NA
+"16"	"A. za"	170625	"full"	372134	118	265	365	100
+"26"	"A. za"	170625	"zero"	166254	-3	265	271	6
