@@ -22,6 +22,12 @@ All the results are saved in the `outputs` folder.
 
 Figure 1: **Bioclimatic niche of the seven baobabs species found in Madagascar**.
 
+Check the most threatened baobab species.
+
+<img alt="Threatened baobab species" src="outputs/threat.png" width="500">
+
+Figure 2: **The most threatened Malagasy baobab species(2080) under two dispersal scenarios**.
+
 ## Additional folders
 
 - The `manuscript` folder includes the `manuscript.Rmd` file with the sources code used to write the scientific article `manuscript.pdf`.
