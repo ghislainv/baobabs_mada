@@ -399,9 +399,19 @@ database6_rubro <- read.csv(file=paste0("Adansonia.rubrostipa/","niche_graph_spe
 database7_za <- read.csv(file=paste0("Adansonia.za/","niche_graph_species.csv"), header=T,sep=";")
 data_teste <- rbind(database2_digi,database3_grand,
               database4_mada,database5_perri,database6_rubro,database1_suare,database7_za)
+levels(data_teste$species)
 quantiles <- data_teste[,c(2,3,4,5,6)]
 quantiles <- round(apply(quantiles,2,quantile,c(0.025,0.975),na.rm=TRUE)) #use it to set new plot
 
+data_teste$species = factor(data_teste$species,
+                            levels = c("Adansonia.digitata","Adansonia.grandidieri",
+                                       "Adansonia.madagascariensis","Adansonia.perrieri",
+                                       "Adansonia.rubrostipa","Adansonia.suarezensis",
+                                       "Adansonia.za"),
+                            labels = c("A. digitata","A. grandidieri",
+                                       "A. madagascariensis","A. perrieri",
+                                       "A. rubrostipa","A. suarezensis",
+                                       "A. za"))
 # Density plots ## Temp. Seasonality
 range(data_teste$tseas)
 # generate break positions
@@ -421,9 +431,9 @@ my_plot_tseas =  my_plot + theme(panel.grid.major = element_blank(), panel.grid.
                                  panel.background = element_blank(), axis.line = element_line(colour = "black"))+
   labs(x="Temp. Seasonality (sd x 100ºC)", y = "Density",size=5) +
   theme(axis.title.x = element_text(size = rel(2),colour="black")) +
-  theme(axis.title.y = element_text(size = rel(1),colour="black")) +
-  theme(axis.text.x = element_text(size = rel(1.5),colour="black")) +
-  theme(axis.text.y = element_text(size = rel(1.5), colour="black")) +
+  theme(axis.title.y = element_text(size = rel(2),colour="black")) +
+  theme(axis.text.x = element_text(size = rel(1.6),colour="black")) +
+  theme(axis.text.y = element_text(size = rel(1.6), colour="black")) +
   theme(legend.position="none")
   
 
@@ -444,10 +454,11 @@ my_plot2 = ggplot(data_teste, aes(x=tmean, color=species)) +
                                   panel.background = element_blank(), axis.line = element_line(colour = "black"))+
   labs(x="Mean Annual Temperature (ºC x 10) ", y = "Density",size=5) +
   theme(axis.title.x = element_text(size = rel(2),colour="black")) +
-  theme(axis.title.y = element_text(size = rel(1),colour="black")) +
-  theme(axis.text.x = element_text(size = rel(1.5),colour="black")) +
-  theme(axis.text.y = element_text(size = rel(1.5), colour="black")) +
+  theme(axis.title.y = element_text(size = rel(2),colour="black")) +
+  theme(axis.text.x = element_text(size = rel(1.6),colour="black")) +
+  theme(axis.text.y = element_text(size = rel(1.6), colour="black")) +
   theme(legend.key.size = unit(0.5, "cm"))
+  
 my_plot_tmean <- reposition_legend(my_plot_tmean, 'top left', offset = 0.05)
 
   # Density plots ### Annual Mean Precipitation
@@ -465,11 +476,11 @@ my_plot_prec =  my_plot3 + theme(panel.grid.major = element_blank(), panel.grid.
                              panel.background = element_blank(), axis.line = element_line(colour = "black"))+
   labs(x="Mean Annual Precipitation (mm.y-¹)", y = "Density",size=5) +
   theme(axis.title.x = element_text(size = rel(2),colour="black")) +
-  theme(axis.title.y = element_text(size = rel(1),colour="black")) +
-  theme(axis.text.x = element_text(size = rel(1.5),colour="black")) +
-  theme(axis.text.y = element_text(size = rel(1.5), colour="black")) +
+  theme(axis.title.y = element_text(size = rel(2),colour="black")) +
+  theme(axis.text.x = element_text(size = rel(1.6),colour="black")) +
+  theme(axis.text.y = element_text(size = rel(1.6), colour="black")) +
   theme(legend.position="none")
-
+  
 # Density plots ### Climatic Water Deficit
 # generate break positions
 breaks <- c(round(seq(min(data_teste$cwd),max(data_teste$cwd),length=6)))
@@ -484,10 +495,12 @@ my_plot_cwd =  my_plot4 + theme(panel.grid.major = element_blank(), panel.grid.m
                              panel.background = element_blank(), axis.line = element_line(colour = "black"))+
   labs(x="Climatic Water Deficit (mm)", y = "Density",size=5) +
   theme(axis.title.x = element_text(size = rel(2),colour="black")) +
-  theme(axis.title.y = element_text(size = rel(1),colour="black")) +
-  theme(axis.text.x = element_text(size = rel(1.5),colour="black")) +
-  theme(axis.text.y = element_text(size = rel(1.5), colour="black")) +
+  theme(axis.title.y = element_text(size = rel(2),colour="black")) +
+  theme(axis.text.x = element_text(size = rel(1.6),colour="black")) +
+  theme(axis.text.y = element_text(size = rel(1.6), colour="black")) +
   theme(legend.position="none")
+  
+
   
 ## Combine plots 
 lay_2 <- cbind(c(rep(seq(1,4,by=1),each=3)),
@@ -497,10 +510,13 @@ lay_2 <- subset( lay_2, select = -b )
 
 plot_densities <- grid.arrange(my_plot_tmean, my_plot_tseas, my_plot_prec, my_plot_cwd,
                                layout_matrix=lay_2)
+
+ggsave(filename="outputs/Fig_ap1_sps_niche2.png", plot=plot_densities,
+       width=8, height=11, dpi="print")
+
 ggsave(filename="outputs/Fig_ap1_sps_niche.pdf", plot=plot_densities,
        width=8, height=11, dpi="print")
-ggsave(filename="outputs/Fig_ap1_sps_niche.png", plot=plot_densities,
-       width=8, height=11, dpi="print")
+
 
 ### Comparing bioclimatic niche of each species inside current SDA according to the 
 ### most important variables ######
@@ -1148,6 +1164,7 @@ col_scale_var_test_fut <- scale_fill_gradientn(
 ## Color scales pres
 col_scale_var_test_pres <- scale_fill_gradientn(
   colours = c(grey(c(0.90,seq(0.9,0.7,-0.2))),gcolors(3)),
+  #colours = c(grey(c(0.90,seq(0.9,0.7,-0.2))),gcolors(3)),
   na.value="transparent",
   values=rescale(seq(0,1000),0,1000),
   limits=c(0,1000),
@@ -1181,7 +1198,7 @@ a_suare <- read.table(paste0("Adansonia.suarezensis/function_ready.txt"), header
 
 # non threatened
 a1 <- plot_anomaly_alt(m=environ$alt,n=a_digi,label="(a)",
-                     title="Presence Points\nAltitudinal range (m)") + 
+                     title="Presence Points\nElevation(m)") + 
   col_scale_var_test_alt
 
 e2 <- plot_anomaly_alt(m=environ$alt,n=a_grand,label="(e)",
@@ -1192,7 +1209,7 @@ i3 <- plot_anomaly_alt(m=environ$alt,n=a_za,label="(i)",
 
 # threatened species
 a1t <- plot_anomaly_alt(m=environ$alt,n=a_mada,label="(a)",
-                       title="Presence Points\nAltitudinal range (m)") + 
+                       title="Presence Points\nElevation (m)") + 
   col_scale_var_test_alt
 
 e2t <- plot_anomaly_alt(m=environ$alt,n=a_perri,label="(e)",
@@ -1225,7 +1242,7 @@ ca_suare <- pred_suare[[1]]
 
 # non threatened
 b1 <- plot_anomaly_2(r=ca_dig,label="(b)",
-                     title="Current\nDistribution/Votes") + 
+                     title="Current\nDistribution") + 
   col_scale_var_test_pres
 
 f2 <- plot_anomaly_2(r=ca_gran,label="(f)",
@@ -1235,7 +1252,7 @@ j3 <- plot_anomaly_2(r=ca_za,label="(j)",
                      title="") + col_scale_var_test_pres
 # threatened 
 b1t <- plot_anomaly_2(r=ca_mada,label="(b)",
-                     title="Current\nDistribution/Votes") + 
+                     title="Current\nDistribution") + 
   col_scale_var_test_pres
 
 f2t <- plot_anomaly_2(r=ca_perri,label="(f)",
@@ -1270,7 +1287,7 @@ caZD_suare <- raster(paste0("Adansonia.suarezensis/caZD.tif"))
 
 # non threatened 
 c1 <- plot_anomaly_2(r=cafut_dig, label="(c)",
-                     title="Full Dispersal\nRCP 8.5 2080/Votes") +
+                     title="Full Dispersal\nRCP 8.5 2080") +
   col_scale_var_test_fut
 
 g2 <- plot_anomaly_2(r=cafut_gran, label="(g)",
@@ -1280,7 +1297,7 @@ k3 <- plot_anomaly_2(r=cafut_za, label="(k)",
                      title="") + col_scale_var_test_fut
 
 d1 <- plot_anomaly_2(r=caZD_dig, label="(d)",
-                     title="Zero Dispersal\nRCP 8.5 2080/Votes") + 
+                     title="Zero Dispersal\nRCP 8.5 2080") + 
   col_scale_var_test_fut
 
 h2 <- plot_anomaly_2(r=caZD_gran, label="(h)",
@@ -1291,7 +1308,7 @@ l3 <- plot_anomaly_2(r=caZD_za, label="(l)",
 # threatened
 
 c1t <- plot_anomaly_2(r=cafut_mada, label="(c)",
-                     title="Full Dispersal\nRCP 8.5 2080/Votes") + 
+                     title="Full Dispersal\nRCP 8.5 2080") + 
   col_scale_var_test_fut
 
 g2t <- plot_anomaly_2(r=cafut_perri, label="(g)",
@@ -1303,10 +1320,10 @@ k3t <- plot_anomaly_2(r=cafut_rubro, label="(k)",
 o4t <- plot_anomaly_2(r=cafut_suare, label="(o)",
                       title="") + col_scale_var_test_fut
 
-### Zero Dispersial
+### Zero Dispersal
 
 d1t <- plot_anomaly_2(r=caZD_mada, label="(d)",
-                     title="Zero Dispersal\nRCP 8.5 2080/Votes") + 
+                     title="Zero Dispersal\nRCP 8.5 2080") + 
   col_scale_var_test_fut
 
 h2t <- plot_anomaly_2(r=caZD_perri, label="(h)",
@@ -1499,15 +1516,15 @@ col_scale_var_anomws <- scale_fill_gradientn(
 
 # Current ws
 cur_ws <- plot_anomaly_ws(r=current_ws, label="(a)",
-                      title="Temperature Seasonality (ºC sd x 100)") + col_scale_var_cur_ws
+                      title="Current temperature seasonality (°C sd x 100)") + col_scale_var_cur_ws
                       
 # Future anomaly
 ano_ws <- plot_anomaly_ws(r=Stack.bio4.current_worldcrop, label="(b)",
-                          title="Future Climatic Anomaly") + col_scale_var_anomws
+                          title="Temperature seasonality anomaly (current vs. 2085 RCP 8.5, °C sd x 100)") + col_scale_var_anomws
 
 # future seasonality
 fut_ws <- plot_anomaly_ws(r=future_ws, label="(c)",
-                          title="Temperature Seasonality (ºC sd x 100) - 2080") + col_scale_var_fut_ws
+                          title="Future temperature seasonality (2085 RCP 8.5, °C sd x 100)") + col_scale_var_fut_ws
 
 ## Combine plots
 lay_6 <- rbind(c(rep(seq(1,1,by=1),each=3)),
