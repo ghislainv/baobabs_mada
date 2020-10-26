@@ -26,7 +26,7 @@ Check the most threatened baobab species.
 
 <img alt="Threatened baobab species" src="outputs/threat.png" width="500">
 
-Figure 2: **The most threatened Malagasy baobab species (2085) under two dispersal scenarios**.
+Figure 2: **The most threatened Malagasy baobab species (2085) under two dispersal hypothesis (Full-Dispersal and Zero-Dispersal) and RCP 8.5**.
 
 ## Additional folders
 
