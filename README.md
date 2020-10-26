@@ -6,7 +6,7 @@
 
 The R script `R/baoabas.R` can be run to reproduce the results of the following study:
 
-**MUNIZ TAGLIARI Mario, Pascal DANTHU, Jean-Michel LEONG POCK TSY, Jonathan LENOIR, Cyrille CORNU, Vitor CARVALHO-ROCHA, and Ghislain VIEILLEDENT**. 2020. Not all species should migrate towards the Poles under climate change: the case of the seven Baobab species in Madagascar.
+**MUNIZ TAGLIARI Mario, Vitor CARVALHO-ROCHA, Pascal DANTHU, Jean-Michel LEONG POCK TSY, Cyrille CORNU, Jonathan LENOIR, Ghislain VIEILLEDENT**. 2020. Not all species should migrate towards the Poles under climate change: the case of the seven Baobab species in Madagascar.
 
 To run the script, you can either execute the `baobabs.sh` shellscript file or run the R script under a R GUI such as RStudio.
 
