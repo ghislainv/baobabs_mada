@@ -93,7 +93,7 @@ run.species <- function (i, run.models=TRUE) {
                                                   myFormula=NULL, 
                                                   family=binomial(link="logit")),
                                          RF=list(do.classif=TRUE, ntree=500),
-                                         MAXENT.Phillips=list(path_to_maxent.jar=paste0(getwd(), "/maxent"), 
+                                         MAXENT.Phillips=list(path_to_maxent.jar='D:/OneDrive/Cap_1_outros_papers/script_art_1/maxent', 
                                           #attention with path to Maxent, Rserver may not works. Try to set your own path in your PC
                                                               visible=FALSE, maximumiterations=500,
                                                               memory_allocated=512,
@@ -172,10 +172,10 @@ run.species <- function (i, run.models=TRUE) {
   
   ## Future distribution with Future Data - MadaClim   
   mod <- c("no","he","gs") # For global climate models (GCMs): NorESM1-M, HadGEM2-ES, GISS-E2-R,  
-  #rcp <- c("45","85") # For representative concentration pathways (RCPs): RCP 4.5, RCP 8.5
-  rcp <- c("85") # If only for RCP 85
-  #yr <- c("2050","2080") # For 2050, 2080
-  yr <- c("2080") # If only for 2080
+  rcp <- c("45","85") # For representative concentration pathways (RCPs): RCP 4.5, RCP 8.5
+  #rcp <- c("85") # If only for RCP 85
+  yr <- c("2050","2080") # For 2050, 2080
+  #yr <- c("2080") # If only for 2080
   n.mod <- length(mod)*length(rcp)*length(yr)
   
   if (run.models) {
@@ -321,24 +321,24 @@ run.species <- function (i, run.models=TRUE) {
   
   # ## Considering RCP 45,85 and year 2050,2080
   # ## Table for change in area
-  # SDA.fut <- data.frame(area.pres=SDA.pres,
-  #                       rcp=rep(c("45","85"),each=4),yr=rep(rep(c("2050","2080"),each=2),2),
-  #                       rcp=rep(c("45","85"),each=4),yr=rep(rep(c("2050","2080"),each=2),2),
-  #                       disp=rep(c("full","zero"),4),area.fut=NA)
+   SDA.fut <- data.frame(area.pres=SDA.pres,
+                         rcp=rep(c("45","85"),each=4),yr=rep(rep(c("2050","2080"),each=2),2),
+                         rcp=rep(c("45","85"),each=4),yr=rep(rep(c("2050","2080"),each=2),2),
+                         disp=rep(c("full","zero"),4),area.fut=NA)
   # ## Change in altitude
-  # Alt.fut <- data.frame(mean.pres=niche$alt[1],q1.pres=niche$alt[2],q2.pres=niche$alt[3],
-  #                       rcp=rep(c("45","85"),each=4),yr=rep(rep(c("2050","2080"),each=2),2),
-  #                       disp=rep(c("full","zero"),4),mean.fut=NA,q1.fut=NA,q2.fut=NA)
+   Alt.fut <- data.frame(mean.pres=niche$alt[1],q1.pres=niche$alt[2],q2.pres=niche$alt[3],
+                         rcp=rep(c("45","85"),each=4),yr=rep(rep(c("2050","2080"),each=2),2),
+                         disp=rep(c("full","zero"),4),mean.fut=NA,q1.fut=NA,q2.fut=NA)
   
   # Only considering RCP 85 and year 2080
   ## Table for change in area
-  SDA.fut <- data.frame(area.pres=SDA.pres,
-                        rcp=rep("85", 2),yr=rep("2080",2),
-                        disp=c("full","zero"),area.fut=NA)
-  ## Change in altitude
-  Alt.fut <- data.frame(mean.pres=niche$alt[1],q1.pres=niche$alt[2],q2.pres=niche$alt[3],
-                        rcp=rep("85", 2),yr=rep("2080",2),
-                        disp=c("full","zero"),mean.fut=NA,q1.fut=NA,q2.fut=NA)
+  #SDA.fut <- data.frame(area.pres=SDA.pres,
+   #                     rcp=rep("85", 2),yr=rep("2080",2),
+    #                    disp=c("full","zero"),area.fut=NA)
+  ## #hange in altitude
+  #Alt.fut <- data.frame(mean.pres=niche$alt[1],q1.pres=niche$alt[2],q2.pres=niche$alt[3],
+   #                     rcp=rep("85", 2),yr=rep("2080",2),
+    #                    disp=c("full","zero"),mean.fut=NA,q1.fut=NA,q2.fut=NA)
   
   ## Committee averaging for the three GCMs (sum)
   for (j in 1:length(rcp)) {
@@ -362,7 +362,7 @@ run.species <- function (i, run.models=TRUE) {
       l.arg <- list(text="Vote",side=2, line=0.5, cex=1.2)
       
       # Plot (Committee Averaging Full Dispersal)
-      writeRaster(caFut,paste0(spdir,"/caFut.tif"),datatype="INT2S",
+      writeRaster(caFut,paste0(spdir,"/caFut_",rcp[j],"_",yr[l],".tif"),datatype="INT2S",
                   overwrite=TRUE,
                   options=c("COMPRESS=LZW","PREDICTOR=2"))
       pdf(paste0(spdir,"/figures/cafd_",rcp[j],"_",yr[l],".pdf"),width=6.5,height=10)
@@ -376,7 +376,7 @@ run.species <- function (i, run.models=TRUE) {
       # Zero-dispersal
       caZD <- caFut
       values(caZD)[values(ca)<500] <- 0 
-      writeRaster(caZD,paste0(spdir,"/caZD.tif"),datatype="INT2S",
+      writeRaster(caZD,paste0(spdir,"/caZD_",rcp[j],"_",yr[l],".tif"),datatype="INT2S",
                   overwrite=TRUE,
                   options=c("COMPRESS=LZW","PREDICTOR=2"))
       pdf(paste0(spdir,"/figures/cazd_",rcp[j],"_",yr[l],".pdf"),width=6.5,height=10)
