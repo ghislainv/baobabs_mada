@@ -1,8 +1,0 @@
-"Sen"	"Spe"	"TSS"
-"A. digitata"	1	0.921	0.921
-"A. grandidieri"	0.992	0.96	0.952
-"A. madagascariensis"	0.993	0.844	0.837
-"A. perrieri"	1	0.978	0.978
-"A. rubrostipa"	0.978	0.874	0.851
-"A. suarezensis"	1	0.991	0.991
-"A. za"	0.948	0.724	0.672
