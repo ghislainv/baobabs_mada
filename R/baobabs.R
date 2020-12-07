@@ -1942,7 +1942,7 @@ altitude_mada <- ggplot(alegria_test_mada_finale) +
   ylab("Elevation (m)") +
   theme_bw() +
   labs(col = "") +
-  annotate("text", x  = 0.5, y = 450 , size=7, label = "(a)") +
+  annotate("text", x  = 0.5, y = 950 , size=7, label = "(a)") +
   theme(axis.title.x = element_text(size = rel(1.75),colour="black")) +
   theme(axis.title.y = element_text(size = rel(1.75),colour="black")) +
   theme(axis.text.x = element_text(size = rel(1.65),colour="black")) +
@@ -2135,7 +2135,7 @@ altitude_rubro <- ggplot(alegria_test_rubro_finale) +
   ylab("Elevation (m)") +
   theme_bw() +
   labs(col = "") +
-  annotate("text", x  = 0.5, y = 325 , size=7, label = "(e)") +
+  annotate("text", x  = 0.5, y = 950 , size=7, label = "(e)") +
   theme(axis.title.x = element_text(size = rel(1.75),colour="black")) +
   theme(axis.title.y = element_text(size = rel(1.75),colour="black")) +
   theme(axis.text.x = element_text(size = rel(1.65),colour="black")) +
