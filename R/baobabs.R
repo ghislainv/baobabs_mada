@@ -1559,6 +1559,8 @@ alegria <- ca_test_na3 %>% filter(Adansonia.digitata_EMcaByTSS_mergedAlgo_merged
 
 ####################### Box plots according to each SDAp and SDAf compared
 
+####################### Box plots according to each SDAp and SDAf compared
+
 ##### Non threatened baobab species ####
 ### A digitata ###
 
@@ -1572,21 +1574,21 @@ ca_test_na3 <- as.data.frame(ca_test_na2[complete.cases(ca_test_na2), ] )
 
 alegria <- ca_test_na3 %>% filter(Adansonia.digitata_EMcaByTSS_mergedAlgo_mergedRun_mergedData >= 500)
 
-set.seed(20)
+#set.seed(20)
 alegria2 <- sample_n(alegria, size = 1000, replace = F)
 alegria2$Proj <- rep(c("Present"),1000)
 names(alegria2) <- c("Long","Lat","Prediction","Alt","Scenario")
 
 ### Future testing 2080
-caZD_dig <- raster(paste0("Adansonia.digitata/caFD_85_2080.tif"))
+caZD_dig <- raster(paste0("Adansonia.digitata/caFut_85_2080.tif"))
 ca_test_fut <- stack(caZD_dig,environ$alt)
 ca_test_na_fut <- na.omit(ca_test_fut)
 
 ca_test_na2_fut <- rasterToPoints(ca_test_na_fut)
 ca_test_na3_fut <- as.data.frame(ca_test_na2_fut[complete.cases(ca_test_na2_fut), ] )
-alegria_fut <- ca_test_na3_fut %>% filter(caFD_85_2080 >= 1500)
+alegria_fut <- ca_test_na3_fut %>% filter(caFut_85_2080 >= 1500)
 
-set.seed(20)
+#set.seed(20)
 alegria2_fut <- sample_n(alegria_fut, size = 1000, replace = F)
 alegria2_fut$Proj <- rep(c("Future_2085"),1000)
 names(alegria2_fut) <- c("Long","Lat","Prediction","Alt","Scenario")
@@ -1602,7 +1604,7 @@ ca_test_na2_fut_digi_55 <- rasterToPoints(ca_test_na_fut_digi_55)
 ca_test_na3_fut_digi_55 <- as.data.frame(ca_test_na2_fut_digi_55[complete.cases(ca_test_na2_fut_digi_55), ] )
 alegria_fut_digi_55 <- ca_test_na3_fut_digi_55 %>% filter(caFut_85_2050 >= 1500)
 
-set.seed(20)
+#set.seed(20)
 alegria2_fut_digi_55 <- sample_n(alegria_fut_digi_55, size = 1000, replace = F)
 alegria2_fut_digi_55$Proj <- rep(c("Future_2055"),1000)
 names(alegria2_fut_digi_55) <- c("Long","Lat","Prediction","Alt","Scenario")
@@ -1650,7 +1652,7 @@ altitude_digi <- ggplot(alegria_test_digi_finale) +
   ylab("Elevation (m)") +
   theme_bw() +
   labs(col = "") +
-  annotate("text", x  = 0.5, y = 600 , size=7, label = "(a)") +
+  annotate("text", x  = 0.5, y = 800 , size=7, label = "(a)") +
   theme(axis.title.x = element_text(size = rel(1.75),colour="black")) +
   theme(axis.title.y = element_text(size = rel(1.75),colour="black")) +
   theme(axis.text.x = element_text(size = rel(1.65),colour="black")) +
@@ -1670,7 +1672,7 @@ ca_test_na3_grand <- as.data.frame(ca_test_na2_grand[complete.cases(ca_test_na2_
 
 alegria_grand <- ca_test_na3_grand %>% filter(Adansonia.grandidieri_EMcaByTSS_mergedAlgo_mergedRun_mergedData >= 500)
 
-set.seed(20)
+#set.seed(20)
 alegria2_grand <- sample_n(alegria_grand, size = 1000, replace = F)
 alegria2_grand$Proj <- rep(c("Present"),1000)
 names(alegria2_grand) <- c("Long","Lat","Prediction","Alt","Scenario")
@@ -1684,7 +1686,7 @@ ca_test_na2_fut_grand <- rasterToPoints(ca_test_na_fut_grand)
 ca_test_na3_fut_grand <- as.data.frame(ca_test_na2_fut_grand[complete.cases(ca_test_na2_fut_grand), ] )
 alegria_fut_grand <- ca_test_na3_fut_grand %>% filter(caFut_85_2080 >= 1500)
 
-set.seed(20)
+#set.seed(20)
 alegria2_fut_grand <- sample_n(alegria_fut_grand, size = 1000, replace = F)
 alegria2_fut_grand$Proj <- rep(c("Future_2085"),1000)
 names(alegria2_fut_grand) <- c("Long","Lat","Prediction","Alt","Scenario")
@@ -1701,7 +1703,7 @@ ca_test_na3_fut_grand_55 <- as.data.frame(ca_test_na2_fut_grand_55[complete.case
 alegria_fut_grand_55 <- ca_test_na3_fut_grand_55 %>% filter(caFut_85_2050 >= 1500)
 
 
-set.seed(20)
+#set.seed(20)
 alegria2_fut_grand_55 <- sample_n(alegria_fut_grand_55, size = 1000, replace = F)
 alegria2_fut_grand_55$Proj <- rep(c("Future_2055"),1000)
 names(alegria2_fut_grand_55) <- c("Long","Lat","Prediction","Alt","Scenario")
@@ -1767,7 +1769,7 @@ ca_test_na3_za <- as.data.frame(ca_test_na2_za[complete.cases(ca_test_na2_za), ]
 
 alegria_za <- ca_test_na3_za %>% filter(Adansonia.za_EMcaByTSS_mergedAlgo_mergedRun_mergedData >= 500)
 
-set.seed(20)
+#set.seed(20)
 alegria2_za <- sample_n(alegria_za, size = 1000, replace = F)
 alegria2_za$Proj <- rep(c("Present"),1000)
 names(alegria2_za) <- c("Long","Lat","Prediction","Alt","Scenario")
@@ -1781,7 +1783,7 @@ ca_test_na2_fut_za <- rasterToPoints(ca_test_na_fut_za)
 ca_test_na3_fut_za <- as.data.frame(ca_test_na2_fut_za[complete.cases(ca_test_na2_fut_za), ] )
 alegria_fut_za <- ca_test_na3_fut_za %>% filter(caFut_85_2080 >= 1500)
 
-set.seed(20)
+#set.seed(20)
 alegria2_fut_za <- sample_n(alegria_fut_za, size = 1000, replace = F)
 alegria2_fut_za$Proj <- rep(c("Future_2085"),1000)
 names(alegria2_fut_za) <- c("Long","Lat","Prediction","Alt","Scenario")
@@ -1796,7 +1798,7 @@ ca_test_na2_fut_za_55 <- rasterToPoints(ca_test_na_fut_za_55)
 ca_test_na3_fut_za_55 <- as.data.frame(ca_test_na2_fut_za_55[complete.cases(ca_test_na2_fut_za_55), ] )
 alegria_fut_za_55 <- ca_test_na3_fut_za_55 %>% filter(caFut_85_2050 >= 1500)
 
-set.seed(20)
+#set.seed(20)
 alegria2_fut_za_55 <- sample_n(alegria_fut_za_55, size = 1000, replace = F)
 alegria2_fut_za_55$Proj <- rep(c("Future_2055"),1000)
 names(alegria2_fut_za_55) <- c("Long","Lat","Prediction","Alt","Scenario")
@@ -1862,7 +1864,7 @@ ca_test_na3_mada <- as.data.frame(ca_test_na2_mada[complete.cases(ca_test_na2_ma
 
 alegria_mada <- ca_test_na3_mada %>% filter(Adansonia.madagascariensis_EMcaByTSS_mergedAlgo_mergedRun_mergedData >= 500)
 
-set.seed(20)
+#set.seed(20)
 alegria2_mada <- sample_n(alegria_mada, size = 1000, replace = F)
 alegria2_mada$Proj <- rep(c("Present"),1000)
 names(alegria2_mada) <- c("Long","Lat","Prediction","Alt","Scenario")
@@ -1876,7 +1878,7 @@ ca_test_na2_fut_mada <- rasterToPoints(ca_test_na_fut_mada)
 ca_test_na3_fut_mada <- as.data.frame(ca_test_na2_fut_mada[complete.cases(ca_test_na2_fut_mada), ] )
 alegria_fut_mada <- ca_test_na3_fut_mada %>% filter(caFut_85_2080 >= 1500)
 
-set.seed(20)
+#set.seed(20)
 alegria2_fut_mada <- sample_n(alegria_fut_mada, size = 1000, replace = F)
 alegria2_fut_mada$Proj <- rep(c("Future_2085"),1000)
 names(alegria2_fut_mada) <- c("Long","Lat","Prediction","Alt","Scenario")
@@ -1893,7 +1895,7 @@ ca_test_na3_fut_mada_55 <- as.data.frame(ca_test_na2_fut_mada_55[complete.cases(
 alegria_fut_mada_55 <- ca_test_na3_fut_mada_55 %>% filter(caFut_85_2050 >= 1500)
 
 
-set.seed(20)
+#set.seed(20)
 alegria2_fut_mada_55 <- sample_n(alegria_fut_mada_55, size = 1000, replace = F)
 alegria2_fut_mada_55$Proj <- rep(c("Future_2055"),1000)
 names(alegria2_fut_mada_55) <- c("Long","Lat","Prediction","Alt","Scenario")
@@ -1942,7 +1944,7 @@ altitude_mada <- ggplot(alegria_test_mada_finale) +
   ylab("Elevation (m)") +
   theme_bw() +
   labs(col = "") +
-  annotate("text", x  = 0.5, y = 950 , size=7, label = "(a)") +
+  annotate("text", x  = 0.5, y = 800 , size=7, label = "(a)") +
   theme(axis.title.x = element_text(size = rel(1.75),colour="black")) +
   theme(axis.title.y = element_text(size = rel(1.75),colour="black")) +
   theme(axis.text.x = element_text(size = rel(1.65),colour="black")) +
@@ -1961,7 +1963,7 @@ ca_test_na3_perrieri <- as.data.frame(ca_test_na2_perrieri[complete.cases(ca_tes
 
 alegria_perrieri <- ca_test_na3_perrieri %>% filter(Adansonia.perrieri_EMcaByTSS_mergedAlgo_mergedRun_mergedData >= 500)
 
-set.seed(20)
+#set.seed(20)
 alegria2_perrieri <- sample_n(alegria_perrieri, size = 1000, replace = F)
 alegria2_perrieri$Proj <- rep(c("Present"),1000)
 names(alegria2_perrieri) <- c("Long","Lat","Prediction","Alt","Scenario")
@@ -1975,9 +1977,9 @@ ca_test_na2_fut_perrieri <- rasterToPoints(ca_test_na_fut_perrieri)
 ca_test_na3_fut_perrieri <- as.data.frame(ca_test_na2_fut_perrieri[complete.cases(ca_test_na2_fut_perrieri), ] )
 alegria_fut_perrieri <- ca_test_na3_fut_perrieri %>% filter(caFut_45_2080 >= 1500)
 
-set.seed(20)
-alegria2_fut_perrieri <- sample_n(alegria_fut_perrieri, size = 427, replace = F)
-alegria2_fut_perrieri$Proj <- rep(c("Future_2085"),427)
+#set.seed(20)
+alegria2_fut_perrieri <- sample_n(alegria_fut_perrieri, size = 416, replace = F)
+alegria2_fut_perrieri$Proj <- rep(c("Future_2085"),416)
 names(alegria2_fut_perrieri) <- c("Long","Lat","Prediction","Alt","Scenario")
 alegria_test_perrieri <- rbind(alegria2_perrieri,alegria2_fut_perrieri)
 tail(alegria_test_perrieri)
@@ -1992,7 +1994,7 @@ ca_test_na3_fut_perrieri_55 <- as.data.frame(ca_test_na2_fut_perrieri_55[complet
 alegria_fut_perrieri_55 <- ca_test_na3_fut_perrieri_55 %>% filter(caFut_85_2050 >= 1500)
 
 
-set.seed(20)
+#set.seed(20)
 alegria2_fut_perrieri_55 <- sample_n(alegria_fut_perrieri_55, size = 1000, replace = F)
 alegria2_fut_perrieri_55$Proj <- rep(c("Future_2055"),1000)
 names(alegria2_fut_perrieri_55) <- c("Long","Lat","Prediction","Alt","Scenario")
@@ -2057,7 +2059,7 @@ ca_test_na3_rubro <- as.data.frame(ca_test_na2_rubro[complete.cases(ca_test_na2_
 
 alegria_rubro <- ca_test_na3_rubro %>% filter(Adansonia.rubrostipa_EMcaByTSS_mergedAlgo_mergedRun_mergedData >= 500)
 
-set.seed(20)
+#set.seed(20)
 alegria2_rubro <- sample_n(alegria_rubro, size = 1000, replace = F)
 alegria2_rubro$Proj <- rep(c("Present"),1000)
 names(alegria2_rubro) <- c("Long","Lat","Prediction","Alt","Scenario")
@@ -2071,7 +2073,7 @@ ca_test_na2_fut_rubro <- rasterToPoints(ca_test_na_fut_rubro)
 ca_test_na3_fut_rubro <- as.data.frame(ca_test_na2_fut_rubro[complete.cases(ca_test_na2_fut_rubro), ] )
 alegria_fut_rubro <- ca_test_na3_fut_rubro %>% filter(caFut_85_2080 >= 1500)
 
-set.seed(20)
+#set.seed(20)
 alegria2_fut_rubro <- sample_n(alegria_fut_rubro, size = 1000, replace = F)
 alegria2_fut_rubro$Proj <- rep(c("Future_2085"),1000)
 names(alegria2_fut_rubro) <- c("Long","Lat","Prediction","Alt","Scenario")
@@ -2087,7 +2089,7 @@ ca_test_na3_fut_rubro_55 <- as.data.frame(ca_test_na2_fut_rubro_55[complete.case
 alegria_fut_rubro_55 <- ca_test_na3_fut_rubro_55 %>% filter(caFut_85_2050 >= 1500)
 
 
-set.seed(20)
+#set.seed(20)
 alegria2_fut_rubro_55 <- sample_n(alegria_fut_rubro_55, size = 1000, replace = F)
 alegria2_fut_rubro_55$Proj <- rep(c("Future_2055"),1000)
 names(alegria2_fut_rubro_55) <- c("Long","Lat","Prediction","Alt","Scenario")
@@ -2135,7 +2137,7 @@ altitude_rubro <- ggplot(alegria_test_rubro_finale) +
   ylab("Elevation (m)") +
   theme_bw() +
   labs(col = "") +
-  annotate("text", x  = 0.5, y = 950 , size=7, label = "(e)") +
+  annotate("text", x  = 0.5, y = 1000 , size=7, label = "(e)") +
   theme(axis.title.x = element_text(size = rel(1.75),colour="black")) +
   theme(axis.title.y = element_text(size = rel(1.75),colour="black")) +
   theme(axis.text.x = element_text(size = rel(1.65),colour="black")) +
@@ -2154,7 +2156,7 @@ ca_test_na3_suare <- as.data.frame(ca_test_na2_suare[complete.cases(ca_test_na2_
 
 alegria_suare <- ca_test_na3_suare %>% filter(Adansonia.suarezensis_EMcaByTSS_mergedAlgo_mergedRun_mergedData >= 500)
 
-set.seed(20)
+#set.seed(20)
 alegria2_suare <- sample_n(alegria_suare, size = 1000, replace = F)
 alegria2_suare$Proj <- rep(c("Present"),1000)
 names(alegria2_suare) <- c("Long","Lat","Prediction","Alt","Scenario")
@@ -2168,9 +2170,9 @@ ca_test_na2_fut_suare <- rasterToPoints(ca_test_na_fut_suare)
 ca_test_na3_fut_suare <- as.data.frame(ca_test_na2_fut_suare[complete.cases(ca_test_na2_fut_suare), ] )
 alegria_fut_suare <- ca_test_na3_fut_suare %>% filter(caFut_45_2080 >= 1500)
 
-set.seed(20)
-alegria2_fut_suare <- sample_n(alegria_fut_suare, size = 100, replace = F)
-alegria2_fut_suare$Proj <- rep(c("Future_2085"),100)
+#set.seed(20)
+alegria2_fut_suare <- sample_n(alegria_fut_suare, size = 105, replace = F)
+alegria2_fut_suare$Proj <- rep(c("Future_2085"),105)
 names(alegria2_fut_suare) <- c("Long","Lat","Prediction","Alt","Scenario")
 alegria_test_suare <- rbind(alegria2_suare,alegria2_fut_suare)
 
@@ -2183,9 +2185,9 @@ ca_test_na2_fut_suare_55 <- rasterToPoints(ca_test_na_fut_suare_55)
 ca_test_na3_fut_suare_55 <- as.data.frame(ca_test_na2_fut_suare_55[complete.cases(ca_test_na2_fut_suare_55), ] )
 alegria_fut_suare_55 <- ca_test_na3_fut_suare_55 %>% filter(caFut_45_2050 >= 1500)
 
-set.seed(20)
-alegria2_fut_suare_55 <- sample_n(alegria_fut_suare_55, size = 13, replace = F)
-alegria2_fut_suare_55$Proj <- rep(c("Future_2055"),13)
+#set.seed(20)
+alegria2_fut_suare_55 <- sample_n(alegria_fut_suare_55, size = 15, replace = F)
+alegria2_fut_suare_55$Proj <- rep(c("Future_2055"),15)
 names(alegria2_fut_suare_55) <- c("Long","Lat","Prediction","Alt","Scenario")
 alegria_test_suare_finale <- rbind(alegria2_fut_suare_55,alegria_test_suare)
 
@@ -2241,30 +2243,30 @@ altitude_suare <- ggplot(alegria_test_suare_finale) +
 
 ## Legend names for plot
 grob_digitata <- textGrob("A. digitata",rot=90, gp=gpar(cex=2,fontface="italic"),
-                          hjust=0.3, vjust=5)
+                          hjust=0.3, vjust=2)
 grob_grand <- textGrob("A. grandidieri",rot=90, gp=gpar(cex=2,fontface="italic"),
-                          hjust=0.3, vjust=5)
+                          hjust=0.3, vjust=2)
 grob_mada <- textGrob("A. madagascariensis",rot=90, gp=gpar(cex=2,fontface="italic"),
-                       hjust=0.4, vjust=5)
+                       hjust=0.4, vjust=2)
 grob_perri <- textGrob("A. perrieri",rot=90, gp=gpar(cex=2,fontface="italic"),
-                     hjust=0.3, vjust=5)
+                     hjust=0.3, vjust=2)
 grob_rubro <- textGrob("A. rubrostipa",rot=90, gp=gpar(cex=2,fontface="italic"),
-                       hjust=0.3, vjust=5)
+                       hjust=0.3, vjust=2)
 grob_suare <- textGrob("A. suarezensis",rot=90, gp=gpar(cex=2,fontface="italic"),
-                       hjust=0.3, vjust=5)
+                       hjust=0.3, vjust=2)
 grob_za <- textGrob("A. za",rot=90, gp=gpar(cex=2,fontface="italic"),
-                       hjust=0.3, vjust=5)
+                       hjust=0.3, vjust=2)
 ## Combine plots
 ### Threatened species
-day_1 <- rbind(c(1,rep(seq(5,6,by=1),each=3)),
-              c(2,rep(seq(7,8,by=1),each=3)),
-              c(3,rep(seq(9,10,by=1),each=3)),
-              c(4,rep(seq(11,12,by=1),each=3)))
+day_1 <- rbind(c(1,rep(seq(5,6,by=1),each=5)),
+              c(2,rep(seq(7,8,by=1),each=5)),
+              c(3,rep(seq(9,10,by=1),each=5)),
+              c(4,rep(seq(11,12,by=1),each=5)))
 
 ### Non-threatened species
-day_2 <- rbind(c(1,rep(seq(5,6,by=1),each=3)),
-               c(2,rep(seq(7,8,by=1),each=3)),
-               c(3,rep(seq(9,10,by=1),each=3)))             
+day_2 <- rbind(c(1,rep(seq(5,6,by=1),each=5)),
+               c(2,rep(seq(7,8,by=1),each=5)),
+               c(3,rep(seq(9,10,by=1),each=5)))             
 
 #### Threatened species
 a5 <- grid.arrange(grob_mada, grob_perri,
