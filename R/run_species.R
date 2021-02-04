@@ -2,7 +2,7 @@
 
 # ==============================================================================
 # authors         :Ghislain Vieilledent / Mario Tagliari
-# email           :ghislain.vieilledent@cirad.fr, ghislainv@gmail.com / mario.tagliari@posgrad.ufsc.br
+# email           :ghislain.vieilledent@cirad.fr / mario_tagliari@hotmail.com
 # license         :GPLv3
 # ==============================================================================
 
@@ -20,7 +20,7 @@ source("R/miscellaneous_functions.R")
 gcolors <- colorRampPalette(c("#568203","#013220"))
 
 # Run computation for each species
-run.species <- function (i, run.models=TRUE) {
+run.species <- function (i, path_to_maxent.jar, run.models=TRUE) {
   
   spdir <- sp.dir[i]
   spname <- sp.names[i]
@@ -50,15 +50,12 @@ run.species <- function (i, run.models=TRUE) {
   wcomp <- which(complete.cases(data.xy))
   
   ## Transform as a SpatialPointsDataFrame and SpatialPoints (for presence only)
-  ##d <- SpatialPointsDataFrame(coords=Coords.presence[wcomp,], data=data.xy[wcomp,],
-    ##                          proj4string=CRS("+init=epsg:32738"))
-      ## doesn't work anymore
+  proj_38S <- "+proj=utm +zone=38 +south +datum=WGS84 +units=m +no_defs +type=crs"
   d <- SpatialPointsDataFrame(coords=Coords.presence[wcomp,], data=data.xy[wcomp,],
-                              proj4string=CRS("+proj=utm +zone=38 +south +datum=WGS84 +units=m +no_defs +type=crs")) # correct new way
+                              proj4string=CRS(proj_38S))
   
   p <- SpatialPoints(d) ## This is used for presence-only data
-  #PROJ.6 must define CRS for "p" otherwise it won't work
-  crs(p)  <- "+proj=utm +zone=38 +south +datum=WGS84 +units=m +no_defs +type=crs"
+  crs(p)  <- proj_38S
   ## Save "d" as data-frame
   dir.create(paste0(spdir,"/figures"),recursive=TRUE)
   write.table(d@data,file=paste0(spdir,"/figures/presences.txt"),sep="\t",row.names=FALSE)
@@ -93,8 +90,7 @@ run.species <- function (i, run.models=TRUE) {
                                                   myFormula=NULL, 
                                                   family=binomial(link="logit")),
                                          RF=list(do.classif=TRUE, ntree=500),
-                                         MAXENT.Phillips=list(path_to_maxent.jar='D:/OneDrive/Cap_1_outros_papers/script_art_1/maxent', 
-                                          #attention with path to Maxent, Rserver may not works. Try to set your own path in your PC
+                                         MAXENT.Phillips=list(path_to_maxent.jar=path_to_maxent.jar, 
                                                               visible=FALSE, maximumiterations=500,
                                                               memory_allocated=512,
                                                               # To avoid overparametrization (Merow  et al.  2013)
@@ -173,9 +169,7 @@ run.species <- function (i, run.models=TRUE) {
   ## Future distribution with Future Data - MadaClim   
   mod <- c("no","he","gs") # For global climate models (GCMs): NorESM1-M, HadGEM2-ES, GISS-E2-R,  
   rcp <- c("45","85") # For representative concentration pathways (RCPs): RCP 4.5, RCP 8.5
-  #rcp <- c("85") # If only for RCP 85
   yr <- c("2050","2080") # For 2050, 2080
-  #yr <- c("2080") # If only for 2080
   n.mod <- length(mod)*length(rcp)*length(yr)
   
   if (run.models) {
@@ -319,26 +313,16 @@ run.species <- function (i, run.models=TRUE) {
   ##====================
   ## Future distribution
   
-  # ## Considering RCP 45,85 and year 2050,2080
-  # ## Table for change in area
-   SDA.fut <- data.frame(area.pres=SDA.pres,
-                         rcp=rep(c("45","85"),each=4),yr=rep(rep(c("2050","2080"),each=2),2),
-                         rcp=rep(c("45","85"),each=4),yr=rep(rep(c("2050","2080"),each=2),2),
-                         disp=rep(c("full","zero"),4),area.fut=NA)
-  # ## Change in altitude
-   Alt.fut <- data.frame(mean.pres=niche$alt[1],q1.pres=niche$alt[2],q2.pres=niche$alt[3],
-                         rcp=rep(c("45","85"),each=4),yr=rep(rep(c("2050","2080"),each=2),2),
-                         disp=rep(c("full","zero"),4),mean.fut=NA,q1.fut=NA,q2.fut=NA)
-  
-  # Only considering RCP 85 and year 2080
+  ## Considering RCP 45,85 and year 2050,2080
   ## Table for change in area
-  #SDA.fut <- data.frame(area.pres=SDA.pres,
-   #                     rcp=rep("85", 2),yr=rep("2080",2),
-    #                    disp=c("full","zero"),area.fut=NA)
-  ## #hange in altitude
-  #Alt.fut <- data.frame(mean.pres=niche$alt[1],q1.pres=niche$alt[2],q2.pres=niche$alt[3],
-   #                     rcp=rep("85", 2),yr=rep("2080",2),
-    #                    disp=c("full","zero"),mean.fut=NA,q1.fut=NA,q2.fut=NA)
+  SDA.fut <- data.frame(area.pres=SDA.pres,
+                        rcp=rep(c("45","85"),each=4),yr=rep(rep(c("2050","2080"),each=2),2),
+                        rcp=rep(c("45","85"),each=4),yr=rep(rep(c("2050","2080"),each=2),2),
+                        disp=rep(c("full","zero"),4),area.fut=NA)
+  ## Change in altitude
+  Alt.fut <- data.frame(mean.pres=niche$alt[1],q1.pres=niche$alt[2],q2.pres=niche$alt[3],
+                        rcp=rep(c("45","85"),each=4),yr=rep(rep(c("2050","2080"),each=2),2),
+                        disp=rep(c("full","zero"),4),mean.fut=NA,q1.fut=NA,q2.fut=NA)
   
   ## Committee averaging for the three GCMs (sum)
   for (j in 1:length(rcp)) {

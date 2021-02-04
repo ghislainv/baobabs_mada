@@ -9,6 +9,7 @@
 # Libraries
 require(readr)
 require(dplyr)
+require(here)
 
 # ==============================================================================
 # Import and format each dataset
@@ -17,8 +18,8 @@ require(dplyr)
 # Set URL for raw datasets
 
 # Data-set from Jean-Michel Leong Pock Tsy sent on 20/11/2012
-in1_1 <- read_csv("data/baobabs_raw_data/1_1_data_Adansonia_2004_2012.csv")
-cor1_2 <- read_csv("data/baobabs_raw_data/1_2_data_corrections_A_suar_mada_confusion.csv") %>%
+in1_1 <- read_csv(here("data/baobabs_raw_data/1_1_data_Adansonia_2004_2012.csv"))
+cor1_2 <- read_csv(here("data/baobabs_raw_data/1_2_data_corrections_A_suar_mada_confusion.csv")) %>%
   dplyr::mutate(TreeID=paste(Species, TreeName, Lat, Long, sep="_"))
 out1 <- in1_1 %>%
   dplyr::filter(!is.na(Lat) & !is.na(Long)) %>%
@@ -34,7 +35,7 @@ out1 <- in1_1 %>%
   dplyr::select(Species, TreeName, Lat, Long, Year, Institute, Collector, Source, Dataset)
 
 # Adansonia suarezensis data from Cyrille Cornu field observations in 2014
-in2 <- read_csv("data/baobabs_raw_data/2_data_A_suarezensis_cc_2014.csv")
+in2 <- read_csv(here("data/baobabs_raw_data/2_data_A_suarezensis_cc_2014.csv"))
 out2 <- in2 %>%
   dplyr::rename(Lat=Y, Long=X) %>%
   dplyr::mutate(Species="A_suarezensis", Year="2014", Institute="CIRAD",
@@ -45,7 +46,7 @@ out2 <- in2 %>%
   dplyr::select(Species, TreeName, Lat, Long, Year, Institute, Collector, Source, Dataset)
 
 # Adansonia grandidieri data from Cyrille Cornu photo-interpretation in 2009
-in3 <- read_csv("data/baobabs_raw_data/3_data_A_grandidieri_sat_2009.csv")
+in3 <- read_csv(here("data/baobabs_raw_data/3_data_A_grandidieri_sat_2009.csv"))
 out3 <- in3 %>%
   dplyr::rename(Lat=Y, Long=X) %>%
   dplyr::mutate(Species="A_grandidieri", Year="2009", Institute="CIRAD",
@@ -55,7 +56,7 @@ out3 <- in3 %>%
   dplyr::select(Species, TreeName, Lat, Long, Year, Institute, Collector, Source, Dataset)
 
 # Adansonia suarezensis data from Cyrille Cornu photo-interpretation in 2010
-in4 <- read_csv("data/baobabs_raw_data/4_data_A_suarezensis_sat_2010.csv")
+in4 <- read_csv(here("data/baobabs_raw_data/4_data_A_suarezensis_sat_2010.csv"))
 out4 <- in4 %>%
   dplyr::rename(Lat=Y, Long=X) %>%
   dplyr::mutate(Species="A_suarezensis", Year="2010", Institute="CIRAD",
@@ -65,7 +66,7 @@ out4 <- in4 %>%
   dplyr::select(Species, TreeName, Lat, Long, Year, Institute, Collector, Source, Dataset)
 
 # Comores by Jean-Michel Leong Pock Tsy
-in5 <- read_csv("data/baobabs_raw_data/5_data_A_digitata_comoro_islands_jm_2011_2014.csv")
+in5 <- read_csv(here("data/baobabs_raw_data/5_data_A_digitata_comoro_islands_jm_2011_2014.csv"))
 out5 <- in5 %>%
   dplyr::mutate(Institute="CIRAD",
          Year=as.character(Year),
@@ -77,7 +78,7 @@ out5 <- in5 %>%
 
 # Missions by Wilfried Ramahafaly
 # Data sent by Jean-Michel on 09/05/2015
-# Attention: In this data-set, coordinates are given in Lat/Long hddd°mm.mmm'
+# WARNING: In this data-set, coordinates are given in Lat/Long hddd°mm.mmm'
 # Function to convert hdd°mm.mmm' in decimal degrees
 ddmm2latlong <- function (x, coord="Lat") {
   format_x <- format(x, nsmall=5, drop0trailing=FALSE)
@@ -90,7 +91,7 @@ ddmm2latlong <- function (x, coord="Lat") {
   return (y)
 }
 # Input data
-in6 <- read_csv("data/baobabs_raw_data/6_data_wr_missions_2013_2015.csv")
+in6 <- read_csv(here("data/baobabs_raw_data/6_data_wr_missions_2013_2015.csv"))
 # Output data
 out6 <- in6 %>%
   # Convert ddmm to lat/long format
@@ -126,7 +127,7 @@ out6 <- in6 %>%
   dplyr::select(Species, TreeName, Lat, Long, Year, Institute, Collector, Source, Dataset)
 
 # A_perrieri points including raw gps positions in dd°mm.mmm'
-in7 <- read_csv("data/baobabs_raw_data/7_data_A_perrieri_gv_raw_gps_2013.csv")
+in7 <- read_csv(here("data/baobabs_raw_data/7_data_A_perrieri_gv_raw_gps_2013.csv"))
 out7 <- in7 %>%
   # Convert ddmm to lat/long format
   dplyr::mutate(Lat_ddmm=paste0(substr(Position,2,3),".",
@@ -145,7 +146,7 @@ out7 <- in7 %>%
   dplyr::select(Species, TreeName, Lat, Long, Year, Institute, Collector, Source, Dataset)
 
 # Some additional A_suarezensis points sent by email from Cyrille Cornu on 20/04/2015
-in8_1 <- read_csv("data/baobabs_raw_data/8_1_data_A_suarezensis_cc_2015.csv")
+in8_1 <- read_csv(here("data/baobabs_raw_data/8_1_data_A_suarezensis_cc_2015.csv"))
 out8_1 <- in8_1 %>%
   dplyr::mutate(Lat=Y, Long=X, Species="A_suarezensis", Year="2015", Institute="CIRAD",
                 Source="field observation", Collector="Cornu Cyrille",
@@ -154,7 +155,7 @@ out8_1 <- in8_1 %>%
   dplyr::select(Species, TreeName, Lat, Long, Year, Institute, Collector, Source, Dataset)
 
 # Some additional Adansonia points sent by email from Cyrille Cornu on 22/05/2015
-in8_2 <- read_csv("data/baobabs_raw_data/8_2_data_Adansonia_cc_2015.csv")
+in8_2 <- read_csv(here("data/baobabs_raw_data/8_2_data_Adansonia_cc_2015.csv"))
 out8_2 <- in8_2 %>%
   dplyr::mutate(Lat=Y, Long=X,
          Year="2015", Institute="CIRAD",
@@ -166,7 +167,7 @@ out8_2 <- in8_2 %>%
   dplyr::select(Species, TreeName, Lat, Long, Year, Institute, Collector, Source, Dataset)
 
 # A_madagascariensis points close to Montagne des Français by Ghislain Vieilledent and Mario Tagliari
-in9 <- read_csv("data/baobabs_raw_data/9_data_A_madagascariensis_gv_mt_2015.csv")
+in9 <- read_csv(here("data/baobabs_raw_data/9_data_A_madagascariensis_gv_mt_2015.csv"))
 out9 <- in9 %>%
   dplyr::mutate(Year="2015", Institute="CIRAD", Dataset="dataset9",
          Source="field observation", Collector="Vieilledent Ghislain; Muniz-Tagliari Mario",
@@ -200,13 +201,13 @@ data_Adansonia <- data_bind %>%
   
 # Export data-set
 dir.create("data/baobabs", showWarnings=FALSE)
-write_csv(data_Adansonia, "data/baobabs/data_Adansonia.csv")
+write_csv(data_Adansonia, here("data/baobabs/data_Adansonia.csv"))
 
 # Number of observations per species
 obs_per_sp <- data_Adansonia %>%
   dplyr::group_by(Species) %>%
   dplyr::summarise(n())
-write_csv(obs_per_sp, "data/baobabs/obs_per_sp.csv")
+write_csv(obs_per_sp, here("data/baobabs/obs_per_sp.csv"))
 
 # ==============================================================================
 # Message

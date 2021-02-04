@@ -28,7 +28,7 @@ write_sf(adan_sf, here("data", "baobabs", "adansonia_occ.gpkg"))
 psql_db <- "ecology"
 psql_host <- "localhost"
 psql_port <- "5432"
-psql_user <- "ghislain"
+psql_user <- Sys.getenv("PSQL_USER")
 psql_pwd <- Sys.getenv("PSQL_PASSWORD")
 psql_tab <- "adansonia_occ"
 f <- here("data", "baobabs", "adansonia_occ.gpkg")

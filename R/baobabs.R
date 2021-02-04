@@ -2,17 +2,17 @@
 
 # ==============================================================================
 # authors         :Ghislain Vieilledent / Mario Tagliari
-# email           :ghislain.vieilledent@cirad.fr, ghislainv@gmail.com / mario.tagliari@posgrad.ufsc.br
+# email           :ghislain.vieilledent@cirad.fr / mario_tagliari@hotmail.com
 # license         :GPLv3
 # ==============================================================================
 
 ## Set environmental variable
 ## For MAXENT.Phillips with JAVA to work on RStudio server
 Sys.unsetenv("DISPLAY")
-Sys.unsetenv("PROJ_LIB")
+## Sys.unsetenv("PROJ_LIB")
 
 ## Libraries
-pkg <- c("curl", "readr", "dplyr", "rgdal", "sp", "raster",
+pkg <- c("curl", "here", "readr", "dplyr", "rgdal", "sp", "raster",
          "biomod2", "foreach", "doParallel", "grDevices")
 load.pkg <- function(x) {
   if(!require(x, character.only = T)) {
@@ -89,11 +89,12 @@ if(!file.exists("outputs/environ.pdf")) {
   dev.off()
 }
 
-##==================================
-## Occurence data for baobab species
-##==================================
+##===================================
+## Occurrence data for baobab species
+##===================================
 
 ## Building the occurrence dataset from raw data
+## You can disregard the warnings
 source("R/data_baobabs.R")
 ## Load dataset
 df.orig <- read.csv(file=paste0(dir_baobabs,"data_Adansonia.csv"),header=TRUE,sep=",")
@@ -101,7 +102,6 @@ df.orig <- read.csv(file=paste0(dir_baobabs,"data_Adansonia.csv"),header=TRUE,se
 coords <- cbind(df.orig$Long,df.orig$Lat)
 ## see PROJ.6 style here - https://www.gaia-gis.it/fossil/libspatialite/wiki?name=PROJ.6
 df.sp <- SpatialPointsDataFrame(coords, data=df.orig, proj4string=CRS("+proj=longlat +datum=WGS84 +no_defs +type=crs"))
-# df.sp <- SpatialPointsDataFrame(coords,data=df.orig,proj4string=CRS("+init=epsg:4326")) # our old version
 ## Reproject into UTM 38S - SET exactly as "s" raster created above
 df.sp <- spTransform(df.sp,CRS("+proj=utm +zone=38 +south +datum=WGS84 +units=m +no_defs +type=crs"))
 ## Only for Baoabab data: change species names
@@ -117,6 +117,8 @@ n.species <- length(sp.names)
 
 ## Load run_species() function
 source("R/run_species.R")
+## Path to MaxEnt (indicate your path)
+path_to_maxent.jar <- here("maxent")
 ## Make a cluster with all possible cores
 n.core <- max(1,detectCores()-2)
 clust <- makeCluster(n.core)
@@ -128,7 +130,7 @@ getDoParWorkers()
 pkg.names.clust <- c("rgdal","sp","raster","biomod2")
 ## Parallel computations
 t.start <- Sys.time() ## Start the clock
-foreach(i=1:n.species,.packages=pkg.names.clust) %dopar% run.species(i, run.models=TRUE)
+foreach(i=1:n.species,.packages=pkg.names.clust) %dopar% run.species(i, path_to_maxent.jar, run.models=TRUE)
 ## Stop the cluster
 stopCluster(clust)
 ## Time computation
