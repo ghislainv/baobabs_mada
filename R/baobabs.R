@@ -9,6 +9,7 @@
 ## Set environmental variable
 ## For MAXENT.Phillips with JAVA to work on RStudio server
 Sys.unsetenv("DISPLAY")
+Sys.unsetenv("PROJ_LIB")
 
 ## Libraries
 pkg <- c("curl", "readr", "dplyr", "rgdal", "sp", "raster",
@@ -98,17 +99,18 @@ source("R/data_baobabs.R")
 df.orig <- read.csv(file=paste0(dir_baobabs,"data_Adansonia.csv"),header=TRUE,sep=",")
 ## Make a SpatialPointsDataFrame object
 coords <- cbind(df.orig$Long,df.orig$Lat)
-## see PROJ.6 style here – thanks universe! https://www.gaia-gis.it/fossil/libspatialite/wiki?name=PROJ.6
-df.sp <- SpatialPointsDataFrame(coords,data=df.orig,proj4string=CRS("+proj=longlat +south +datum=WGS84 +no_defs +type=crs")) # lat long here proj!
-#df.sp <- SpatialPointsDataFrame(coords,data=df.orig,proj4string=CRS("+init=epsg:4326")) # our old version
+## see PROJ.6 style here - https://www.gaia-gis.it/fossil/libspatialite/wiki?name=PROJ.6
+df.sp <- SpatialPointsDataFrame(coords, data=df.orig, proj4string=CRS("+proj=longlat +datum=WGS84 +no_defs +type=crs"))
+# df.sp <- SpatialPointsDataFrame(coords,data=df.orig,proj4string=CRS("+init=epsg:4326")) # our old version
 ## Reproject into UTM 38S - SET exactly as "s" raster created above
-df.sp <- spTransform(df.sp,CRS("+proj=utm +zone=38 +south +datum=WGS84 +units=m +no_defs +type=crs")) # utm proj!
+df.sp <- spTransform(df.sp,CRS("+proj=utm +zone=38 +south +datum=WGS84 +units=m +no_defs +type=crs"))
 ## Only for Baoabab data: change species names
 df.sp$Species <- gsub("A_","Adansonia ",df.sp$Species)
 # Species
 sp.names <- levels(as.factor(df.sp$Species)) # Sorted in alphabetical order
 sp.dir <- gsub(" ",".",sp.names)
 n.species <- length(sp.names)
+
 ##==================================
 ## Computation per species
 ##==================================
@@ -2621,6 +2623,4 @@ all_niches <- cbind(niches_dig,niches_grand,niches_mada,niches_perri,
 
 write.table(all_niches,paste0("./outputs/tableA3_niches_fut_cur_comparison.txt"),sep="\t")
 
-##===========================================================================
-## End of script - Have a Nice Day and Enjoy The View and go for a hike!
-##===========================================================================
+## End of file
