@@ -12,9 +12,10 @@ require(sp)
 require(raster)
 require(biomod2)
 require(grDevices) # for colorRampPalette
+require(here)
 
 # Source miscellaneous functions
-source("R/miscellaneous_functions.R")
+source(here("R/miscellaneous_functions.R"))
 
 # Colors for legend
 gcolors <- colorRampPalette(c("#568203","#013220"))
@@ -404,4 +405,6 @@ run.species <- function (i, path_to_maxent.jar, run.models=TRUE) {
   
 }
 
-# End of script
+# ===========
+# End of file
+# ===========
