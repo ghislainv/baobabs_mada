@@ -177,3 +177,7 @@ source(here("R/plot_world_seasonality.R"))
 # Create all study's tables
 # ==========================================================
 source(here("R/all_tables.R"))
+
+# ===========
+# End of file
+# ===========
