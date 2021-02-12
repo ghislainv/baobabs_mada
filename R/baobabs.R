@@ -159,6 +159,26 @@ source(here("R/plot_climate_change_SDA.R"))
 source(here("R/plot_SDA.R"))
 
 # ==========================================================
+# Plot relationship between climatic, elevational and lat gradients in Mada
+# ==========================================================
+source(here("R/plot_gradients_Mada.R"))
+
+# ==========================================================
+# Plot box plots comparing current and future projections and the changes in Lat and Elevation
+# ==========================================================
+source(here("R/plot_boxplot_alt_lat_species.R"))
+
+# ==========================================================
+# Plot World Seasonality Map
+# ==========================================================
+source(here("R/plot_world_seasonality.R"))
+
+# ==========================================================
+# Create all study's tables
+# ==========================================================
+source(here("R/all_tables.R"))
+
+# ==========================================================
 # Draw points in the SDA and extract environmental variables
 # ==========================================================
 
