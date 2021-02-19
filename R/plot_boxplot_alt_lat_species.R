@@ -22,11 +22,11 @@ ca_test_na <- na.omit(ca_test)
 ca_test_na2 <- rasterToPoints(ca_test_na)
 ca_test_na3 <- as.data.frame(ca_test_na2[complete.cases(ca_test_na2), ] )
 
-alegria <- ca_test_na3 %>% filter(Adansonia.digitata_EMcaByTSS_mergedAlgo_mergedRun_mergedData >= 500)
+a_dig <- ca_test_na3 %>% filter(Adansonia.digitata_EMcaByTSS_mergedAlgo_mergedRun_mergedData >= 500)
 
-alegria2 <- sample_n(alegria, size = 1000, replace = F)
-alegria2$Proj <- rep(c("Present"),1000)
-names(alegria2) <- c("Long","Lat","Prediction","Alt","Scenario")
+a_dig_2 <- sample_n(a_dig, size = 1000, replace = F)
+a_dig_2$Proj <- rep(c("Present"),1000)
+names(a_dig_2) <- c("Long","Lat","Prediction","Alt","Scenario")
 
 ### Future testing 2080
 caZD_dig <- raster(paste0("Adansonia.digitata/caFut_85_2080.tif"))
@@ -35,12 +35,12 @@ ca_test_na_fut <- na.omit(ca_test_fut)
 
 ca_test_na2_fut <- rasterToPoints(ca_test_na_fut)
 ca_test_na3_fut <- as.data.frame(ca_test_na2_fut[complete.cases(ca_test_na2_fut), ] )
-alegria_fut <- ca_test_na3_fut %>% filter(caFut_85_2080 >= 1500)
+a_dig_fut <- ca_test_na3_fut %>% filter(caFut_85_2080 >= 1500)
 
-alegria2_fut <- sample_n(alegria_fut, size = 1000, replace = F)
-alegria2_fut$Proj <- rep(c("Future_2085"),1000)
-names(alegria2_fut) <- c("Long","Lat","Prediction","Alt","Scenario")
-alegria_test <- rbind(alegria2,alegria2_fut)
+a_dig_2_fut <- sample_n(a_dig_fut, size = 1000, replace = F)
+a_dig_2_fut$Proj <- rep(c("Future_2085"),1000)
+names(a_dig_2_fut) <- c("Long","Lat","Prediction","Alt","Scenario")
+combine <- rbind(a_dig_2,a_dig_2_fut)
 
 ### Future testing 2050 
 caZD_digi_2055 <- raster(paste0("Adansonia.digitata/caFut_85_2050.tif"))
@@ -49,20 +49,20 @@ ca_test_na_fut_digi_55 <- na.omit(ca_test_fut_digi_2055)
 
 ca_test_na2_fut_digi_55 <- rasterToPoints(ca_test_na_fut_digi_55)
 ca_test_na3_fut_digi_55 <- as.data.frame(ca_test_na2_fut_digi_55[complete.cases(ca_test_na2_fut_digi_55), ] )
-alegria_fut_digi_55 <- ca_test_na3_fut_digi_55 %>% filter(caFut_85_2050 >= 1500)
+a_dig_fut_55 <- ca_test_na3_fut_digi_55 %>% filter(caFut_85_2050 >= 1500)
 
-alegria2_fut_digi_55 <- sample_n(alegria_fut_digi_55, size = 1000, replace = F)
-alegria2_fut_digi_55$Proj <- rep(c("Future_2055"),1000)
-names(alegria2_fut_digi_55) <- c("Long","Lat","Prediction","Alt","Scenario")
-alegria_test_digi_finale <- rbind(alegria_test, alegria2_fut_digi_55)
+a_dig_2_fut_55 <- sample_n(a_dig_fut_55, size = 1000, replace = F)
+a_dig_2_fut_55$Proj <- rep(c("Future_2055"),1000)
+names(a_dig_2_fut_55) <- c("Long","Lat","Prediction","Alt","Scenario")
+final_df <- rbind(combine, a_dig_2_fut_55)
 
 
-alegria_test_digi_finale$Scenario = factor(alegria_test_digi_finale$Scenario,
+final_df$Scenario = factor(final_df$Scenario,
                                            levels = c("Present", "Future_2055","Future_2085"),
                                            labels = c("Present", "Future 2055","Future 2085"))
 ### Latitude plot
 
-latitude_digi <- ggplot(alegria_test_digi_finale) +
+latitude_digi <- ggplot(final_df) +
   aes(y= Lat, x= Scenario) +
   geom_jitter(alpha =.5,
               height = 0,
@@ -84,7 +84,7 @@ latitude_digi <- ggplot(alegria_test_digi_finale) +
   theme(legend.position = "none")
 
 ## Altitude plot
-altitude_digi <- ggplot(alegria_test_digi_finale) +
+altitude_digi <- ggplot(final_df) +
   aes(y= Alt, x= Scenario) +
   geom_jitter(alpha =.5,
               height = 0,
@@ -116,11 +116,11 @@ ca_test_na_grand <- na.omit(ca_test_grand)
 ca_test_na2_grand <- rasterToPoints(ca_test_na_grand)
 ca_test_na3_grand <- as.data.frame(ca_test_na2_grand[complete.cases(ca_test_na2_grand), ] )
 
-alegria_grand <- ca_test_na3_grand %>% filter(Adansonia.grandidieri_EMcaByTSS_mergedAlgo_mergedRun_mergedData >= 500)
+data_grand <- ca_test_na3_grand %>% filter(Adansonia.grandidieri_EMcaByTSS_mergedAlgo_mergedRun_mergedData >= 500)
 
-alegria2_grand <- sample_n(alegria_grand, size = 1000, replace = F)
-alegria2_grand$Proj <- rep(c("Present"),1000)
-names(alegria2_grand) <- c("Long","Lat","Prediction","Alt","Scenario")
+data_2_grand <- sample_n(data_grand, size = 1000, replace = F)
+data_2_grand$Proj <- rep(c("Present"),1000)
+names(data_2_grand) <- c("Long","Lat","Prediction","Alt","Scenario")
 
 ### Future testing 2080
 caZD_grand <- raster(paste0("Adansonia.grandidieri/caFut_85_2080.tif"))
@@ -129,12 +129,12 @@ ca_test_na_fut_grand <- na.omit(ca_test_fut_grand)
 
 ca_test_na2_fut_grand <- rasterToPoints(ca_test_na_fut_grand)
 ca_test_na3_fut_grand <- as.data.frame(ca_test_na2_fut_grand[complete.cases(ca_test_na2_fut_grand), ] )
-alegria_fut_grand <- ca_test_na3_fut_grand %>% filter(caFut_85_2080 >= 1500)
+data_fut_grand <- ca_test_na3_fut_grand %>% filter(caFut_85_2080 >= 1500)
 
-alegria2_fut_grand <- sample_n(alegria_fut_grand, size = 1000, replace = F)
-alegria2_fut_grand$Proj <- rep(c("Future_2085"),1000)
-names(alegria2_fut_grand) <- c("Long","Lat","Prediction","Alt","Scenario")
-alegria_test_grand <- rbind(alegria2_grand,alegria2_fut_grand)
+data_2_fut_grand <- sample_n(data_fut_grand, size = 1000, replace = F)
+data_2_fut_grand$Proj <- rep(c("Future_2085"),1000)
+names(data_2_fut_grand) <- c("Long","Lat","Prediction","Alt","Scenario")
+data_1_grand <- rbind(data_2_grand,data_2_fut_grand)
 
 
 ### Future testing 2050 
@@ -144,20 +144,20 @@ ca_test_na_fut_grand_55 <- na.omit(ca_test_fut_grand_2055)
 
 ca_test_na2_fut_grand_55 <- rasterToPoints(ca_test_na_fut_grand_55)
 ca_test_na3_fut_grand_55 <- as.data.frame(ca_test_na2_fut_grand_55[complete.cases(ca_test_na2_fut_grand_55), ] )
-alegria_fut_grand_55 <- ca_test_na3_fut_grand_55 %>% filter(caFut_85_2050 >= 1500)
+data_fut_grand_55 <- ca_test_na3_fut_grand_55 %>% filter(caFut_85_2050 >= 1500)
 
 
-alegria2_fut_grand_55 <- sample_n(alegria_fut_grand_55, size = 1000, replace = F)
-alegria2_fut_grand_55$Proj <- rep(c("Future_2055"),1000)
-names(alegria2_fut_grand_55) <- c("Long","Lat","Prediction","Alt","Scenario")
-alegria_test_grand_finale <- rbind(alegria2_fut_grand_55,alegria_test_grand)
+data_2_fut_grand_55 <- sample_n(data_fut_grand_55, size = 1000, replace = F)
+data_2_fut_grand_55$Proj <- rep(c("Future_2055"),1000)
+names(data_2_fut_grand_55) <- c("Long","Lat","Prediction","Alt","Scenario")
+data_final_grand <- rbind(data_2_fut_grand_55,data_1_grand)
 
-alegria_test_grand_finale$Scenario = factor(alegria_test_grand_finale$Scenario,
+data_final_grand$Scenario = factor(data_final_grand$Scenario,
                                             levels = c("Present", "Future_2055","Future_2085"),
                                             labels = c("Present", "Future 2055","Future 2085"))
 
 ### Latitude plot
-latitude_grand <- ggplot(alegria_test_grand_finale) +
+latitude_grand <- ggplot(data_final_grand) +
   aes(y= Lat, x= Scenario) +
   geom_jitter(alpha =.5,
               height = 0,
@@ -179,7 +179,7 @@ latitude_grand <- ggplot(alegria_test_grand_finale) +
   theme(legend.position = "none")
 
 ## Altitude plot
-altitude_grand <- ggplot(alegria_test_grand_finale) +
+altitude_grand <- ggplot(data_final_grand) +
   aes(y= Alt, x= Scenario) +
   geom_jitter(alpha =.5,
               height = 0,
@@ -210,11 +210,11 @@ ca_test_na_za <- na.omit(ca_test_za)
 ca_test_na2_za <- rasterToPoints(ca_test_na_za)
 ca_test_na3_za <- as.data.frame(ca_test_na2_za[complete.cases(ca_test_na2_za), ] )
 
-alegria_za <- ca_test_na3_za %>% filter(Adansonia.za_EMcaByTSS_mergedAlgo_mergedRun_mergedData >= 500)
+data_za <- ca_test_na3_za %>% filter(Adansonia.za_EMcaByTSS_mergedAlgo_mergedRun_mergedData >= 500)
 
-alegria2_za <- sample_n(alegria_za, size = 1000, replace = F)
-alegria2_za$Proj <- rep(c("Present"),1000)
-names(alegria2_za) <- c("Long","Lat","Prediction","Alt","Scenario")
+data_2_za <- sample_n(data_za, size = 1000, replace = F)
+data_2_za$Proj <- rep(c("Present"),1000)
+names(data_2_za) <- c("Long","Lat","Prediction","Alt","Scenario")
 
 ### Future testing 2080
 caZD_za <- raster(paste0("Adansonia.za/caFut_85_2080.tif"))
@@ -223,12 +223,12 @@ ca_test_na_fut_za <- na.omit(ca_test_fut_za)
 
 ca_test_na2_fut_za <- rasterToPoints(ca_test_na_fut_za)
 ca_test_na3_fut_za <- as.data.frame(ca_test_na2_fut_za[complete.cases(ca_test_na2_fut_za), ] )
-alegria_fut_za <- ca_test_na3_fut_za %>% filter(caFut_85_2080 >= 1500)
+data_fut_za <- ca_test_na3_fut_za %>% filter(caFut_85_2080 >= 1500)
 
-alegria2_fut_za <- sample_n(alegria_fut_za, size = 1000, replace = F)
-alegria2_fut_za$Proj <- rep(c("Future_2085"),1000)
-names(alegria2_fut_za) <- c("Long","Lat","Prediction","Alt","Scenario")
-alegria_test_za <- rbind(alegria2_za,alegria2_fut_za)
+data_2_fut_za <- sample_n(data_fut_za, size = 1000, replace = F)
+data_2_fut_za$Proj <- rep(c("Future_2085"),1000)
+names(data_2_fut_za) <- c("Long","Lat","Prediction","Alt","Scenario")
+data_1_za <- rbind(data_2_za,data_2_fut_za)
 
 ### Future testing 2050 
 caZD_za_2055 <- raster(paste0("Adansonia.za/caFut_85_2050.tif"))
@@ -237,18 +237,18 @@ ca_test_na_fut_za_55 <- na.omit(ca_test_fut_za_2055)
 
 ca_test_na2_fut_za_55 <- rasterToPoints(ca_test_na_fut_za_55)
 ca_test_na3_fut_za_55 <- as.data.frame(ca_test_na2_fut_za_55[complete.cases(ca_test_na2_fut_za_55), ] )
-alegria_fut_za_55 <- ca_test_na3_fut_za_55 %>% filter(caFut_85_2050 >= 1500)
+data_fut_za_55 <- ca_test_na3_fut_za_55 %>% filter(caFut_85_2050 >= 1500)
 
-alegria2_fut_za_55 <- sample_n(alegria_fut_za_55, size = 1000, replace = F)
-alegria2_fut_za_55$Proj <- rep(c("Future_2055"),1000)
-names(alegria2_fut_za_55) <- c("Long","Lat","Prediction","Alt","Scenario")
-alegria_test_za_finale <- rbind(alegria2_fut_za_55,alegria_test_za)
+data_2_fut_za_55 <- sample_n(data_fut_za_55, size = 1000, replace = F)
+data_2_fut_za_55$Proj <- rep(c("Future_2055"),1000)
+names(data_2_fut_za_55) <- c("Long","Lat","Prediction","Alt","Scenario")
+data_final_za <- rbind(data_2_fut_za_55,data_1_za)
 
-alegria_test_za_finale$Scenario = factor(alegria_test_za_finale$Scenario,
+data_final_za$Scenario = factor(data_final_za$Scenario,
                                          levels = c("Present", "Future_2055","Future_2085"),
                                          labels = c("Present", "Future 2055","Future 2085"))
 ### Latitude plot
-latitude_za <- ggplot(alegria_test_za_finale) +
+latitude_za <- ggplot(data_final_za) +
   aes(y= Lat, x= Scenario) +
   geom_jitter(alpha =.5,
               height = 0,
@@ -270,7 +270,7 @@ latitude_za <- ggplot(alegria_test_za_finale) +
   theme(legend.position = "none")
 
 ## Altitude plot
-altitude_za <- ggplot(alegria_test_za_finale) +
+altitude_za <- ggplot(data_final_za) +
   aes(y= Alt, x= Scenario) +
   geom_jitter(alpha =.5,
               height = 0,
@@ -302,11 +302,11 @@ ca_test_na_mada <- na.omit(ca_test_mada)
 ca_test_na2_mada <- rasterToPoints(ca_test_na_mada)
 ca_test_na3_mada <- as.data.frame(ca_test_na2_mada[complete.cases(ca_test_na2_mada), ] )
 
-alegria_mada <- ca_test_na3_mada %>% filter(Adansonia.madagascariensis_EMcaByTSS_mergedAlgo_mergedRun_mergedData >= 500)
+data_mada <- ca_test_na3_mada %>% filter(Adansonia.madagascariensis_EMcaByTSS_mergedAlgo_mergedRun_mergedData >= 500)
 
-alegria2_mada <- sample_n(alegria_mada, size = 1000, replace = F)
-alegria2_mada$Proj <- rep(c("Present"),1000)
-names(alegria2_mada) <- c("Long","Lat","Prediction","Alt","Scenario")
+data_2_mada <- sample_n(data_mada, size = 1000, replace = F)
+data_2_mada$Proj <- rep(c("Present"),1000)
+names(data_2_mada) <- c("Long","Lat","Prediction","Alt","Scenario")
 
 ### Future testing 2080
 caFut_mada <- raster(paste0("Adansonia.madagascariensis/caFut_85_2080.tif"))
@@ -315,13 +315,12 @@ ca_test_na_fut_mada <- na.omit(ca_test_fut_mada)
 
 ca_test_na2_fut_mada <- rasterToPoints(ca_test_na_fut_mada)
 ca_test_na3_fut_mada <- as.data.frame(ca_test_na2_fut_mada[complete.cases(ca_test_na2_fut_mada), ] )
-alegria_fut_mada <- ca_test_na3_fut_mada %>% filter(caFut_85_2080 >= 1500)
+data_fut_mada <- ca_test_na3_fut_mada %>% filter(caFut_85_2080 >= 1500)
 
-alegria2_fut_mada <- sample_n(alegria_fut_mada, size = 1000, replace = F)
-alegria2_fut_mada$Proj <- rep(c("Future_2085"),1000)
-names(alegria2_fut_mada) <- c("Long","Lat","Prediction","Alt","Scenario")
-alegria_test_mada <- rbind(alegria2_mada,alegria2_fut_mada)
-tail(alegria_test_mada)
+data_2_fut_mada <- sample_n(data_fut_mada, size = 1000, replace = F)
+data_2_fut_mada$Proj <- rep(c("Future_2085"),1000)
+names(data_2_fut_mada) <- c("Long","Lat","Prediction","Alt","Scenario")
+data_1_mada <- rbind(data_2_mada,data_2_fut_mada)
 
 ### Future testing 2050 
 caFut_mada_2055 <- raster(paste0("Adansonia.madagascariensis/caFut_85_2050.tif"))
@@ -330,20 +329,20 @@ ca_test_na_fut_mada_55 <- na.omit(ca_test_fut_mada_2055)
 
 ca_test_na2_fut_mada_55 <- rasterToPoints(ca_test_na_fut_mada_55)
 ca_test_na3_fut_mada_55 <- as.data.frame(ca_test_na2_fut_mada_55[complete.cases(ca_test_na2_fut_mada_55), ] )
-alegria_fut_mada_55 <- ca_test_na3_fut_mada_55 %>% filter(caFut_85_2050 >= 1500)
+data_fut_mada_55 <- ca_test_na3_fut_mada_55 %>% filter(caFut_85_2050 >= 1500)
 
 
-alegria2_fut_mada_55 <- sample_n(alegria_fut_mada_55, size = 1000, replace = F)
-alegria2_fut_mada_55$Proj <- rep(c("Future_2055"),1000)
-names(alegria2_fut_mada_55) <- c("Long","Lat","Prediction","Alt","Scenario")
-alegria_test_mada_finale <- rbind(alegria2_fut_mada_55,alegria_test_mada)
+data_2_fut_mada_55 <- sample_n(data_fut_mada_55, size = 1000, replace = F)
+data_2_fut_mada_55$Proj <- rep(c("Future_2055"),1000)
+names(data_2_fut_mada_55) <- c("Long","Lat","Prediction","Alt","Scenario")
+data_final_mada <- rbind(data_2_fut_mada_55,data_1_mada)
 
-alegria_test_mada_finale$Scenario = factor(alegria_test_mada_finale$Scenario,
+data_final_mada$Scenario = factor(data_final_mada$Scenario,
                                            levels = c("Present", "Future_2055","Future_2085"),
                                            labels = c("Present", "Future 2055","Future 2085"))
 
 ### Latitude plot
-latitude_mada <- ggplot(alegria_test_mada_finale) +
+latitude_mada <- ggplot(data_final_mada) +
   aes(y= Lat, x= Scenario) +
   geom_jitter(alpha =.5,
               height = 0,
@@ -367,7 +366,7 @@ latitude_mada <- ggplot(alegria_test_mada_finale) +
 
 ## Altitude plot
 
-altitude_mada <- ggplot(alegria_test_mada_finale) +
+altitude_mada <- ggplot(data_final_mada) +
   aes(y= Alt, x= Scenario) +
   geom_jitter(alpha =.5,
               height = 0,
@@ -398,11 +397,11 @@ ca_test_na_perrieri <- na.omit(ca_test_perrieri)
 ca_test_na2_perrieri <- rasterToPoints(ca_test_na_perrieri)
 ca_test_na3_perrieri <- as.data.frame(ca_test_na2_perrieri[complete.cases(ca_test_na2_perrieri), ] )
 
-alegria_perrieri <- ca_test_na3_perrieri %>% filter(Adansonia.perrieri_EMcaByTSS_mergedAlgo_mergedRun_mergedData >= 500)
+data_perrieri <- ca_test_na3_perrieri %>% filter(Adansonia.perrieri_EMcaByTSS_mergedAlgo_mergedRun_mergedData >= 500)
 
-alegria2_perrieri <- sample_n(alegria_perrieri, size = 1000, replace = F)
-alegria2_perrieri$Proj <- rep(c("Present"),1000)
-names(alegria2_perrieri) <- c("Long","Lat","Prediction","Alt","Scenario")
+data_2_perrieri <- sample_n(data_perrieri, size = 1000, replace = F)
+data_2_perrieri$Proj <- rep(c("Present"),1000)
+names(data_2_perrieri) <- c("Long","Lat","Prediction","Alt","Scenario")
 
 ### Future testing 2080 (RCP 4.5!!!) Atention!
 caFut_perrieri <- raster(paste0("Adansonia.perrieri/caFut_45_2080.tif"))
@@ -411,13 +410,12 @@ ca_test_na_fut_perrieri <- na.omit(ca_test_fut_perrieri)
 
 ca_test_na2_fut_perrieri <- rasterToPoints(ca_test_na_fut_perrieri)
 ca_test_na3_fut_perrieri <- as.data.frame(ca_test_na2_fut_perrieri[complete.cases(ca_test_na2_fut_perrieri), ] )
-alegria_fut_perrieri <- ca_test_na3_fut_perrieri %>% filter(caFut_45_2080 >= 1500)
+data_fut_perrieri <- ca_test_na3_fut_perrieri %>% filter(caFut_45_2080 >= 1500)
 
-alegria2_fut_perrieri <- sample_n(alegria_fut_perrieri, size = 416, replace = F)
-alegria2_fut_perrieri$Proj <- rep(c("Future_2085"),416)
-names(alegria2_fut_perrieri) <- c("Long","Lat","Prediction","Alt","Scenario")
-alegria_test_perrieri <- rbind(alegria2_perrieri,alegria2_fut_perrieri)
-tail(alegria_test_perrieri)
+data_2_fut_perrieri <- sample_n(data_fut_perrieri, size = 416, replace = F)
+data_2_fut_perrieri$Proj <- rep(c("Future_2085"),416)
+names(data_2_fut_perrieri) <- c("Long","Lat","Prediction","Alt","Scenario")
+data_1_perrieri <- rbind(data_2_perrieri,data_2_fut_perrieri)
 
 ### Future testing 2050 
 caFut_perrieri_2055 <- raster(paste0("Adansonia.perrieri/caFut_85_2050.tif"))
@@ -426,19 +424,19 @@ ca_test_na_fut_perrieri_55 <- na.omit(ca_test_fut_perrieri_2055)
 
 ca_test_na2_fut_perrieri_55 <- rasterToPoints(ca_test_na_fut_perrieri_55)
 ca_test_na3_fut_perrieri_55 <- as.data.frame(ca_test_na2_fut_perrieri_55[complete.cases(ca_test_na2_fut_perrieri_55), ] )
-alegria_fut_perrieri_55 <- ca_test_na3_fut_perrieri_55 %>% filter(caFut_85_2050 >= 1500)
+data_fut_perrieri_55 <- ca_test_na3_fut_perrieri_55 %>% filter(caFut_85_2050 >= 1500)
 
 
-alegria2_fut_perrieri_55 <- sample_n(alegria_fut_perrieri_55, size = 1000, replace = F)
-alegria2_fut_perrieri_55$Proj <- rep(c("Future_2055"),1000)
-names(alegria2_fut_perrieri_55) <- c("Long","Lat","Prediction","Alt","Scenario")
-alegria_test_perrieri_finale <- rbind(alegria2_fut_perrieri_55,alegria_test_perrieri)
+data_2_fut_perrieri_55 <- sample_n(data_fut_perrieri_55, size = 1000, replace = F)
+data_2_fut_perrieri_55$Proj <- rep(c("Future_2055"),1000)
+names(data_2_fut_perrieri_55) <- c("Long","Lat","Prediction","Alt","Scenario")
+data_final_perrieri <- rbind(data_2_fut_perrieri_55,data_1_perrieri)
 
-alegria_test_perrieri_finale$Scenario = factor(alegria_test_perrieri_finale$Scenario,
+data_final_perrieri$Scenario = factor(data_final_perrieri$Scenario,
                                                levels = c("Present", "Future_2055","Future_2085"),
                                                labels = c("Present", "Future 2055","Future 2085"))
 ### Latitude plot
-latitude_perrieri <- ggplot(alegria_test_perrieri_finale) +
+latitude_perrieri <- ggplot(data_final_perrieri) +
   aes(y= Lat, x= Scenario) +
   geom_jitter(alpha =.5,
               height = 0,
@@ -461,7 +459,7 @@ latitude_perrieri <- ggplot(alegria_test_perrieri_finale) +
 
 
 ## Altitude plot
-altitude_perrieri <- ggplot(alegria_test_perrieri_finale) +
+altitude_perrieri <- ggplot(data_final_perrieri) +
   aes(y= Alt, x= Scenario) +
   geom_jitter(alpha =.5,
               height = 0,
@@ -491,11 +489,11 @@ ca_test_na_rubro <- na.omit(ca_test_rubro)
 ca_test_na2_rubro <- rasterToPoints(ca_test_na_rubro)
 ca_test_na3_rubro <- as.data.frame(ca_test_na2_rubro[complete.cases(ca_test_na2_rubro), ] )
 
-alegria_rubro <- ca_test_na3_rubro %>% filter(Adansonia.rubrostipa_EMcaByTSS_mergedAlgo_mergedRun_mergedData >= 500)
+data_rubro <- ca_test_na3_rubro %>% filter(Adansonia.rubrostipa_EMcaByTSS_mergedAlgo_mergedRun_mergedData >= 500)
 
-alegria2_rubro <- sample_n(alegria_rubro, size = 1000, replace = F)
-alegria2_rubro$Proj <- rep(c("Present"),1000)
-names(alegria2_rubro) <- c("Long","Lat","Prediction","Alt","Scenario")
+data_2_rubro <- sample_n(data_rubro, size = 1000, replace = F)
+data_2_rubro$Proj <- rep(c("Present"),1000)
+names(data_2_rubro) <- c("Long","Lat","Prediction","Alt","Scenario")
 
 ### Future testing 2080
 caFut_rubro <- raster(paste0("Adansonia.rubrostipa/caFut_85_2080.tif"))
@@ -504,12 +502,12 @@ ca_test_na_fut_rubro <- na.omit(ca_test_fut_rubro)
 
 ca_test_na2_fut_rubro <- rasterToPoints(ca_test_na_fut_rubro)
 ca_test_na3_fut_rubro <- as.data.frame(ca_test_na2_fut_rubro[complete.cases(ca_test_na2_fut_rubro), ] )
-alegria_fut_rubro <- ca_test_na3_fut_rubro %>% filter(caFut_85_2080 >= 1500)
+data_fut_rubro <- ca_test_na3_fut_rubro %>% filter(caFut_85_2080 >= 1500)
 
-alegria2_fut_rubro <- sample_n(alegria_fut_rubro, size = 1000, replace = F)
-alegria2_fut_rubro$Proj <- rep(c("Future_2085"),1000)
-names(alegria2_fut_rubro) <- c("Long","Lat","Prediction","Alt","Scenario")
-alegria_test_rubro <- rbind(alegria2_rubro,alegria2_fut_rubro)
+data_2_fut_rubro <- sample_n(data_fut_rubro, size = 1000, replace = F)
+data_2_fut_rubro$Proj <- rep(c("Future_2085"),1000)
+names(data_2_fut_rubro) <- c("Long","Lat","Prediction","Alt","Scenario")
+data_1_rubro <- rbind(data_2_fut_rubro,data_2_rubro)
 
 ### Future testing 2050 
 caFut_rubro_2055 <- raster(paste0("Adansonia.rubrostipa/caFut_85_2050.tif"))
@@ -518,20 +516,20 @@ ca_test_na_fut_rubro_55 <- na.omit(ca_test_fut_rubro_2055)
 
 ca_test_na2_fut_rubro_55 <- rasterToPoints(ca_test_na_fut_rubro_55)
 ca_test_na3_fut_rubro_55 <- as.data.frame(ca_test_na2_fut_rubro_55[complete.cases(ca_test_na2_fut_rubro_55), ] )
-alegria_fut_rubro_55 <- ca_test_na3_fut_rubro_55 %>% filter(caFut_85_2050 >= 1500)
+data_fut_rubro_55 <- ca_test_na3_fut_rubro_55 %>% filter(caFut_85_2050 >= 1500)
 
 
-alegria2_fut_rubro_55 <- sample_n(alegria_fut_rubro_55, size = 1000, replace = F)
-alegria2_fut_rubro_55$Proj <- rep(c("Future_2055"),1000)
-names(alegria2_fut_rubro_55) <- c("Long","Lat","Prediction","Alt","Scenario")
-alegria_test_rubro_finale <- rbind(alegria2_fut_rubro_55,alegria_test_rubro)
+data_2_fut_rubro_55 <- sample_n(data_fut_rubro_55, size = 1000, replace = F)
+data_2_fut_rubro_55$Proj <- rep(c("Future_2055"),1000)
+names(data_2_fut_rubro_55) <- c("Long","Lat","Prediction","Alt","Scenario")
+data_final_rubro <- rbind(data_2_fut_rubro_55,data_1_rubro)
 
-alegria_test_rubro_finale$Scenario = factor(alegria_test_rubro_finale$Scenario,
+data_final_rubro$Scenario = factor(data_final_rubro$Scenario,
                                             levels = c("Present", "Future_2055","Future_2085"),
                                             labels = c("Present", "Future 2055","Future 2085"))
 
 ### Latitude plot
-latitude_rubro <- ggplot(alegria_test_rubro_finale) +
+latitude_rubro <- ggplot(data_final_rubro) +
   aes(y= Lat, x= Scenario) +
   geom_jitter(alpha =.5,
               height = 0,
@@ -554,7 +552,7 @@ latitude_rubro <- ggplot(alegria_test_rubro_finale) +
 
 
 ## Altitude plot
-altitude_rubro <- ggplot(alegria_test_rubro_finale) +
+altitude_rubro <- ggplot(data_final_rubro) +
   aes(y= Alt, x= Scenario) +
   geom_jitter(alpha =.5,
               height = 0,
@@ -585,11 +583,11 @@ ca_test_na_suare <- na.omit(ca_test_suare)
 ca_test_na2_suare <- rasterToPoints(ca_test_na_suare)
 ca_test_na3_suare <- as.data.frame(ca_test_na2_suare[complete.cases(ca_test_na2_suare), ] )
 
-alegria_suare <- ca_test_na3_suare %>% filter(Adansonia.suarezensis_EMcaByTSS_mergedAlgo_mergedRun_mergedData >= 500)
+data_suare <- ca_test_na3_suare %>% filter(Adansonia.suarezensis_EMcaByTSS_mergedAlgo_mergedRun_mergedData >= 500)
 
-alegria2_suare <- sample_n(alegria_suare, size = 1000, replace = F)
-alegria2_suare$Proj <- rep(c("Present"),1000)
-names(alegria2_suare) <- c("Long","Lat","Prediction","Alt","Scenario")
+data_2_suare <- sample_n(data_suare, size = 1000, replace = F)
+data_2_suare$Proj <- rep(c("Present"),1000)
+names(data_2_suare) <- c("Long","Lat","Prediction","Alt","Scenario")
 
 ### Future testing 2080 Atention RCP 4.5 (SAME AS A. perrieri)
 caFut_suare <- raster(paste0("Adansonia.suarezensis/caFut_45_2080.tif"))
@@ -598,12 +596,12 @@ ca_test_na_fut_suare <- na.omit(ca_test_fut_suare)
 
 ca_test_na2_fut_suare <- rasterToPoints(ca_test_na_fut_suare)
 ca_test_na3_fut_suare <- as.data.frame(ca_test_na2_fut_suare[complete.cases(ca_test_na2_fut_suare), ] )
-alegria_fut_suare <- ca_test_na3_fut_suare %>% filter(caFut_45_2080 >= 1500)
+data_fut_suare <- ca_test_na3_fut_suare %>% filter(caFut_45_2080 >= 1500)
 
-alegria2_fut_suare <- sample_n(alegria_fut_suare, size = 105, replace = F)
-alegria2_fut_suare$Proj <- rep(c("Future_2085"),105)
-names(alegria2_fut_suare) <- c("Long","Lat","Prediction","Alt","Scenario")
-alegria_test_suare <- rbind(alegria2_suare,alegria2_fut_suare)
+data_2_fut_suare <- sample_n(data_fut_suare, size = 105, replace = F)
+data_2_fut_suare$Proj <- rep(c("Future_2085"),105)
+names(data_2_fut_suare) <- c("Long","Lat","Prediction","Alt","Scenario")
+data_test_suare <- rbind(data_2_suare,data_2_fut_suare)
 
 ### Future testing 2050 
 caFut_suare_2055 <- raster(paste0("Adansonia.suarezensis/caFut_45_2050.tif"))
@@ -612,18 +610,18 @@ ca_test_na_fut_suare_55 <- na.omit(ca_test_fut_suare_2055)
 
 ca_test_na2_fut_suare_55 <- rasterToPoints(ca_test_na_fut_suare_55)
 ca_test_na3_fut_suare_55 <- as.data.frame(ca_test_na2_fut_suare_55[complete.cases(ca_test_na2_fut_suare_55), ] )
-alegria_fut_suare_55 <- ca_test_na3_fut_suare_55 %>% filter(caFut_45_2050 >= 1500)
+data_fut_suare_55 <- ca_test_na3_fut_suare_55 %>% filter(caFut_45_2050 >= 1500)
 
-alegria2_fut_suare_55 <- sample_n(alegria_fut_suare_55, size = 15, replace = F)
-alegria2_fut_suare_55$Proj <- rep(c("Future_2055"),15)
-names(alegria2_fut_suare_55) <- c("Long","Lat","Prediction","Alt","Scenario")
-alegria_test_suare_finale <- rbind(alegria2_fut_suare_55,alegria_test_suare)
+data_2_fut_suare_55 <- sample_n(data_fut_suare_55, size = 15, replace = F)
+data_2_fut_suare_55$Proj <- rep(c("Future_2055"),15)
+names(data_2_fut_suare_55) <- c("Long","Lat","Prediction","Alt","Scenario")
+data_final_suare <- rbind(alegria2_fut_suare_55,data_test_suare)
 
-alegria_test_suare_finale$Scenario = factor(alegria_test_suare_finale$Scenario,
+data_final_suare$Scenario = factor(data_final_suare$Scenario,
                                             levels = c("Present", "Future_2055","Future_2085"),
                                             labels = c("Present", "Future 2055","Future 2085"))
 ### Latitude plot
-latitude_suare <- ggplot(alegria_test_suare_finale) +
+latitude_suare <- ggplot(data_final_suare) +
   aes(y= Lat, x= Scenario) +
   geom_jitter(alpha =.5,
               height = 0,
@@ -646,7 +644,7 @@ latitude_suare <- ggplot(alegria_test_suare_finale) +
 
 
 ## Altitude plot
-altitude_suare <- ggplot(alegria_test_suare_finale) +
+altitude_suare <- ggplot(data_final_suare) +
   aes(y= Alt, x= Scenario) +
   geom_jitter(alpha =.5,
               height = 0,
