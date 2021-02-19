@@ -615,7 +615,7 @@ data_fut_suare_55 <- ca_test_na3_fut_suare_55 %>% filter(caFut_45_2050 >= 1500)
 data_2_fut_suare_55 <- sample_n(data_fut_suare_55, size = 15, replace = F)
 data_2_fut_suare_55$Proj <- rep(c("Future_2055"),15)
 names(data_2_fut_suare_55) <- c("Long","Lat","Prediction","Alt","Scenario")
-data_final_suare <- rbind(alegria2_fut_suare_55,data_test_suare)
+data_final_suare <- rbind(data_2_fut_suare_55,data_test_suare)
 
 data_final_suare$Scenario = factor(data_final_suare$Scenario,
                                             levels = c("Present", "Future_2055","Future_2085"),
