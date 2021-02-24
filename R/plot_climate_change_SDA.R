@@ -728,8 +728,7 @@ plot_densities_curves <- grid.arrange(plot.seas_dig,plot.cwd_dig,
                                       layout_matrix=lay_3)
 
 ggsave(file=paste0("./outputs/all_species_current_future_niche_comparison.png"),
-       plot=plot_densities_curves,width=18,height=15,dpi="print")
-
+       plot=plot_densities_curves,width=18,height=15,dpi=300,scale=1)
 
 # ===========
 # End of file
