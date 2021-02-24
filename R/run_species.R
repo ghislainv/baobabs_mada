@@ -72,6 +72,7 @@ run.species <- function (i, path_to_maxent.jar, run.models=TRUE) {
   
   ## Number of 1km pixels with at least one presence
   npix <- nrow(d)
+  write_csv(npix, here("data/baobabs/1km_pixels_one_presence.csv"))
   
   ## BIOMOD_FormatingData
   set.seed(1234) ## Reproducible pseudo-absences
@@ -91,7 +92,7 @@ run.species <- function (i, path_to_maxent.jar, run.models=TRUE) {
                                                   myFormula=NULL, 
                                                   family=binomial(link="logit")),
                                          RF=list(do.classif=TRUE, ntree=500),
-                                         MAXENT.Phillips=list(path_to_maxent.jar=path_to_maxent.jar, 
+                                         MAXENT.Phillips=list(path_to_maxent.jar='D:/OneDrive/Cap_1_outros_papers/script_art_1/maxent', 
                                                               visible=FALSE, maximumiterations=500,
                                                               memory_allocated=512,
                                                               # To avoid overparametrization (Merow  et al.  2013)
