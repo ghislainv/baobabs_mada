@@ -119,11 +119,11 @@ n.species <- length(sp.names)
 ##==================================
 ## Computation per species
 ##==================================
+## Path to MaxEnt (indicate your path)
 
+path_to_maxent.jar <- c('D:/OneDrive/Cap_1_outros_papers/script_art_1/maxent')
 ## Load run_species() function
 source(here("R/run_species.R"))
-## Path to MaxEnt (indicate your path)
-path_to_maxent.jar <- here("maxent")
 ## Make a cluster with all possible cores
 n.core <- max(1,detectCores()-2)
 clust <- makeCluster(n.core)
