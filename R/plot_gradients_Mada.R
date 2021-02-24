@@ -35,8 +35,8 @@ map.mat <- ggplot(data_frame2, aes(x=alt, y=tmean)) + xlim(0,2041) + ylim(137,28
         axis.title.y=element_text(size=rel(2)),
         axis.text.x=element_text(size=rel(1.75)),
         axis.text.y=element_text(size=rel(1.75)))
-ggsave(file=paste0("./outputs/meantem_elevation.png"),
-       plot=map.mat,width=10,height=10,dpi='print')
+#ggsave(file=paste0("./outputs/meantem_elevation.png"),
+      # plot=map.mat,width=10,height=10,dpi='print')
 
 #### Altitude x T. seas
 range(data_frame2$alt)
@@ -52,8 +52,8 @@ map.mat2 <- ggplot(data_frame2, aes(x=alt, y=tseas)) + xlim(0,2041) + ylim(991,3
         axis.title.y=element_text(size=rel(2)),
         axis.text.x=element_text(size=rel(1.75)),
         axis.text.y=element_text(size=rel(1.75)))
-ggsave(file=paste0("./outputs/meantempseas_elevation.png"),
-       plot=map.mat2,width=10,height=10,dpi='print')
+#ggsave(file=paste0("./outputs/meantempseas_elevation.png"),
+      # plot=map.mat2,width=10,height=10,dpi='print')
 
 ## Ploting comparing the latitude
 ## Tmean x Latitude
@@ -71,8 +71,8 @@ lat.mat1 <- ggplot(data_frame2, aes(x=data_frame2$y, y=tmean)) + ylim(137,280) +
         axis.title.y=element_text(size=rel(2)),
         axis.text.x=element_text(size=rel(1.75)),
         axis.text.y=element_text(size=rel(1.75)))
-ggsave(file=paste0("./outputs/meantemp_latitude.png"),
-       plot=lat.mat1,width=10,height=10,dpi='print')
+#ggsave(file=paste0("./outputs/meantemp_latitude.png"),
+      # plot=lat.mat1,width=10,height=10,dpi='print')
 
 ## Tseas x Latitude
 
@@ -90,9 +90,8 @@ lat.mat2 <- ggplot(data_frame2, aes(x=data_frame2$y, y=tseas)) + ylim(991,3500) 
         axis.title.y=element_text(size=rel(2)),
         axis.text.x=element_text(size=rel(1.75)),
         axis.text.y=element_text(size=rel(1.75)))
-ggsave(file=paste0("./outputs/meantemp.seas_latitude.png"),
-       plot=lat.mat2,width=10,height=10,dpi='print')
-
+#ggsave(file=paste0("./outputs/meantemp.seas_latitude.png"),
+       #plot=lat.mat2,width=10,height=10,dpi='print')
 
 a5 <- grid.arrange( map.mat, map.mat2, lat.mat1, lat.mat2, nrow=2, ncol=2)
 
