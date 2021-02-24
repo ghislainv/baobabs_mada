@@ -92,7 +92,7 @@ run.species <- function (i, path_to_maxent.jar, run.models=TRUE) {
                                                   myFormula=NULL, 
                                                   family=binomial(link="logit")),
                                          RF=list(do.classif=TRUE, ntree=500),
-                                         MAXENT.Phillips=list(path_to_maxent.jar='D:/OneDrive/Cap_1_outros_papers/script_art_1/maxent', 
+                                         MAXENT.Phillips=list(path_to_maxent.jar= path_to_maxent, 
                                                               visible=FALSE, maximumiterations=500,
                                                               memory_allocated=512,
                                                               # To avoid overparametrization (Merow  et al.  2013)
