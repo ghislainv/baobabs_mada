@@ -1,4 +1,4 @@
-# baobabs_mada
+# Baobabs Mada
 
 # Not all species should migrate towards the Poles under climate change: the case of the seven Baobab species in Madagascar
 
@@ -30,7 +30,7 @@ Figure 2: **The most threatened Malagasy baobab species (2085) under two dispers
 
 Also check how latitude and elevation will change inside threatened baobab projected distribution in the present and in the future (2055 and 2085).
 
-<img alt="Latitudinal and elevation change of  threatened baobab species" src="outputs/lat_ele_all_species_within_SDAcf_threat.png">
+<img alt="Latitudinal and elevation change of  threatened baobab species" src="outputs/lat_ele_all_species_within_SDAcf_threat.png" width='500'>
 
 Figure 3: **The change in elevation and latitude inside projected distribution of the most threatened baobabs species**.
 ## Additional folders
