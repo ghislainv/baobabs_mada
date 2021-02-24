@@ -77,8 +77,8 @@ latitude_digi <- ggplot(final_df) +
   theme_bw() +
   labs(col = "") +
   annotate("text", x  = 0.5, y = 8650000 , size=7, label = "(b)") +
-  theme(axis.title.x = element_text(size = rel(1.75),colour="black")) +
-  theme(axis.title.y = element_text(size = rel(1.75),colour="black")) +
+  theme(axis.title.x = element_text(size = rel(1.65),colour="black")) +
+  theme(axis.title.y = element_text(size = rel(1.65),colour="black")) +
   theme(axis.text.x = element_text(size = rel(1.65),colour="black")) +
   theme(axis.text.y = element_text(size = rel(1.65), colour="black")) +   
   theme(legend.position = "none")
@@ -99,8 +99,8 @@ altitude_digi <- ggplot(final_df) +
   theme_bw() +
   labs(col = "") +
   annotate("text", x  = 0.5, y = 800 , size=7, label = "(a)") +
-  theme(axis.title.x = element_text(size = rel(1.75),colour="black")) +
-  theme(axis.title.y = element_text(size = rel(1.75),colour="black")) +
+  theme(axis.title.x = element_text(size = rel(1.65),colour="black")) +
+  theme(axis.title.y = element_text(size = rel(1.65),colour="black")) +
   theme(axis.text.x = element_text(size = rel(1.65),colour="black")) +
   theme(axis.text.y = element_text(size = rel(1.65), colour="black")) +  
   theme(legend.position = "none")
@@ -172,8 +172,8 @@ latitude_grand <- ggplot(data_final_grand) +
   theme_bw() +
   labs(col = "") +
   annotate("text", x  = 0.5, y = 8250000 , size=7, label = "(d)") +
-  theme(axis.title.x = element_text(size = rel(1.75),colour="black")) +
-  theme(axis.title.y = element_text(size = rel(1.75),colour="black")) +
+  theme(axis.title.x = element_text(size = rel(1.65),colour="black")) +
+  theme(axis.title.y = element_text(size = rel(1.65),colour="black")) +
   theme(axis.text.x = element_text(size = rel(1.65),colour="black")) +
   theme(axis.text.y = element_text(size = rel(1.65), colour="black")) +  
   theme(legend.position = "none")
@@ -194,8 +194,8 @@ altitude_grand <- ggplot(data_final_grand) +
   theme_bw() +
   labs(col = "") +
   annotate("text", x  = 0.5, y = 1050 , size=7, label = "(c)") +
-  theme(axis.title.x = element_text(size = rel(1.75),colour="black")) +
-  theme(axis.title.y = element_text(size = rel(1.75),colour="black")) +
+  theme(axis.title.x = element_text(size = rel(1.65),colour="black")) +
+  theme(axis.title.y = element_text(size = rel(1.65),colour="black")) +
   theme(axis.text.x = element_text(size = rel(1.65),colour="black")) +
   theme(axis.text.y = element_text(size = rel(1.65), colour="black")) +   
   theme(legend.position = "none")
@@ -263,8 +263,8 @@ latitude_za <- ggplot(data_final_za) +
   theme_bw() +
   labs(col = "") +
   annotate("text", x  = 0.5, y = 8650000 , size=7, label = "(f)") +
-  theme(axis.title.x = element_text(size = rel(1.75),colour="black")) +
-  theme(axis.title.y = element_text(size = rel(1.75),colour="black")) +
+  theme(axis.title.x = element_text(size = rel(1.65),colour="black")) +
+  theme(axis.title.y = element_text(size = rel(1.65),colour="black")) +
   theme(axis.text.x = element_text(size = rel(1.65),colour="black")) +
   theme(axis.text.y = element_text(size = rel(1.65), colour="black")) +   
   theme(legend.position = "none")
@@ -285,8 +285,8 @@ altitude_za <- ggplot(data_final_za) +
   theme_bw() +
   labs(col = "") +
   annotate("text", x  = 0.5, y = 1350 , size=7, label = "(e)") +
-  theme(axis.title.x = element_text(size = rel(1.75),colour="black")) +
-  theme(axis.title.y = element_text(size = rel(1.75),colour="black")) +
+  theme(axis.title.x = element_text(size = rel(1.65),colour="black")) +
+  theme(axis.title.y = element_text(size = rel(1.65),colour="black")) +
   theme(axis.text.x = element_text(size = rel(1.65),colour="black")) +
   theme(axis.text.y = element_text(size = rel(1.65), colour="black")) +  
   theme(legend.position = "none")
@@ -357,8 +357,8 @@ latitude_mada <- ggplot(data_final_mada) +
   theme_bw() +
   labs(col = "") +
   annotate("text", x  = 0.5, y = 8650000 , size=7, label = "(b)") +
-  theme(axis.title.x = element_text(size = rel(1.75),colour="black")) +
-  theme(axis.title.y = element_text(size = rel(1.75),colour="black")) +
+  theme(axis.title.x = element_text(size = rel(1.65),colour="black")) +
+  theme(axis.title.y = element_text(size = rel(1.65),colour="black")) +
   theme(axis.text.x = element_text(size = rel(1.65),colour="black")) +
   theme(axis.text.y = element_text(size = rel(1.65), colour="black")) +    
   theme(legend.position = "none")
@@ -381,8 +381,8 @@ altitude_mada <- ggplot(data_final_mada) +
   theme_bw() +
   labs(col = "") +
   annotate("text", x  = 0.5, y = 800 , size=7, label = "(a)") +
-  theme(axis.title.x = element_text(size = rel(1.75),colour="black")) +
-  theme(axis.title.y = element_text(size = rel(1.75),colour="black")) +
+  theme(axis.title.x = element_text(size = rel(1.65),colour="black")) +
+  theme(axis.title.y = element_text(size = rel(1.65),colour="black")) +
   theme(axis.text.x = element_text(size = rel(1.65),colour="black")) +
   theme(axis.text.y = element_text(size = rel(1.65), colour="black")) +  
   theme(legend.position = "none")
@@ -451,8 +451,8 @@ latitude_perrieri <- ggplot(data_final_perrieri) +
   theme_bw() +
   labs(col = "") +
   annotate("text", x  = 0.5, y = 8600000 , size=7, label = "(d)") +
-  theme(axis.title.x = element_text(size = rel(1.75),colour="black")) +
-  theme(axis.title.y = element_text(size = rel(1.75),colour="black")) +
+  theme(axis.title.x = element_text(size = rel(1.65),colour="black")) +
+  theme(axis.title.y = element_text(size = rel(1.65),colour="black")) +
   theme(axis.text.x = element_text(size = rel(1.65),colour="black")) +
   theme(axis.text.y = element_text(size = rel(1.65), colour="black")) +    
   theme(legend.position = "none")
@@ -474,8 +474,8 @@ altitude_perrieri <- ggplot(data_final_perrieri) +
   theme_bw() +
   labs(col = "") +
   annotate("text", x  = 0.5, y = 1450 , size=7, label = "(c)") +
-  theme(axis.title.x = element_text(size = rel(1.75),colour="black")) +
-  theme(axis.title.y = element_text(size = rel(1.75),colour="black")) +
+  theme(axis.title.x = element_text(size = rel(1.65),colour="black")) +
+  theme(axis.title.y = element_text(size = rel(1.65),colour="black")) +
   theme(axis.text.x = element_text(size = rel(1.65),colour="black")) +
   theme(axis.text.y = element_text(size = rel(1.65), colour="black")) +   
   theme(legend.position = "none")
@@ -544,8 +544,8 @@ latitude_rubro <- ggplot(data_final_rubro) +
   theme_bw() +
   labs(col = "") +
   annotate("text", x  = 0.5, y = 8600000 , size=7, label = "(f)") +
-  theme(axis.title.x = element_text(size = rel(1.75),colour="black")) +
-  theme(axis.title.y = element_text(size = rel(1.75),colour="black")) +
+  theme(axis.title.x = element_text(size = rel(1.65),colour="black")) +
+  theme(axis.title.y = element_text(size = rel(1.65),colour="black")) +
   theme(axis.text.x = element_text(size = rel(1.65),colour="black")) +
   theme(axis.text.y = element_text(size = rel(1.65), colour="black")) +  
   theme(legend.position = "none")
@@ -567,8 +567,8 @@ altitude_rubro <- ggplot(data_final_rubro) +
   theme_bw() +
   labs(col = "") +
   annotate("text", x  = 0.5, y = 1000 , size=7, label = "(e)") +
-  theme(axis.title.x = element_text(size = rel(1.75),colour="black")) +
-  theme(axis.title.y = element_text(size = rel(1.75),colour="black")) +
+  theme(axis.title.x = element_text(size = rel(1.65),colour="black")) +
+  theme(axis.title.y = element_text(size = rel(1.65),colour="black")) +
   theme(axis.text.x = element_text(size = rel(1.65),colour="black")) +
   theme(axis.text.y = element_text(size = rel(1.65), colour="black")) +  
   theme(legend.position = "none")
@@ -598,7 +598,12 @@ ca_test_na2_fut_suare <- rasterToPoints(ca_test_na_fut_suare)
 ca_test_na3_fut_suare <- as.data.frame(ca_test_na2_fut_suare[complete.cases(ca_test_na2_fut_suare), ] )
 data_fut_suare <- ca_test_na3_fut_suare %>% filter(caFut_45_2080 >= 1500)
 
-data_2_fut_suare <- sample_n(data_fut_suare, size = 105, replace = F)
+data_2_fut_suare <- sample_n(data_fut_suare, size = 105, replace = T)
+# Error: `size` must be less or equal than xxx (size of data),
+## set `replace` = TRUE to use sampling with replacement.
+### Explanation: every time we run the model, we will have an interval of
+#### 95 to 105 1km² occurrence. So, if you run and have the above error, please set
+##### size = "size of data" then you will have no error or set replace = T ;)
 data_2_fut_suare$Proj <- rep(c("Future_2085"),105)
 names(data_2_fut_suare) <- c("Long","Lat","Prediction","Alt","Scenario")
 data_test_suare <- rbind(data_2_suare,data_2_fut_suare)
@@ -612,7 +617,7 @@ ca_test_na2_fut_suare_55 <- rasterToPoints(ca_test_na_fut_suare_55)
 ca_test_na3_fut_suare_55 <- as.data.frame(ca_test_na2_fut_suare_55[complete.cases(ca_test_na2_fut_suare_55), ] )
 data_fut_suare_55 <- ca_test_na3_fut_suare_55 %>% filter(caFut_45_2050 >= 1500)
 
-data_2_fut_suare_55 <- sample_n(data_fut_suare_55, size = 15, replace = F)
+data_2_fut_suare_55 <- sample_n(data_fut_suare_55, size = 15, replace = T)
 data_2_fut_suare_55$Proj <- rep(c("Future_2055"),15)
 names(data_2_fut_suare_55) <- c("Long","Lat","Prediction","Alt","Scenario")
 data_final_suare <- rbind(data_2_fut_suare_55,data_test_suare)
@@ -636,8 +641,8 @@ latitude_suare <- ggplot(data_final_suare) +
   theme_bw() +
   labs(col = "") +
   annotate("text", x  = 0.5, y = 8670000 , size=7, label = "(h)") +
-  theme(axis.title.x = element_text(size = rel(1.75),colour="black")) +
-  theme(axis.title.y = element_text(size = rel(1.75),colour="black")) +
+  theme(axis.title.x = element_text(size = rel(1.65),colour="black")) +
+  theme(axis.title.y = element_text(size = rel(1.65),colour="black")) +
   theme(axis.text.x = element_text(size = rel(1.65),colour="black")) +
   theme(axis.text.y = element_text(size = rel(1.65), colour="black")) +    
   theme(legend.position = "none")
@@ -659,26 +664,26 @@ altitude_suare <- ggplot(data_final_suare) +
   theme_bw() +
   labs(col = "") +
   annotate("text", x  = 0.5, y = 950 , size=7, label = "(g)") +
-  theme(axis.title.x = element_text(size = rel(1.75),colour="black")) +
-  theme(axis.title.y = element_text(size = rel(1.75),colour="black")) +
+  theme(axis.title.x = element_text(size = rel(1.65),colour="black")) +
+  theme(axis.title.y = element_text(size = rel(1.65),colour="black")) +
   theme(axis.text.x = element_text(size = rel(1.65),colour="black")) +
   theme(axis.text.y = element_text(size = rel(1.65), colour="black")) +   
   theme(legend.position = "none")
 
 ## Legend names for plot
-grob_digitata <- textGrob("A. digitata",rot=90, gp=gpar(cex=2,fontface="italic"),
+grob_digitata <- textGrob("A. digitata",rot=90, gp=gpar(cex=1.5,fontface="italic"),
                           hjust=0.3, vjust=2)
-grob_grand <- textGrob("A. grandidieri",rot=90, gp=gpar(cex=2,fontface="italic"),
+grob_grand <- textGrob("A. grandidieri",rot=90, gp=gpar(cex=1.5,fontface="italic"),
                        hjust=0.3, vjust=2)
-grob_mada <- textGrob("A. madagascariensis",rot=90, gp=gpar(cex=2,fontface="italic"),
+grob_mada <- textGrob("A. madagascariensis",rot=90, gp=gpar(cex=1.5,fontface="italic"),
                       hjust=0.4, vjust=2)
-grob_perri <- textGrob("A. perrieri",rot=90, gp=gpar(cex=2,fontface="italic"),
+grob_perri <- textGrob("A. perrieri",rot=90, gp=gpar(cex=1.5,fontface="italic"),
                        hjust=0.3, vjust=2)
-grob_rubro <- textGrob("A. rubrostipa",rot=90, gp=gpar(cex=2,fontface="italic"),
+grob_rubro <- textGrob("A. rubrostipa",rot=90, gp=gpar(cex=1.5,fontface="italic"),
                        hjust=0.3, vjust=2)
-grob_suare <- textGrob("A. suarezensis",rot=90, gp=gpar(cex=2,fontface="italic"),
+grob_suare <- textGrob("A. suarezensis",rot=90, gp=gpar(cex=1.5,fontface="italic"),
                        hjust=0.3, vjust=2)
-grob_za <- textGrob("A. za",rot=90, gp=gpar(cex=2,fontface="italic"),
+grob_za <- textGrob("A. za",rot=90, gp=gpar(cex=1.5,fontface="italic"),
                     hjust=0.3, vjust=2)
 ## Combine plots
 ### Threatened species
@@ -706,11 +711,13 @@ a6 <- grid.arrange(grob_digitata, grob_grand,
                    altitude_digi,latitude_digi,altitude_grand,latitude_grand,
                    altitude_za,latitude_za,layout_matrix = day_2)
 
+
+
 ggsave(file=paste0("./outputs/lat_ele_all_species_within_SDAcf_threat.png"),
-       plot=a5,width=18,height=15,dpi=300)
+       plot=a5,width=18,height=15, scale=2,unit="cm",dpi=300)
 
 ggsave(file=paste0("./outputs/lat_ele_all_species_within_SDAcf_non_threat.png"),
-       plot=a6,width=18,height=15,dpi=300)
+       plot=a6,width=18,height=15,scale=2, unit="cm",dpi=300)
 
 # ===========
 # End of file
