@@ -83,27 +83,8 @@ View(try)
 
 write.table(try,paste0("./outputs/table2vi.txt"),sep="\t")
 
-#### Table 3 with performance indexes
 
-suare_dig <- read.table(paste0("Adansonia.digitata/performance_ca.txt"), header=T,sep="\t")
-suare_grandi <- read.table(paste0("Adansonia.grandidieri/performance_ca.txt"), header=T,sep="\t")
-suare_mada <- read.table(paste0("Adansonia.madagascariensis/performance_ca.txt"), header=T,sep="\t")
-suare_perri <- read.table(paste0("Adansonia.perrieri/performance_ca.txt"), header=T,sep="\t")
-suare_rubro <- read.table(paste0("Adansonia.rubrostipa/performance_ca.txt"), header=T,sep="\t")
-suare_suare <- read.table(paste0("Adansonia.suarezensis/performance_ca.txt"), header=T,sep="\t")
-suare_za <- read.table(paste0("Adansonia.za/performance_ca.txt"), header=T,sep="\t")
-ca_species <- rbind(suare_dig,suare_grandi,suare_mada,suare_perri,suare_rubro,
-                    suare_suare,suare_za)
-
-rownames(ca_species) <- c("A. digitata","A. grandidieri","A. madagascariensis", 
-                          "A. perrieri", "A. rubrostipa","A. suarezensis","A. za")
-
-only_sen_spe_tss <- subset(ca_species, select=c("Sen", "Spe","TSS"))
-
-write.table(only_sen_spe_tss,paste0("./outputs/table3_performance_ready.txt"),sep="\t")
-
-
-####### #### Table A2 with performance indexes
+####### #### Table S2 with performance indexes
 
 perf_dig <- read.table(paste0("Adansonia.digitata/current_model_evaluation.txt"), header=T,sep="\t")
 perf_grand <- read.table(paste0("Adansonia.grandidieri/current_model_evaluation.txt"), header=T,sep="\t")
@@ -133,7 +114,7 @@ partial_final1 <- partial_final %>%
   filter(wIndex != 'KAPPA')#omit tempcol in output
 
 
-write.table(partial_final1,paste0("./outputs/tableA2_performance_partial.txt"),sep="\t")
+write.table(partial_final1,paste0("./outputs/tableS2_performance_partial.txt"),sep="\t")
 
 ### To calculate mean over the full dataset
 newdataf <- newdata[newdata$Run == 'Full', ]
@@ -146,9 +127,29 @@ full_final1 <- full_final %>%
 
 partial_final1
 full_final1
-write.table(full_final1,paste0("./outputs/tableA2_performance_full.txt"),sep="\t")
+write.table(full_final1,paste0("./outputs/tableS2_performance_full.txt"),sep="\t")
 
-############# Table 4
+#### Table S3 with performance indexes
+
+suare_dig <- read.table(paste0("Adansonia.digitata/performance_ca.txt"), header=T,sep="\t")
+suare_grandi <- read.table(paste0("Adansonia.grandidieri/performance_ca.txt"), header=T,sep="\t")
+suare_mada <- read.table(paste0("Adansonia.madagascariensis/performance_ca.txt"), header=T,sep="\t")
+suare_perri <- read.table(paste0("Adansonia.perrieri/performance_ca.txt"), header=T,sep="\t")
+suare_rubro <- read.table(paste0("Adansonia.rubrostipa/performance_ca.txt"), header=T,sep="\t")
+suare_suare <- read.table(paste0("Adansonia.suarezensis/performance_ca.txt"), header=T,sep="\t")
+suare_za <- read.table(paste0("Adansonia.za/performance_ca.txt"), header=T,sep="\t")
+ca_species <- rbind(suare_dig,suare_grandi,suare_mada,suare_perri,suare_rubro,
+                    suare_suare,suare_za)
+
+rownames(ca_species) <- c("A. digitata","A. grandidieri","A. madagascariensis", 
+                          "A. perrieri", "A. rubrostipa","A. suarezensis","A. za")
+
+only_sen_spe_tss <- subset(ca_species, select=c("Sen", "Spe","TSS"))
+
+write.table(only_sen_spe_tss,paste0("./outputs/tableS3_performance_ready.txt"),sep="\t")
+
+
+############# Table S4
 
 nichesf_dig <- read.table(paste0("Adansonia.digitata/mean_niche_with_future.txt"), header=T,sep="\t")
 nichesc_dig <- read.table(paste0("Adansonia.digitata/niche.txt"), header=T,sep="\t")
@@ -188,7 +189,7 @@ niches_za$species <- rep(c("A. za"),each=3)
 all_niches <- cbind(niches_dig,niches_grand,niches_mada,niches_perri,
                     niches_rubro,niches_suare,niches_za)
 
-write.table(all_niches,paste0("./outputs/tableA3_niches_fut_cur_comparison.txt"),sep="\t")
+write.table(all_niches,paste0("./outputs/tableS4_niches_fut_cur_comparison.txt"),sep="\t")
 
 # ===========
 # End of file
