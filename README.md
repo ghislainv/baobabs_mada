@@ -18,7 +18,7 @@ Data can be found in the `data` folder. The `baobabs_raw_data` folder includes s
 
 All the results are saved in the `outputs` folder.
 
-<img alt="Bioclimatic niche of studied species" src="outputs/Fig_ap1_sps_niche2.png" width="500">
+<img alt="Bioclimatic niche of studied species" src="outputs/Fig_ap_sps_niche.png" width="500">
 
 Figure 1: **Bioclimatic niche of the seven baobabs species found in Madagascar**.
 
