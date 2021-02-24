@@ -86,7 +86,7 @@ my_plot_tseas <-  my_plot + theme(panel.grid.major = element_blank(), panel.grid
                                  #legend.text = element_text(face= "italic",size=15),
                                  legend.title=element_blank(),
                                  panel.background = element_blank(), axis.line = element_line(colour = "black")) +
-  labs(x="Temp. Seasonality (sd x 100ºC)", y = "Density",size=5) +
+  labs(x="Temp. Seasonality (sd x 100 ºC)", y = "Density",size=5) +
   theme(legend.position="none") + theme_par
   
 # Density plots ### Annual Mean Temperature
@@ -152,8 +152,6 @@ plot_densities <- grid.arrange(my_plot_tmean, my_plot_tseas, my_plot_prec, my_pl
 ggsave(filename="outputs/Fig_ap_sps_niche.png", plot=plot_densities,
        width=textwidth, height=textwidth*(11/8), scale=1.2, dpi=300, unit="cm")
 
-# ggsave(filename="outputs/Fig_ap1_sps_niche.pdf", plot=plot_densities,
-#        width=8, height=11, dpi="print")
 
 
 ### Comparing bioclimatic niche of each species inside current SDA according to the 
@@ -162,10 +160,10 @@ ggsave(filename="outputs/Fig_ap_sps_niche.png", plot=plot_densities,
 # Import data_set
 a.suare <- read.csv(file=paste0("Adansonia.suarezensis/niche_graph_species_compared_anomaly.csv"), header=T,sep=";",dec=",")
 # 1st importance variable - Tseas
-range(a.suare$tseas) # 1202 1421
-range(a.suare$tseasf) # 1307.000 1529.333
-mean(a.suare$tseas) # 1276.642
-mean(a.suare$tseasf) # 1387.751
+range(a.suare$tseas) 
+range(a.suare$tseasf) 
+mean(a.suare$tseas) 
+mean(a.suare$tseasf) 
 breaks <- c(round(seq(min(a.suare$tseas),max(a.suare$tseasf),length=8)))
 labels = as.character(breaks)
 
@@ -199,8 +197,8 @@ plot.seas_suar =  plot.seas_suar + theme(panel.grid.major = element_blank(), pan
 
 
 ### second importance variable - Prec
-range(a.suare$prec) # 1113 - 1522
-range(a.suare$precf) # 922.3 1325
+range(a.suare$prec) 
+range(a.suare$precf) 
 breaks <- c(round(seq(min(a.suare$precf),max(a.suare$prec),length=8)))
 labels = as.character(breaks)
 
@@ -239,10 +237,10 @@ plot.prec_suar =  plot.prec_suar + theme(panel.grid.major = element_blank(), pan
 #1st importance variable - Tseas 
 a.perrieri <- read.csv(file=paste0("Adansonia.perrieri/niche_graph_species_compared_anomaly.csv"), header=T,sep=";",dec=",")
 head(a.perrieri)
-range(a.perrieri$tseas) # 860 1958
-range(a.perrieri$tseasf) # 1040 2177
-round(mean(a.perrieri$tseas)) # 1392
-round(mean(a.perrieri$tseasf)) # 1535
+range(a.perrieri$tseas) 
+range(a.perrieri$tseasf) 
+round(mean(a.perrieri$tseas))
+round(mean(a.perrieri$tseasf))
 breaks <- c(round(seq(min(a.perrieri$tseas),max(a.perrieri$tseasf),length=8)))
 labels = as.character(breaks)
 
@@ -302,7 +300,7 @@ plot.cwd_perrieri =  plot.cwd_perrieri + theme(panel.grid.major = element_blank(
   
   labs(x="Climatic Water Deficit (mm)", y="",size=5) +
   labs(col = "") +
-  annotate("text", x  = 80, y = 0.0023 , size=7, label = "(h)") +
+  annotate("text", x  = 80, y = 0.0020 , size=7, label = "(h)") +
   theme(axis.title.x = element_text(size = rel(2),colour="black")) +
   theme(axis.title.y = element_text(size = rel(2),colour="black")) +
   theme(axis.text.x = element_text(size = rel(1.75),colour="black")) +
@@ -314,10 +312,10 @@ plot.cwd_perrieri =  plot.cwd_perrieri + theme(panel.grid.major = element_blank(
 a.rubrostipa <- read.csv(file=paste0("Adansonia.rubrostipa/niche_graph_species_compared_anomaly.csv"), header=T,sep=";",dec=",")
 
 ## 1st importance variable - Climatic Water Deficit
-range(a.rubrostipa$cwd) # 704 967
-range(a.rubrostipa$cwdf) # 1289.000 2029.333
-mean(a.rubrostipa$cwd) # 811.045
-mean(a.rubrostipa$cwdf) # 1672.713
+range(a.rubrostipa$cwd)
+range(a.rubrostipa$cwdf) 
+mean(a.rubrostipa$cwd) 
+mean(a.rubrostipa$cwdf) 
 breaks <- c(round(seq(min(a.rubrostipa$cwd),max(a.rubrostipa$cwdf),length=6)))
 labels = as.character(breaks)
 
@@ -352,10 +350,10 @@ plot.cwd_rubro =  plot.cwd_rubro + theme(panel.grid.major = element_blank(), pan
   theme(legend.position="none")
 
 ### 2nd Importance Variable - Prec
-range(a.rubrostipa$prec) # 340 1726
-round(range(a.rubrostipa$precf)) # 326 1559
-mean(a.rubrostipa$prec) # 1093.882
-mean(a.rubrostipa$precf) # 954.4527
+range(a.rubrostipa$prec) 
+round(range(a.rubrostipa$precf)) 
+mean(a.rubrostipa$prec) 
+mean(a.rubrostipa$precf) 
 breaks <- c(round(seq(min(a.rubrostipa$prec),max(a.rubrostipa$precf),length=8)))
 labels = as.character(breaks)
 
@@ -394,8 +392,8 @@ plot.prec_rubro =  plot.prec_rubro + theme(panel.grid.major = element_blank(), p
 a.madagascariensis <- read.csv(file=paste0("Adansonia.madagascariensis/niche_graph_species_compared_anomaly.csv"), header=T,sep=";",dec=",")
 
 # 1st importance variable - Tseas
-range(a.madagascariensis$tseas) # 903 2076
-range(a.madagascariensis$tseasf) # 1058.667 2186.667
+range(a.madagascariensis$tseas) 
+range(a.madagascariensis$tseasf) 
 
 breaks <- c(round(seq(min(a.madagascariensis$tseas),max(a.madagascariensis$tseasf),length=8)))
 labels = as.character(breaks)
@@ -422,7 +420,7 @@ plot.seas_mada =  plot.seas_mada + theme(panel.grid.major = element_blank(), pan
   
   labs(x="Temp. Seasonality (ºC sd x 100)", y = "A. madagascariensis",size=5) +
   labs(col = "") +
-  annotate("text", x  = 875, y = 0.0025 , size=7, label = "(e)") +
+  annotate("text", x  = 875, y = 0.0023 , size=7, label = "(e)") +
   theme(axis.title.x = element_text(size = rel(2),colour="black")) +
   theme(axis.title.y = element_text(size = rel(1.5),colour="black",face="italic")) +
   theme(axis.text.x = element_text(size = rel(1.75),colour="black")) +
@@ -431,10 +429,10 @@ plot.seas_mada =  plot.seas_mada + theme(panel.grid.major = element_blank(), pan
 
 
 ### 2nd importance variable - Tmean
-range(a.madagascariensis$tmean) # 243 275
-range(a.madagascariensis$tmeanf) #  271.0000 311.6667
-mean(a.madagascariensis$tmean) # 262
-mean(a.madagascariensis$tmeanf) # 296
+range(a.madagascariensis$tmean)
+range(a.madagascariensis$tmeanf) 
+mean(a.madagascariensis$tmean) 
+mean(a.madagascariensis$tmeanf) 
 
 breaks <- c(round(seq(min(a.madagascariensis$tmean),max(a.madagascariensis$tmeanf),length=8)))
 labels = as.character(breaks)
@@ -461,7 +459,7 @@ plot.mean_mada =  plot.mean_mada + theme(panel.grid.major = element_blank(), pan
   
   labs(x="Annual Mean Temperature (ºC x 10)", y="",size=5) +
   labs(col = "") +
-  annotate("text", x  = 241.5, y = 0.075 , size=7, label = "(f)") +
+  annotate("text", x  = 241.5, y = 0.059 , size=7, label = "(f)") +
   theme(axis.title.x = element_text(size = rel(2),colour="black")) +
   theme(axis.title.y = element_text(size = rel(2),colour="black")) +
   theme(axis.text.x = element_text(size = rel(1.75),colour="black")) +
@@ -473,10 +471,10 @@ plot.mean_mada =  plot.mean_mada + theme(panel.grid.major = element_blank(), pan
 a.grandidieri <- read.csv(file=paste0("Adansonia.grandidieri/niche_graph_species_compared_anomaly.csv"), header=T,sep=";",dec=",")
 
 # 1st Importance Variable - Prec
-range(a.grandidieri$prec) # 381 1033
-range(a.grandidieri$precf) # 347.0000 962.6667
-mean(a.grandidieri$prec) # 747.566
-mean(a.grandidieri$precf) # 707.908
+range(a.grandidieri$prec) 
+range(a.grandidieri$precf) 
+mean(a.grandidieri$prec)
+mean(a.grandidieri$precf)
 breaks <- c(round(seq(min(a.grandidieri$precf),max(a.grandidieri$prec),length=8)))
 labels = as.character(breaks)
 
@@ -512,10 +510,10 @@ plot.prec_grand =  plot.prec_grand + theme(panel.grid.major = element_blank(), p
 
 
 ## 2nd Importance Variable - Tmean
-range(a.grandidieri$tmean) # 242 - 261
-range(a.grandidieri$tmeanf) # 274 7
-mean(a.grandidieri$tmean) # 250
-mean(a.grandidieri$tmeanf) # 285
+range(a.grandidieri$tmean)
+range(a.grandidieri$tmeanf)
+mean(a.grandidieri$tmean)
+mean(a.grandidieri$tmeanf)
 breaks <- c(round(seq(min(a.grandidieri$tmean),max(a.grandidieri$tmeanf),length=8)))
 labels = as.character(breaks)
 
@@ -554,8 +552,8 @@ plot.mean_grand =  plot.mean_grand + theme(panel.grid.major = element_blank(), p
 a.za <- read.csv(file=paste0("Adansonia.za/niche_graph_species_compared_anomaly.csv"), header=T,sep=";",dec=",")
 head(a.za)
 # 1st Importance Variable - Prec
-range(a.za$prec) # 349 1842
-range(a.za$precf) # 325 1542
+range(a.za$prec)
+range(a.za$precf)
 
 breaks <- c(round(seq(min(a.za$precf),max(a.za$prec),length=8)))
 labels = as.character(breaks)
@@ -583,7 +581,7 @@ plot.prec_za =  plot.prec_za + theme(panel.grid.major = element_blank(), panel.g
   
   labs(x="Mean Annual Precipitation (mm.y-¹)", y = "A. za",size=5) +
   labs(col = "") +
-  annotate("text", x  = 250, y = 0.002 , size=7, label = "(m)") +
+  annotate("text", x  = 250, y = 0.0019 , size=7, label = "(m)") +
   theme(axis.title.x = element_text(size = rel(2),colour="black")) +
   theme(axis.title.y = element_text(size = rel(2),colour="black",face="italic")) +
   theme(axis.text.x = element_text(size = rel(1.75),colour="black")) +
@@ -591,10 +589,10 @@ plot.prec_za =  plot.prec_za + theme(panel.grid.major = element_blank(), panel.g
   theme(legend.position="none")
 
 ## 2nd Importance Variable - Tmean
-range(a.za$tmean) # 214 275
-range(a.za$tmeanf) # 250 311
-mean(a.za$tmean) # 243
-mean(a.za$tmeanf) # 278
+range(a.za$tmean)
+range(a.za$tmeanf)
+mean(a.za$tmean)
+mean(a.za$tmeanf)
 breaks <- c(round(seq(min(a.za$tmean),max(a.za$tmeanf),length=8)))
 labels = as.character(breaks)
 
@@ -635,10 +633,10 @@ head(a.digitata)
 ##1st Importance Variable - Tseas
 
 # range tseas 
-range(a.digitata$tseas) # 882 2473
-range(a.digitata$tseasf) # 1066 2561
-mean(a.digitata$tseas) # 1526
-mean(a.digitata$tseasf) # 1640
+range(a.digitata$tseas) 
+range(a.digitata$tseasf)
+mean(a.digitata$tseas)
+mean(a.digitata$tseasf) 
 breaks <- c(round(seq(min(a.digitata$tseas),max(a.digitata$tseasf),length=8)))
 labels = as.character(breaks)
 
@@ -673,10 +671,10 @@ plot.seas_dig =  plot.seas_dig + theme(panel.grid.major = element_blank(), panel
 
 
 ## 2nd Importance Variable - Climatic Water Deficit
-range(a.digitata$cwd) # 625 - 920
-range(a.digitata$cwdf) # 1218.667 2001.000
-mean(a.digitata$cwd) # 796.666
-mean(a.digitata$cwdf) # 1692
+range(a.digitata$cwd) 
+range(a.digitata$cwdf) 
+mean(a.digitata$cwd)
+mean(a.digitata$cwdf) 
 breaks <- c(round(seq(min(a.digitata$cwd),max(a.digitata$cwdf),length=8)))
 labels = as.character(breaks)
 
@@ -732,8 +730,6 @@ plot_densities_curves <- grid.arrange(plot.seas_dig,plot.cwd_dig,
 ggsave(file=paste0("./outputs/all_species_current_future_niche_comparison.png"),
        plot=plot_densities_curves,width=18,height=15,dpi="print")
 
-# ggsave(file=paste0("./outputs/all_species_current_future_niche_comparison.pdf"),
-#        plot=plot_densities_curves,width=18,height=15,dpi="print")
 
 # ===========
 # End of file
