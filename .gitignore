@@ -3,8 +3,6 @@ Adansonia*
 maxent
 data/*
 !data/baobabs_raw_data
-outputs/*
-!outputs/plot_SDA_threat.png
 
 # biblio bak
 bib/*.bak
