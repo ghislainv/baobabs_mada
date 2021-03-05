@@ -157,7 +157,7 @@ lay_6 <- rbind(c(rep(seq(1,1,by=1),each=3)),
 plot_world_anomaly <- grid.arrange(cur_ws, ano_ws, fut_ws,layout_matrix=lay_6)
 
 ggsave(file=paste0("./outputs/anomaly_world_chart.png"),
-       plot=plot_world_anomaly,width=11,height=8,dpi=300)
+       plot=plot_world_anomaly,width=11,height=8,dpi=300,scale=0.8)
 
 # ===========
 # End of file

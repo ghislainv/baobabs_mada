@@ -1,4 +1,4 @@
-# baobabs_mada
+# Baobabs Mada
 
 This GitHub repository includes the code and data for the following scientific article:
 
@@ -14,7 +14,25 @@ All the results of the study can be reproduced executing the R script `R/baoabas
 
 ## Results
 
+<<<<<<< HEAD
 All the results of the study (tables and figures) are saved in the `outputs` folder.
+=======
+All the results are saved in the `outputs` folder.
+
+<img alt="Bioclimatic niche of studied species" src="outputs/Fig_ap_sps_niche.png" width="500">
+
+Figure 1: **Bioclimatic niche of the seven baobabs species found in Madagascar**.
+
+Check the most threatened baobab species.
+
+<img alt="Threatened baobab species" src="outputs/plot_SDA_threat.png" width="500">
+
+Figure 2: **The most threatened Malagasy baobab species (2085) under two dispersal hypothesis (Full-Dispersal and Zero-Dispersal) and RCP 8.5**.
+
+Also check how latitude and elevation will change inside threatened baobab projected distribution in the present and in the future (2055 and 2085).
+
+<img alt="Latitudinal and elevation change of  threatened baobab species" src="outputs/lat_ele_all_species_within_SDAcf_threat.png" width='500'>
+>>>>>>> 8402e913a3de0d5e6f4638c2a7170aed1b2ef69a
 
 <img alt="SDA" src="outputs/plot_SDA_threat.png" width="500">
 

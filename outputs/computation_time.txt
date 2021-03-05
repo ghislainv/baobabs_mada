@@ -1,1 +1,1 @@
-Computation time (min): 106.78
+Computation time (min): 82.37
