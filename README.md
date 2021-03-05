@@ -16,7 +16,7 @@ All the results of the study can be reproduced executing the R script `R/baoabas
 
 All the results of the study (tables and figures) are saved in the `outputs` folder.
 
-<img alt="SDA" src="outputs/plot_SDA_threat.png" width="500" align="center">
+<center><img alt="SDA" src="outputs/plot_SDA_threat.png" width="600"></center>
 
 Figure: **Species range contraction under climate change for the four threatened baobab species.** The four species are _A. madagascariensis_, _A. perrieri_, _A. rubrostipa_, and _A. suarezensis_ (one species per row). (a, e, i, m) Occurrence points over Madagascar elevation map (elevation in m); (b, f, j, n) Current predicted species distribution. Legend indicates the number of models (0-4) predicting the species presence; (c,g,k,o) Projected species distribution in 2085 under scenario RCP 8.5 and the full-dispersal hypothesis. Legend indicates the number of models (0-12) predicting the species presence; (d,h,l,p) Projected species distribution in 2085 under scenario RCP 8.5 and the zero-dispersal hypothesis. Legend indicates the number of models (0-12) predicting the species presence. For the distribution maps, the species is assumed to be present (green areas) when a majority of models predicts a presence (votes >= 2 in the present, and >= 6 in the future). The species is considered absent (grey areas) when no model (votes = 0), or a minority of models (votes < 2 in the present, and < 6 in the future), predicts a presence. Maps for _A. perrieri_ and _A. suarezensis_, two species distributed at the extreme North of Madagascar, have been zoomed in (black squares).
 
