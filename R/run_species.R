@@ -72,7 +72,7 @@ run.species <- function (i, path_to_maxent.jar, run.models=TRUE) {
   
   ## Number of 1km pixels with at least one presence
   npix <- nrow(d)
-  write_csv(npix, here("data/baobabs/1km_pixels_one_presence.csv"))
+  write.csv(npix, here("data/baobabs/1km_pixels_one_presence.csv"))
   
   ## BIOMOD_FormatingData
   set.seed(1234) ## Reproducible pseudo-absences
