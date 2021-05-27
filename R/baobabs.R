@@ -120,8 +120,7 @@ n.species <- length(sp.names)
 ## Computation per species
 ##==================================
 ## Path to MaxEnt (indicate your path)
-
-path_to_maxent.jar <- here("maxent")
+path_to_maxent.jar= c('D:/OneDrive/Cap_1_outros_papers/script_art_1/maxent')
 ## Load run_species() function
 source(here("R/run_species.R"))
 ## Make a cluster with all possible cores
@@ -132,7 +131,7 @@ registerDoParallel(clust)
 ## Return number of parallel workers
 getDoParWorkers() 
 ## Package names for parallel computations
-pkg.names.clust <- c("rgdal","sp","raster","biomod2")
+pkg.names.clust <- c("rgdal","sp","raster","biomod2","here")
 ## Parallel computations
 t.start <- Sys.time() ## Start the clock
 foreach(i=1:n.species,.packages=pkg.names.clust) %dopar% run.species(i, path_to_maxent.jar, run.models=TRUE)
