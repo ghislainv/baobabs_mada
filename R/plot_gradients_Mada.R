@@ -98,6 +98,8 @@ a5 <- grid.arrange( map.mat, map.mat2, lat.mat1, lat.mat2, nrow=2, ncol=2)
 
 ggsave(file=paste0("./outputs/four_chart_lat_elevations.png"),
        plot=a5,width=12,height=12,dpi=300)
+ggsave(filename=here("outputs/four_chart_lat_elevation.pdf"), plot=a5,
+       width=12, height=12, dpi=300)
 
 # ===========
 # End of file
