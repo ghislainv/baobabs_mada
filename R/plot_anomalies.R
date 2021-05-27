@@ -177,27 +177,27 @@ col_scale_ano_cwd <- scale_fill_gradientn(
 p1 <- plot_anomaly(r=var_85_2080[["tmean"]], label="(a)",
                    title="Temperature\n(°C x 10)") +
     col_scale_var_tmean
-p2 <- plot_anomaly(r=ano_85_2080[["tmean"]], label="(a')",
+p2 <- plot_anomaly(r=ano_85_2080[["tmean"]], label="(e)",
                    title="") +
     col_scale_ano_tmean
 p3 <- plot_anomaly(r=var_85_2080[["tseas"]], label="(b)",
                    title="T. seasonality\n(°C sd x 100)") +
     col_scale_var_tseas
-p4 <- plot_anomaly(r=ano_85_2080[["tseas"]], label="(b')",
+p4 <- plot_anomaly(r=ano_85_2080[["tseas"]], label="(f)",
                    title="") +
     col_scale_ano_tseas
 ## prec
 p5 <- plot_anomaly(r=var_85_2080[["prec"]], label="(c)",
                    title="Precipitation\n(mm/y)") +
     col_scale_var_prec
-p6 <- plot_anomaly(r=ano_85_2080[["prec"]], label="(c')",
+p6 <- plot_anomaly(r=ano_85_2080[["prec"]], label="(g)",
                    title="") +
     col_scale_ano_prec
 ## cwd
 p7 <- plot_anomaly(r=var_85_2080[["cwd"]], label="(d)",
                    title="Climatic water deficit\n(mm/y)") +
     col_scale_var_cwd
-p8 <- plot_anomaly(r=ano_85_2080[["cwd"]], label="(d')",
+p8 <- plot_anomaly(r=ano_85_2080[["cwd"]], label="(h)",
                    title="") +
     col_scale_ano_cwd
 
@@ -215,8 +215,8 @@ plot_anomalies <- grid.arrange(tgrob_pres, tgrob_fut,
 ggsave(filename=here("outputs/climatic_anomalies.png"), plot=plot_anomalies,
        width=textwidth, height=0.8*textwidth, dpi=300, units="cm")
 
-# ggsave(filename=here("outputs/Fig1_climatic_anomalies.pdf"), plot=plot_anomalies,
-#       width=8, height=7, dpi="print")
+ggsave(filename=here("outputs/Fig1_climatic_anomalies.pdf"), plot=plot_anomalies,
+      width=textwidth, height=0.8*textwidth, dpi=300, units="cm")
 
 # ===========
 # End of file
