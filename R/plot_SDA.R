@@ -206,7 +206,7 @@ j3t <- plot_current_SDA(r=ca_rubro,label="(j)", title="")
 n4t <- plot_current_SDA(r=ca_suare,label="(n)", title="", xlim=c(xmin_sua, xmax_sua), ylim=c(ymin_sua, ymax_sua))
 
 # =============================================
-# Future SDA
+# Future SDA RCP 8.5
 # =============================================
 
 ## Non-threatened species
@@ -249,6 +249,51 @@ h2t <- plot_future_SDA(r=caZD_perri, label="(h)", title="", xlim=c(xmin_per, xma
 l3t <- plot_future_SDA(r=caZD_rubro, label="(l)", title="")
 p4t <- plot_future_SDA(r=caZD_suare, label="(p)", title="", xlim=c(xmin_sua, xmax_sua), ylim=c(ymin_sua, ymax_sua))
 
+
+# =============================================
+# Future SDA RCP 4.5
+# =============================================
+
+## Non-threatened species
+cafut_dig_45 <- raster(paste0("Adansonia.digitata/caFut_45_2080.tif"))
+cafut_gran_45 <- raster(paste0("Adansonia.grandidieri/caFut_45_2080.tif"))
+cafut_za_45 <- raster(paste0("Adansonia.za/caFut_45_2080.tif"))
+# Zero-dispersal hypothesis
+caZD_dig_45 <- raster(paste0("Adansonia.digitata/caZD_45_2080.tif"))
+caZD_gran_45 <- raster(paste0("Adansonia.grandidieri/caZD_45_2080.tif"))
+caZD_za_45 <- raster(paste0("Adansonia.za/caZD_45_2080.tif"))
+
+## Threatened species
+cafut_mada_45 <- raster(paste0("Adansonia.madagascariensis/caFut_45_2080.tif"))
+cafut_perri_45 <- raster(paste0("Adansonia.perrieri/caFut_45_2080.tif"))
+cafut_rubro_45 <- raster(paste0("Adansonia.rubrostipa/caFut_45_2080.tif"))
+cafut_suare_45 <- raster(paste0("Adansonia.suarezensis/caFut_45_2080.tif"))
+# Zero-dispersal hypothesis
+caZD_mada_45 <- raster(paste0("Adansonia.madagascariensis/caZD_45_2080.tif"))
+caZD_perri_45 <- raster(paste0("Adansonia.perrieri/caZD_45_2080.tif"))
+caZD_rubro_45 <- raster(paste0("Adansonia.rubrostipa/caZD_45_2080.tif"))
+caZD_suare_45 <- raster(paste0("Adansonia.suarezensis/caZD_45_2080.tif"))
+
+## Non-threatened species
+c1_45 <- plot_future_SDA(r=cafut_dig_45, label="(c)", title="Full Dispersal\nRCP 4.5 2085")
+g2_45 <- plot_future_SDA(r=cafut_gran_45, label="(g)", title="")
+k3_45 <- plot_future_SDA(r=cafut_za_45, label="(k)", title="")
+# Zero-dispersal hypothesis
+d1_45 <- plot_future_SDA(r=caZD_dig_45, label="(d)", title="Zero Dispersal\nRCP 4.5 2085")
+h2_45 <- plot_future_SDA(r=caZD_gran_45, label="(h)", title="")
+l3_45 <- plot_future_SDA(r=caZD_za_45, label="(l)", title="")
+
+## Threatened species
+c1t_45 <- plot_future_SDA(r=cafut_mada_45, label="(c)", title="Full Dispersal\nRCP 4.5 2085")
+g2t_45 <- plot_future_SDA(r=cafut_perri_45, label="(g)", title="", xlim=c(xmin_per, xmax_per), ylim=c(ymin_per, ymax_per))
+k3t_45 <- plot_future_SDA(r=cafut_rubro_45, label="(k)", title="")
+o4t_45 <- plot_future_SDA(r=cafut_suare_45, label="(o)", title="", xlim=c(xmin_sua, xmax_sua), ylim=c(ymin_sua, ymax_sua))
+# Zero-dispersal hypothesis
+d1t_45 <- plot_future_SDA(r=caZD_mada_45, label="(d)", title="Zero Dispersal\nRCP 4.5 2085")
+h2t_45 <- plot_future_SDA(r=caZD_perri_45, label="(h)", title="", xlim=c(xmin_per, xmax_per), ylim=c(ymin_per, ymax_per))
+l3t_45 <- plot_future_SDA(r=caZD_rubro_45, label="(l)", title="")
+p4t_45 <- plot_future_SDA(r=caZD_suare_45, label="(p)", title="", xlim=c(xmin_sua, xmax_sua), ylim=c(ymin_sua, ymax_sua))
+
 # =============================================
 # Text
 # =============================================
@@ -280,15 +325,28 @@ lay <- rbind(c(1, 4:7), c(2, 8:11), c(3, 12:15))
 ## Column widths and row heights
 w <- c(1, 4, 4, 4, 4)
 h <- rep(1, 3)
-## Arrange plots
+## Arrange plots RCP 8.5 Non-threatened
 plot_baobabs_non_threat <- grid.arrange(
   tgrob_dig, tgrob_gran, tgrob_za,
   a1,b1,c1,d1,e2,f2,g2,h2,
   i3,j3,k3,l3,
   layout_matrix=lay, widths=w, heights=h)
+## Arrange plots RCP 4.5 Non-threatened
+plot_baobabs_non_threat_45 <- grid.arrange(
+  tgrob_dig, tgrob_gran, tgrob_za,
+  a1,b1,c1_45,d1_45,e2,f2,g2_45,h2_45,
+  i3,j3,k3_45,l3_45,
+  layout_matrix=lay, widths=w, heights=h)
+
 ## Save
 ggsave(file=here("outputs/plot_SDA_non_threat.png"),
        plot=plot_baobabs_non_threat, width=9, height=10, dpi="print")
+ggsave(file=here("outputs/plot_SDA_non_threat.pdf"),
+       plot=plot_baobabs_non_threat, width=9, height=10, dpi="print")
+ggsave(file=here("outputs/plot_SDA_non_threat_45.png"),
+       plot=plot_baobabs_non_threat_45, width=9, height=10, dpi="print")
+ggsave(file=here("outputs/plot_SDA_non_threat_45.pdf"),
+       plot=plot_baobabs_non_threat_45, width=9, height=10, dpi="print")
 
 ## Threatened species
 lay <- rbind(c(1, 5:8), c(2, 9:12),
@@ -301,9 +359,20 @@ plot_baobabs_threatened <- grid.arrange(
   a1t,b1t,c1t,d1t,e2t,f2t,g2t,h2t,
   i3t,j3t,k3t,l3t,m4t,n4t,o4t,p4t,
   layout_matrix=lay, widths=w, heights=h)
+plot_baobabs_threatened_45 <- grid.arrange(
+  tgrob_mada, tgrob_perri, tgrob_rubro,tgrob_suare,
+  a1t,b1t,c1t_45,d1t_45,e2t,f2t,g2t_45,h2t_45,
+  i3t,j3t,k3t_45,l3t_45,m4t,n4t,o4t_45,p4t_45,
+  layout_matrix=lay, widths=w, heights=h)
 ## Save
 ggsave(file=here("outputs/plot_SDA_threat.png"),
+       plot=plot_baobabs_threatened, width=9, height=12, dpi=600)
+ggsave(file=here("outputs/plot_SDA_threat.pdf"),
        plot=plot_baobabs_threatened, width=9, height=12, dpi="print")
+ggsave(file=here("outputs/plot_SDA_threat_45.png"),
+       plot=plot_baobabs_threatened_45, width=9, height=12, dpi=600)
+ggsave(file=here("outputs/plot_SDA_threat_45.pdf"),
+       plot=plot_baobabs_threatened_45, width=9, height=12, dpi="print")
 
 # ===========
 # End of file
