@@ -254,6 +254,24 @@ p4t <- plot_future_SDA(r=caZD_suare, label="(p)", title="", xlim=c(xmin_sua, xma
 # Future SDA RCP 4.5
 # =============================================
 
+aa1 <- plot_alt(m=environ$alt,n=a_digi,label="(a)", title="Presence Points\nElevation(m)")
+bb1 <- plot_alt(m=environ$alt,n=a_grand,label="(e)", title="")
+cc1 <- plot_alt(m=environ$alt,n=a_mada,label="(i)", title="")
+dd1 <- plot_alt(m=environ$alt,n=a_perri,label="(m)", title="") + rect_perrieri
+ee1 <- plot_alt(m=environ$alt,n=a_rubro,label="(q)", title="") 
+ff1 <- plot_alt(m=environ$alt,n=a_suare,label="(u)", title="") + rect_suarezensis
+gg1 <- plot_alt(m=environ$alt,n=a_za,label="(y)", title="")
+
+# Current SDA
+a11 <- plot_current_SDA(r=ca_dig,label="(b)", title="Current\nDistribution")
+b11 <- plot_current_SDA(r=ca_gran,label="(f)", title="")
+c11 <- plot_current_SDA(r=ca_mada,label="(j)", title="")
+d11 <- plot_current_SDA(r=ca_perri,label="(n)", title="", xlim=c(xmin_per, xmax_per), ylim=c(ymin_per, ymax_per))
+e11 <- plot_current_SDA(r=ca_rubro,label="(r)", title="")
+f11 <- plot_current_SDA(r=ca_suare,label="(v)", title="", xlim=c(xmin_sua, xmax_sua), ylim=c(ymin_sua, ymax_sua))
+g11 <- plot_current_SDA(r=ca_za,label="(z)", title="")
+
+
 ## Non-threatened species
 cafut_dig_45 <- raster(paste0("Adansonia.digitata/caFut_45_2080.tif"))
 cafut_gran_45 <- raster(paste0("Adansonia.grandidieri/caFut_45_2080.tif"))
@@ -277,22 +295,23 @@ caZD_suare_45 <- raster(paste0("Adansonia.suarezensis/caZD_45_2080.tif"))
 ## Non-threatened species
 c1_45 <- plot_future_SDA(r=cafut_dig_45, label="(c)", title="Full Dispersal\nRCP 4.5 2085")
 g2_45 <- plot_future_SDA(r=cafut_gran_45, label="(g)", title="")
-k3_45 <- plot_future_SDA(r=cafut_za_45, label="(k)", title="")
+k3_45 <- plot_future_SDA(r=cafut_mada_45, label="(k)", title="")
 # Zero-dispersal hypothesis
 d1_45 <- plot_future_SDA(r=caZD_dig_45, label="(d)", title="Zero Dispersal\nRCP 4.5 2085")
 h2_45 <- plot_future_SDA(r=caZD_gran_45, label="(h)", title="")
-l3_45 <- plot_future_SDA(r=caZD_za_45, label="(l)", title="")
+l3_45 <- plot_future_SDA(r=caZD_mada_45, label="(l)", title="")
 
 ## Threatened species
-c1t_45 <- plot_future_SDA(r=cafut_mada_45, label="(c)", title="Full Dispersal\nRCP 4.5 2085")
-g2t_45 <- plot_future_SDA(r=cafut_perri_45, label="(g)", title="", xlim=c(xmin_per, xmax_per), ylim=c(ymin_per, ymax_per))
-k3t_45 <- plot_future_SDA(r=cafut_rubro_45, label="(k)", title="")
-o4t_45 <- plot_future_SDA(r=cafut_suare_45, label="(o)", title="", xlim=c(xmin_sua, xmax_sua), ylim=c(ymin_sua, ymax_sua))
+o2t_45 <- plot_future_SDA(r=cafut_perri_45, label="(o)", title="", xlim=c(xmin_per, xmax_per), ylim=c(ymin_per, ymax_per))
+s3t_45 <- plot_future_SDA(r=cafut_rubro_45, label="(s)", title="")
+x4t_45 <- plot_future_SDA(r=cafut_suare_45, label="(w)", title="", xlim=c(xmin_sua, xmax_sua), ylim=c(ymin_sua, ymax_sua))
+aa1t_45 <- plot_future_SDA(r=cafut_za_45, label="(a')", title="")
+
 # Zero-dispersal hypothesis
-d1t_45 <- plot_future_SDA(r=caZD_mada_45, label="(d)", title="Zero Dispersal\nRCP 4.5 2085")
-h2t_45 <- plot_future_SDA(r=caZD_perri_45, label="(h)", title="", xlim=c(xmin_per, xmax_per), ylim=c(ymin_per, ymax_per))
-l3t_45 <- plot_future_SDA(r=caZD_rubro_45, label="(l)", title="")
-p4t_45 <- plot_future_SDA(r=caZD_suare_45, label="(p)", title="", xlim=c(xmin_sua, xmax_sua), ylim=c(ymin_sua, ymax_sua))
+p1t_45 <- plot_future_SDA(r=caZD_perri_45, label="(p)",title="", xlim=c(xmin_per, xmax_per), ylim=c(ymin_per, ymax_per))
+t2t_45 <- plot_future_SDA(r=caZD_rubro_45, label="(t)", title="")
+w3t_45 <- plot_future_SDA(r=caZD_suare_45, label="(x)", title="", xlim=c(xmin_sua, xmax_sua), ylim=c(ymin_sua, ymax_sua))
+bb4t_45 <- plot_future_SDA(r=caZD_za_45, label="(b')", title="")
 
 # =============================================
 # Text
@@ -308,6 +327,8 @@ tgrob_za <- textGrob("A. za",rot=90, gp=gpar(cex=1.25,fontface="italic"),
 
 ## Threatened species
 tgrob_mada <- textGrob("A. madagascariensis",rot=90, gp=gpar(cex=1.25,fontface="italic"),
+                       hjust=0.5, vjust=2)
+tgrob_mada2 <- textGrob("A. mada.",rot=90, gp=gpar(cex=1.25,fontface="italic"),
                        hjust=0.5, vjust=2)
 tgrob_perri <- textGrob("A. perrieri",rot=90, gp=gpar(cex=1.25,fontface="italic"),
                         hjust=0.5, vjust=2)
@@ -325,43 +346,58 @@ lay <- rbind(c(1, 4:7), c(2, 8:11), c(3, 12:15))
 ## Column widths and row heights
 w <- c(1, 4, 4, 4, 4)
 h <- rep(1, 3)
-## Arrange plots RCP 8.5 Non-threatened
+## Arrange plots RCP 8.5 Non-threatened 
 plot_baobabs_non_threat <- grid.arrange(
   tgrob_dig, tgrob_gran, tgrob_za,
   a1,b1,c1,d1,e2,f2,g2,h2,
   i3,j3,k3,l3,
   layout_matrix=lay, widths=w, heights=h)
-## Arrange plots RCP 4.5 Non-threatened
-plot_baobabs_non_threat_45 <- grid.arrange(
-  tgrob_dig, tgrob_gran, tgrob_za,
-  a1,b1,c1_45,d1_45,e2,f2,g2_45,h2_45,
-  i3,j3,k3_45,l3_45,
-  layout_matrix=lay, widths=w, heights=h)
+
+####all species together - Appendix figure!
+## Non-threatened species
+lay2 <- rbind(c(1, 8:11), c(2, 12:15), c(3, 16:19),c(4, 20:23),
+              c(5, 24:27),c(6, 28:31),c(7, 32:35))
+
+## Column widths and row heights
+w2 <- c(1, 4, 4, 4, 4)
+h2 <- rep(1, 7)
+
+plot_baobabs_appendix_45 <- grid.arrange(
+ tgrob_dig,tgrob_gran,tgrob_mada2,tgrob_perri,tgrob_rubro,tgrob_suare,tgrob_za,
+  aa1,a11,c1_45,d1_45,bb1,b11,g2_45,h2_45,
+  cc1,c11,k3_45,l3_45,dd1,d11,o2t_45,p1t_45,ee1,e11,s3t_45,t2t_45,ff1,f11,x4t_45,w3t_45,
+  gg1,g11,aa1t_45,bb4t_45,
+  layout_matrix=lay2, widths=w2, heights=h2)
 
 ## Save
 ggsave(file=here("outputs/plot_SDA_non_threat.png"),
        plot=plot_baobabs_non_threat, width=9, height=10, dpi="print")
 ggsave(file=here("outputs/plot_SDA_non_threat.pdf"),
        plot=plot_baobabs_non_threat, width=9, height=10, dpi="print")
-ggsave(file=here("outputs/plot_SDA_non_threat_45.png"),
-       plot=plot_baobabs_non_threat_45, width=9, height=10, dpi="print")
+ggsave(file=here("outputs/plot_SDA_appendix_45.png"),
+       plot=plot_baobabs_appendix_45, width=9, height=14, dpi="print")
 ggsave(file=here("outputs/plot_SDA_non_threat_45.pdf"),
-       plot=plot_baobabs_non_threat_45, width=9, height=10, dpi="print")
+       plot=plot_baobabs_appendix_45, width=11, height=14, dpi="print")
 
-## Threatened species
 lay <- rbind(c(1, 5:8), c(2, 9:12),
              c(3, 13:16), c(4, 17:20))
 ## Column widths and row heights
 w <- c(1, 4, 4, 4, 4)
 h <- rep(1, 4)
+
+## Arrange plots RCP 8.5 threatened 
+
 plot_baobabs_threatened <- grid.arrange(
   tgrob_mada, tgrob_perri, tgrob_rubro,tgrob_suare,
   a1t,b1t,c1t,d1t,e2t,f2t,g2t,h2t,
   i3t,j3t,k3t,l3t,m4t,n4t,o4t,p4t,
   layout_matrix=lay, widths=w, heights=h)
+
+## Arrange plots RCP 4.5 threatened (attention, Digi is threatened under RCP 4.5)
+
 plot_baobabs_threatened_45 <- grid.arrange(
-  tgrob_mada, tgrob_perri, tgrob_rubro,tgrob_suare,
-  a1t,b1t,c1t_45,d1t_45,e2t,f2t,g2t_45,h2t_45,
+  tgrob_dig, tgrob_perri, tgrob_rubro,tgrob_suare,
+  a1t,b1,c1_45,d1_45,e2t,f2t,g2t_45,h2t_45,
   i3t,j3t,k3t_45,l3t_45,m4t,n4t,o4t_45,p4t_45,
   layout_matrix=lay, widths=w, heights=h)
 ## Save
