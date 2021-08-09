@@ -86,7 +86,7 @@ my_plot_tseas <-  my_plot + theme(panel.grid.major = element_blank(), panel.grid
                                  #legend.text = element_text(face= "italic",size=15),
                                  legend.title=element_blank(),
                                  panel.background = element_blank(), axis.line = element_line(colour = "black")) +
-  labs(x="Temp. Seasonality (sd x 100 ºC)", y = "Density",size=5) +
+  labs(x="Temp. Seasonality (sd x 100 ÂºC)", y = "Density",size=5) +
   theme(legend.position="none") + theme_par
   
 # Density plots ### Annual Mean Temperature
@@ -104,7 +104,7 @@ my_plot_tmean <-  my_plot2 + theme(panel.grid.major = element_blank(), panel.gri
                                   legend.text = element_text(face= "italic",size=12),
                                   legend.title=element_blank(),
                                   panel.background = element_blank(), axis.line = element_line(colour = "black")) +
-  labs(x="Mean Annual Temperature (ºC x 10) ", y = "Density",size=5) +
+  labs(x="Mean Annual Temperature (ÂºC x 10) ", y = "Density",size=5) +
   theme(legend.key.size = unit(0.5, "cm")) + theme_par
 library(lemon)  
 my_plot_tmean <- lemon::reposition_legend(my_plot_tmean, 'top left', offset = 0.05)
@@ -122,7 +122,7 @@ my_plot_prec <-  my_plot3 + theme(panel.grid.major = element_blank(), panel.grid
                              #legend.text = element_text(face= "italic",size=15),
                              legend.title=element_blank(),
                              panel.background = element_blank(), axis.line = element_line(colour = "black")) +
-  labs(x="Mean Annual Precipitation (mm.y-¹)", y = "Density",size=5) +
+  labs(x="Mean Annual Precipitation (mm.y-Â¹)", y = "Density",size=5) +
   theme(legend.position="none") + theme_par
   
 # Density plots ### Climatic Water Deficit
@@ -180,24 +180,24 @@ color_present = "#2D708EFF"
 color_future = "#85D54AFF" 
 plot.seas_suar  = ggplot(a.suare, aes(x=tseas, y=..density..)) + 
   geom_density(aes(tseas),fill=color_present, alpha=.5) + 
-  geom_vline(aes(xintercept=mean(tseas)),color="darkorange",linetype="solid",size=1)+
-  geom_vline(aes(xintercept=quantile(tseas,0.975)),color="darkorange",linetype="dashed",size=1) +
-  geom_vline(aes(xintercept=quantile(tseas,0.025)),color="darkorange",linetype="dashed",size=1) +
+  geom_vline(aes(xintercept=mean(tseas)),color="#2D708EFF",linetype="solid",size=2)+
+  geom_vline(aes(xintercept=quantile(tseas,0.975)),color="#2D708EFF",linetype="dashed",size=2) +
+  geom_vline(aes(xintercept=quantile(tseas,0.025)),color="#2D708EFF",linetype="dashed",size=2) +
   
   geom_density(aes(tseasf), fill=color_future,alpha=.5) +
-  geom_vline(aes(xintercept=mean(tseasf)),color="black",linetype="solid",size=1)+
-  geom_vline(aes(xintercept=quantile(tseasf,0.975)),color="black",linetype="dashed",size=1) +
-  geom_vline(aes(xintercept=quantile(tseasf,0.025)),color="black",linetype="dashed",size=1) +
+  geom_vline(aes(xintercept=mean(tseasf)),color="#85D54AFF",linetype="solid",size=2)+
+  geom_vline(aes(xintercept=quantile(tseasf,0.975)),color="#85D54AFF",linetype="dashed",size=2) +
+  geom_vline(aes(xintercept=quantile(tseasf,0.025)),color="#85D54AFF",linetype="dashed",size=2) +
   
   scale_x_continuous(limits = c(1150,1550), breaks = breaks, labels = labels) +
   scale_y_continuous(labels = scales::number_format(accuracy = 0.001)) +
-  scale_color_manual(values = c('tseas' = 'darkorange', 'tseasf' = 'black'))+
+  scale_color_manual(values = c('tseas' = '#2D708EFF', 'tseasf' = '#85D54AFF'))+
   scale_fill_viridis(alpha=1,begin= 0.65,end=0.7, discrete=T,option="D")
 
 plot.seas_suar =  plot.seas_suar + theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
                                legend.text = element_blank(),
                                panel.background = element_blank(), axis.line = element_line(colour = "black"))+
-  labs(x="Temp. Seasonality (ºC sd x 100)", y = "A. suarezensis",size=5) +
+  labs(x="Temp. Seasonality (ÂºC sd x 100)", y = "A. suarezensis",size=5) +
   labs(col = "") +
   annotate("text", x  = 1190, y = 0.0105 , size=8, label = "(k)") +
   theme(axis.title.x = element_text(size = rel(2.25),colour="black")) +
@@ -216,25 +216,25 @@ labels = as.character(breaks)
 
 plot.prec_suar = ggplot(a.suare, aes(x=prec, y=..density..)) + 
   geom_density(aes(prec),fill=color_present, alpha=.5) + 
-  geom_vline(aes(xintercept=mean(prec)),color="darkorange",linetype="solid",size=1)+
-  geom_vline(aes(xintercept=quantile(prec,0.975)),color="darkorange",linetype="dashed",size=1) +
-  geom_vline(aes(xintercept=quantile(prec,0.025)),color="darkorange",linetype="dashed",size=1) +
+  geom_vline(aes(xintercept=mean(prec)),color="#2D708EFF",linetype="solid",size=1)+
+  geom_vline(aes(xintercept=quantile(prec,0.975)),color="#2D708EFF",linetype="dashed",size=2) +
+  geom_vline(aes(xintercept=quantile(prec,0.025)),color="#2D708EFF",linetype="dashed",size=2) +
   
   geom_density(aes(precf),fill=color_future, alpha=.5) + 
-  geom_vline(aes(xintercept=mean(precf)),color="black",linetype="solid",size=1)+
-  geom_vline(aes(xintercept=quantile(precf,0.975)),color="black",linetype="dashed",size=1) +
-  geom_vline(aes(xintercept=quantile(precf,0.025)),color="black",linetype="dashed",size=1) +
+  geom_vline(aes(xintercept=mean(precf)),color="#85D54AFF",linetype="solid",size=1)+
+  geom_vline(aes(xintercept=quantile(precf,0.975)),color="#85D54AFF",linetype="dashed",size=2) +
+  geom_vline(aes(xintercept=quantile(precf,0.025)),color="#85D54AFF",linetype="dashed",size=2) +
 
   scale_x_continuous(limits = c(800,1600), breaks = breaks, labels = labels) +
   scale_y_continuous(labels = scales::number_format(accuracy = 0.001)) +
-  scale_color_manual(values = c('prec' = 'darkorange', 'precf' = 'black'))+
+  scale_color_manual(values = c('prec' = '#2D708EFF', 'precf' = '#85D54AFF'))+
   scale_fill_viridis(alpha=1,begin= 0.65,end=0.7, discrete=T,option="D")
 
 plot.prec_suar =  plot.prec_suar + theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
                                    legend.text = element_blank(),
                                    panel.background = element_blank(), axis.line = element_line(colour = "black"))+
   
-  labs(x="Mean Annual Precipitation (mm.y-¹)", y = "",size=5) +
+  labs(x="Mean Annual Precipitation (mm.y-Â¹)", y = "",size=5) +
   labs(col = "") +
   annotate("text", x  = 825, y = 0.0032 , size=8, label = "(l)") +
   theme(axis.title.x = element_text(size = rel(2.25),colour="black")) +
@@ -258,18 +258,18 @@ labels = as.character(breaks)
 
 plot.seas_per = ggplot(a.perrieri, aes(x=tseas, y=..density..)) + 
   geom_density(aes(tseas),fill=color_present, alpha=.5) + 
-  geom_vline(aes(xintercept=mean(tseas)),color="darkorange",linetype="solid",size=1)+
-  geom_vline(aes(xintercept=quantile(tseas,0.975)),color="darkorange",linetype="dashed",size=1) +
-  geom_vline(aes(xintercept=quantile(tseas,0.025)),color="darkorange",linetype="dashed",size=1) +
+  geom_vline(aes(xintercept=mean(tseas)),color="#2D708EFF",linetype="solid",size=2)+
+  geom_vline(aes(xintercept=quantile(tseas,0.975)),color="#2D708EFF",linetype="dashed",size=2) +
+  geom_vline(aes(xintercept=quantile(tseas,0.025)),color="#2D708EFF",linetype="dashed",size=2) +
   
   geom_density(aes(tseasf),fill=color_future, alpha=.5) + 
-  geom_vline(aes(xintercept=mean(tseasf)),color="black",linetype="solid",size=1)+
-  geom_vline(aes(xintercept=quantile(tseasf,0.975)),color="black",linetype="dashed",size=1) +
-  geom_vline(aes(xintercept=quantile(tseasf,0.025)),color="black",linetype="dashed",size=1) +
+  geom_vline(aes(xintercept=mean(tseasf)),color="#85D54AFF",linetype="solid",size=2)+
+  geom_vline(aes(xintercept=quantile(tseasf,0.975)),color="#85D54AFF",linetype="dashed",size=2) +
+  geom_vline(aes(xintercept=quantile(tseasf,0.025)),color="#85D54AFF",linetype="dashed",size=2) +
 
   scale_x_continuous(limits = c(750, 2250), breaks = breaks, labels = labels) +
   scale_y_continuous(labels = scales::number_format(accuracy = 0.001)) +
-  scale_color_manual(values = c('tseas' = 'darkorange', 'tseasf' = 'black'))+
+  scale_color_manual(values = c('tseas' = '#2D708EFF', 'tseasf' = '#85D54AFF'))+
   scale_fill_viridis(alpha=1,begin= 0.65,end=0.7, discrete=T,option="D")
 
 plot.seas_perrieri =  plot.seas_per + theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
@@ -277,7 +277,7 @@ plot.seas_perrieri =  plot.seas_per + theme(panel.grid.major = element_blank(), 
                                         panel.background = element_blank(), 
                                         axis.line = element_line(colour = "black"))+
   
-  labs(x="Temp. Seasonality (ºC sd x 100)",  y = "A. perrieri",size=5) +
+  labs(x="Temp. Seasonality (ÂºC sd x 100)",  y = "A. perrieri",size=5) +
   labs(col = "") +
   annotate("text", x  = 805, y = 0.0025 , size=8, label = "(g)") +
   theme(axis.title.x = element_text(size = rel(2.25),colour="black")) +
@@ -292,18 +292,18 @@ labels = as.character(breaks)
 
 plot.cwd_perrieri = ggplot(a.perrieri, aes(x=cwd, y=..density..)) + 
   geom_density(aes(cwd),fill=color_present, alpha=.5) + 
-  geom_vline(aes(xintercept=mean(cwd)),color="darkorange",linetype="solid",size=1)+
-  geom_vline(aes(xintercept=quantile(cwd,0.975)),color="darkorange",linetype="dashed",size=1) +
-  geom_vline(aes(xintercept=quantile(cwd,0.025)),color="darkorange",linetype="dashed",size=1) +
+  geom_vline(aes(xintercept=mean(cwd)),color="#2D708EFF",linetype="solid",size=2)+
+  geom_vline(aes(xintercept=quantile(cwd,0.975)),color="#2D708EFF",linetype="dashed",size=2) +
+  geom_vline(aes(xintercept=quantile(cwd,0.025)),color="#2D708EFF",linetype="dashed",size=2) +
   
   geom_density(aes(cwdf),fill=color_future, alpha=.5) + 
-  geom_vline(aes(xintercept=mean(cwdf)),color="black",linetype="solid",size=1)+
-  geom_vline(aes(xintercept=quantile(cwdf,0.975)),color="black",linetype="dashed",size=1) +
-  geom_vline(aes(xintercept=quantile(cwdf,0.025)),color="black",linetype="dashed",size=1) +
+  geom_vline(aes(xintercept=mean(cwdf)),color="#85D54AFF",linetype="solid",size=2)+
+  geom_vline(aes(xintercept=quantile(cwdf,0.975)),color="#85D54AFF",linetype="dashed",size=2) +
+  geom_vline(aes(xintercept=quantile(cwdf,0.025)),color="#85D54AFF",linetype="dashed",size=2) +
   
   scale_x_continuous(limits = c(30, 1800), breaks = breaks, labels = labels) +
   scale_y_continuous(labels = scales::number_format(accuracy = 0.001)) +
-  scale_color_manual(values = c('cwd' = 'darkorange', 'cwdf' = 'black'))+
+  scale_color_manual(values = c('cwd' = '#2D708EFF', 'cwdf' = '#85D54AFF'))+
   scale_fill_viridis(alpha=1,begin= 0.65,end=0.7, discrete=T,option="D")
 
 plot.cwd_perrieri =  plot.cwd_perrieri + theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
@@ -333,18 +333,18 @@ labels = as.character(breaks)
 
 plot.cwd_rubro = ggplot(a.rubrostipa, aes(x=cwd, y=..density..)) + 
   geom_density(aes(cwd),fill=color_present, alpha=.5) + 
-  geom_vline(aes(xintercept=mean(cwd)),color="darkorange",linetype="solid",size=1)+
-  geom_vline(aes(xintercept=quantile(cwd,0.975)),color="darkorange",linetype="dashed",size=1) +
-  geom_vline(aes(xintercept=quantile(cwd,0.025)),color="darkorange",linetype="dashed",size=1) +
+  geom_vline(aes(xintercept=mean(cwd)),color="#2D708EFF",linetype="solid",size=2)+
+  geom_vline(aes(xintercept=quantile(cwd,0.975)),color="#2D708EFF",linetype="dashed",size=2) +
+  geom_vline(aes(xintercept=quantile(cwd,0.025)),color="#2D708EFF",linetype="dashed",size=2) +
   
   geom_density(aes(cwdf),fill=color_future, alpha=.5) + 
-  geom_vline(aes(xintercept=mean(cwdf)),color="black",linetype="solid",size=1)+
-  geom_vline(aes(xintercept=quantile(cwdf,0.975)),color="black",linetype="dashed",size=1) +
-  geom_vline(aes(xintercept=quantile(cwdf,0.025)),color="black",linetype="dashed",size=1) +
+  geom_vline(aes(xintercept=mean(cwdf)),color="#85D54AFF",linetype="solid",size=2)+
+  geom_vline(aes(xintercept=quantile(cwdf,0.975)),color="#85D54AFF",linetype="dashed",size=2) +
+  geom_vline(aes(xintercept=quantile(cwdf,0.025)),color="#85D54AFF",linetype="dashed",size=2) +
   
   scale_x_continuous(limits = c(650, 2100), breaks = breaks, labels = labels) +
   scale_y_continuous(labels = scales::number_format(accuracy = 0.001)) +
-  scale_color_manual(values = c('cwd' = 'darkorange', 'cwdf' = 'black'))+
+  scale_color_manual(values = c('cwd' = '#2D708EFF', 'cwdf' = '#85D54AFF'))+
   scale_fill_viridis(alpha=1,begin= 0.65,end=0.7, discrete=T,option="D")
 
 plot.cwd_rubro =  plot.cwd_rubro + theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
@@ -371,25 +371,25 @@ labels = as.character(breaks)
 
 plot.prec_rubro = ggplot(a.rubrostipa, aes(x=prec, y=..density..)) + 
   geom_density(aes(prec),fill=color_present, alpha=.5) + 
-  geom_vline(aes(xintercept=mean(prec)),color="darkorange",linetype="solid",size=1)+
-  geom_vline(aes(xintercept=quantile(prec,0.975)),color="darkorange",linetype="dashed",size=1) +
-  geom_vline(aes(xintercept=quantile(prec,0.025)),color="darkorange",linetype="dashed",size=1) +
+  geom_vline(aes(xintercept=mean(prec)),color="#2D708EFF",linetype="solid",size=2)+
+  geom_vline(aes(xintercept=quantile(prec,0.975)),color="#2D708EFF",linetype="dashed",size=2) +
+  geom_vline(aes(xintercept=quantile(prec,0.025)),color="#2D708EFF",linetype="dashed",size=2) +
   
   geom_density(aes(precf),fill=color_future, alpha=.5) + 
-  geom_vline(aes(xintercept=mean(precf)),color="black",linetype="solid",size=1)+
-  geom_vline(aes(xintercept=quantile(precf,0.975)),color="black",linetype="dashed",size=1) +
-  geom_vline(aes(xintercept=quantile(precf,0.025)),color="black",linetype="dashed",size=1) +
+  geom_vline(aes(xintercept=mean(precf)),color="#85D54AFF",linetype="solid",size=2)+
+  geom_vline(aes(xintercept=quantile(precf,0.975)),color="#85D54AFF",linetype="dashed",size=2) +
+  geom_vline(aes(xintercept=quantile(precf,0.025)),color="#85D54AFF",linetype="dashed",size=2) +
   
   scale_x_continuous(limits = c(100, 2000), breaks = breaks, labels = labels) +
   scale_y_continuous(labels = scales::number_format(accuracy = 0.001)) +
-  scale_color_manual(values = c('prec' = 'darkorange', 'precf' = 'black'))+
+  scale_color_manual(values = c('prec' = '#2D708EFF', 'precf' = '#85D54AFF'))+
   scale_fill_viridis(alpha=1,begin= 0.65,end=0.7, discrete=T,option="D")
 
 plot.prec_rubro =  plot.prec_rubro + theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
                                              legend.text = element_blank(),
                                              panel.background = element_blank(), axis.line = element_line(colour = "black"))+
   
-  labs(x="Mean Annual Precipitation (mm.y-¹)", y="",size=5) +
+  labs(x="Mean Annual Precipitation (mm.y-Â¹)", y="",size=5) +
   labs(col = "") +
   annotate("text", x  = 200, y = 0.00125 , size=8, label = "(j)") +
   theme(axis.title.x = element_text(size = rel(2.25),colour="black")) +
@@ -412,17 +412,17 @@ labels = as.character(breaks)
 
 plot.seas_mada = ggplot(a.madagascariensis, aes(x=tseas, y=..density..)) + 
   geom_density(aes(tseas),fill=color_present, alpha=.5) + 
-  geom_vline(aes(xintercept=mean(tseas)),color="darkorange",linetype="solid",size=1)+
-  geom_vline(aes(xintercept=quantile(tseas,0.975)),color="darkorange",linetype="dashed",size=1) +
-  geom_vline(aes(xintercept=quantile(tseas,0.025)),color="darkorange",linetype="dashed",size=1) +
+  geom_vline(aes(xintercept=mean(tseas)),color="#2D708EFF",linetype="solid",size=2)+
+  geom_vline(aes(xintercept=quantile(tseas,0.975)),color="#2D708EFF",linetype="dashed",size=2) +
+  geom_vline(aes(xintercept=quantile(tseas,0.025)),color="#2D708EFF",linetype="dashed",size=2) +
   
   geom_density(aes(tseasf),fill=color_future, alpha=.5) + 
-  geom_vline(aes(xintercept=mean(tseasf)),color="black",linetype="solid",size=1)+
-  geom_vline(aes(xintercept=quantile(tseasf,0.975)),color="black",linetype="dashed",size=1) +
-  geom_vline(aes(xintercept=quantile(tseasf,0.025)),color="black",linetype="dashed",size=1) +
+  geom_vline(aes(xintercept=mean(tseasf)),color="#85D54AFF",linetype="solid",size=2)+
+  geom_vline(aes(xintercept=quantile(tseasf,0.975)),color="#85D54AFF",linetype="dashed",size=2) +
+  geom_vline(aes(xintercept=quantile(tseasf,0.025)),color="#85D54AFF",linetype="dashed",size=2) +
   scale_x_continuous(limits = c(800,2300), breaks = breaks, labels = labels) +
   scale_y_continuous(labels = scales::number_format(accuracy = 0.001)) +
-  scale_color_manual(values = c('tseas' = 'darkorange', 'tseasf' = 'black'))+
+  scale_color_manual(values = c('tseas' = '#2D708EFF', 'tseasf' = '#85D54AFF'))+
   scale_fill_viridis(alpha=1,begin= 0.65,end=0.7, discrete=T,option="D")
 
 plot.seas_mada =  plot.seas_mada + theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
@@ -430,7 +430,7 @@ plot.seas_mada =  plot.seas_mada + theme(panel.grid.major = element_blank(), pan
                                          panel.background = element_blank(), 
                                          axis.line = element_line(colour = "black"))+
   
-  labs(x="Temp. Seasonality (ºC sd x 100)", y = "A. madagascariensis",size=3) +
+  labs(x="Temp. Seasonality (ÂºC sd x 100)", y = "A. madagascariensis",size=3) +
   labs(col = "") +
   annotate("text", x  = 875, y = 0.0023 , size=8, label = "(e)") +
   theme(axis.title.x = element_text(size = rel(2.25),colour="black")) +
@@ -451,25 +451,25 @@ labels = as.character(breaks)
 
 plot.mean_mada = ggplot(a.madagascariensis, aes(x=tmean, y=..density..)) + 
   geom_density(aes(tmean),fill=color_present, alpha=.5) + 
-  geom_vline(aes(xintercept=mean(tmean)),color="darkorange",linetype="solid",size=1)+
-  geom_vline(aes(xintercept=quantile(tmean,0.975)),color="darkorange",linetype="dashed",size=1) +
-  geom_vline(aes(xintercept=quantile(tmean,0.025)),color="darkorange",linetype="dashed",size=1) +
+  geom_vline(aes(xintercept=mean(tmean)),color="#2D708EFF",linetype="solid",size=2)+
+  geom_vline(aes(xintercept=quantile(tmean,0.975)),color="#2D708EFF",linetype="dashed",size=2) +
+  geom_vline(aes(xintercept=quantile(tmean,0.025)),color="#2D708EFF",linetype="dashed",size=2) +
   
   geom_density(aes(tmeanf),fill=color_future, alpha=.5) + 
-  geom_vline(aes(xintercept=mean(tmeanf)),color="black",linetype="solid",size=1)+
-  geom_vline(aes(xintercept=quantile(tmeanf,0.975)),color="black",linetype="dashed",size=1) +
-  geom_vline(aes(xintercept=quantile(tmeanf,0.025)),color="black",linetype="dashed",size=1) +
+  geom_vline(aes(xintercept=mean(tmeanf)),color="#85D54AFF",linetype="solid",size=2)+
+  geom_vline(aes(xintercept=quantile(tmeanf,0.975)),color="#85D54AFF",linetype="dashed",size=2) +
+  geom_vline(aes(xintercept=quantile(tmeanf,0.025)),color="#85D54AFF",linetype="dashed",size=2) +
 
   scale_x_continuous(limits = c(240,320), breaks = breaks, labels = labels) +
   scale_y_continuous(labels = scales::number_format(accuracy = 0.001)) +
-  scale_color_manual(values = c('tmean' = 'darkorange', 'tmeanf' = 'black'))+
+  scale_color_manual(values = c('tmean' = '#2D708EFF', 'tmeanf' = '#85D54AFF'))+
   scale_fill_viridis(alpha=1,begin= 0.65,end=0.7, discrete=T,option="D")
 
 plot.mean_mada =  plot.mean_mada + theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
                                  legend.text = element_blank(),
                                  panel.background = element_blank(), axis.line = element_line(colour = "black"))+
   
-  labs(x="Annual Mean Temperature (ºC x 10)", y="",size=5) +
+  labs(x="Annual Mean Temperature (ÂºC x 10)", y="",size=5) +
   labs(col = "") +
   annotate("text", x  = 241.5, y = 0.059 , size=8, label = "(f)") +
   theme(axis.title.x = element_text(size = rel(2.25),colour="black")) +
@@ -492,18 +492,18 @@ labels = as.character(breaks)
 
 plot.prec_grand = ggplot(a.grandidieri, aes(x=prec, y=..density..)) + 
   geom_density(aes(prec),fill=color_present, alpha=.5) + 
-  geom_vline(aes(xintercept=mean(prec)),color="darkorange",linetype="solid",size=1)+
-  geom_vline(aes(xintercept=quantile(prec,0.975)),color="darkorange",linetype="dashed",size=1) +
-  geom_vline(aes(xintercept=quantile(prec,0.025)),color="darkorange",linetype="dashed",size=1) + 
+  geom_vline(aes(xintercept=mean(prec)),color="#2D708EFF",linetype="solid",size=2)+
+  geom_vline(aes(xintercept=quantile(prec,0.975)),color="#2D708EFF",linetype="dashed",size=2) +
+  geom_vline(aes(xintercept=quantile(prec,0.025)),color="#2D708EFF",linetype="dashed",size=2) + 
   
   geom_density(aes(precf),fill=color_future, alpha=.5) + 
-  geom_vline(aes(xintercept=mean(precf)),color="black",linetype="solid",size=1)+
-  geom_vline(aes(xintercept=quantile(precf,0.975)),color="black",linetype="dashed",size=1) +
-  geom_vline(aes(xintercept=quantile(precf,0.025)),color="black",linetype="dashed",size=1) +
+  geom_vline(aes(xintercept=mean(precf)),color="#85D54AFF",linetype="solid",size=2)+
+  geom_vline(aes(xintercept=quantile(precf,0.975)),color="#85D54AFF",linetype="dashed",size=2) +
+  geom_vline(aes(xintercept=quantile(precf,0.025)),color="#85D54AFF",linetype="dashed",size=2) +
   
   scale_x_continuous(limits = c(300,1100), breaks = breaks, labels = labels) +
   scale_y_continuous(labels = scales::number_format(accuracy = 0.001)) +
-  scale_color_manual(values = c('prec' = 'darkorange', 'precf' = 'black'))+
+  scale_color_manual(values = c('prec' = '#2D708EFF', 'precf' = '#85D54AFF'))+
   scale_fill_viridis(alpha=1,begin= 0.65,end=0.7, discrete=T,option="D")
 
 plot.prec_grand =  plot.prec_grand + theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
@@ -511,7 +511,7 @@ plot.prec_grand =  plot.prec_grand + theme(panel.grid.major = element_blank(), p
                                            panel.background = element_blank(), 
                                            axis.line = element_line(colour = "black"))+
   
-  labs(x="Mean Annual Precipitation (mm.y-¹)", y = "     A. grandidieri",size=4) +
+  labs(x="Mean Annual Precipitation (mm.y-Â¹)", y = "     A. grandidieri",size=4) +
   labs(col = "") +
   annotate("text", x  = 336, y = 0.005 , size=8, label = "(c)") +
   theme(axis.title.x = element_text(size = rel(2.25),colour="black")) +
@@ -531,25 +531,25 @@ labels = as.character(breaks)
 
 plot.mean_grand = ggplot(a.grandidieri, aes(x=tmean, y=..density..)) + 
   geom_density(aes(tmean),fill=color_present, alpha=.5) + 
-  geom_vline(aes(xintercept=mean(tmean)),color="darkorange",linetype="solid",size=1)+
-  geom_vline(aes(xintercept=quantile(tmean,0.975)),color="darkorange",linetype="dashed",size=1) +
-  geom_vline(aes(xintercept=quantile(tmean,0.025)),color="darkorange",linetype="dashed",size=1) +
+  geom_vline(aes(xintercept=mean(tmean)),color="#2D708EFF",linetype="solid",size=2)+
+  geom_vline(aes(xintercept=quantile(tmean,0.975)),color="#2D708EFF",linetype="dashed",size=2) +
+  geom_vline(aes(xintercept=quantile(tmean,0.025)),color="#2D708EFF",linetype="dashed",size=2) +
   
   geom_density(aes(tmeanf),fill=color_future, alpha=.5) + 
-  geom_vline(aes(xintercept=mean(tmeanf)),color="black",linetype="solid",size=1)+
-  geom_vline(aes(xintercept=quantile(tmeanf,0.975)),color="black",linetype="dashed",size=1) +
-  geom_vline(aes(xintercept=quantile(tmeanf,0.025)),color="black",linetype="dashed",size=1) +
+  geom_vline(aes(xintercept=mean(tmeanf)),color="#85D54AFF",linetype="solid",size=2)+
+  geom_vline(aes(xintercept=quantile(tmeanf,0.975)),color="#85D54AFF",linetype="dashed",size=2) +
+  geom_vline(aes(xintercept=quantile(tmeanf,0.025)),color="#85D54AFF",linetype="dashed",size=2) +
   
   scale_x_continuous(limits = c(237, 305), breaks = breaks, labels = labels) +
   scale_y_continuous(labels = scales::number_format(accuracy = 0.001)) +
-  scale_color_manual(values = c('tmean' = 'darkorange', 'tmeanf' = 'black'))+
+  scale_color_manual(values = c('tmean' = '#2D708EFF', 'tmeanf' = '#85D54AFF'))+
   scale_fill_viridis(alpha=1,begin= 0.65,end=0.7, discrete=T,option="D")
 
 plot.mean_grand =  plot.mean_grand + theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
                                            legend.text = element_blank(),
                                            panel.background = element_blank(), axis.line = element_line(colour = "black"))+
   
-  labs(x="Annual Mean Temperature (ºC x 10)", y="",size=5) +
+  labs(x="Annual Mean Temperature (ÂºC x 10)", y="",size=5) +
   labs(col = "") +
   annotate("text", x  = 238, y = 0.08 , size=8, label = "(d)") +
   theme(axis.title.x = element_text(size = rel(2.25),colour="black")) +
@@ -572,18 +572,18 @@ labels = as.character(breaks)
 
 plot.prec_za = ggplot(a.za, aes(x=prec, y=..density..)) + 
   geom_density(aes(prec),fill=color_present, alpha=.5) + 
-  geom_vline(aes(xintercept=mean(prec)),color="darkorange",linetype="solid",size=1)+
-  geom_vline(aes(xintercept=quantile(prec,0.975)),color="darkorange",linetype="dashed",size=1) +
-  geom_vline(aes(xintercept=quantile(prec,0.025)),color="darkorange",linetype="dashed",size=1) +
+  geom_vline(aes(xintercept=mean(prec)),color="#2D708EFF",linetype="solid",size=2)+
+  geom_vline(aes(xintercept=quantile(prec,0.975)),color="#2D708EFF",linetype="dashed",size=2) +
+  geom_vline(aes(xintercept=quantile(prec,0.025)),color="#2D708EFF",linetype="dashed",size=2) +
   
   geom_density(aes(precf),fill=color_future, alpha=.5) + 
-  geom_vline(aes(xintercept=mean(precf)),color="black",linetype="solid",size=1)+
-  geom_vline(aes(xintercept=quantile(precf,0.975)),color="black",linetype="dashed",size=1) +
-  geom_vline(aes(xintercept=quantile(precf,0.025)),color="black",linetype="dashed",size=1) +
+  geom_vline(aes(xintercept=mean(precf)),color="#85D54AFF",linetype="solid",size=2)+
+  geom_vline(aes(xintercept=quantile(precf,0.975)),color="#85D54AFF",linetype="dashed",size=2) +
+  geom_vline(aes(xintercept=quantile(precf,0.025)),color="#85D54AFF",linetype="dashed",size=2) +
   
   scale_x_continuous(limits = c(200,1950), breaks = breaks, labels = labels) +
   scale_y_continuous(labels = scales::number_format(accuracy = 0.001)) +
-  scale_color_manual(values = c('prec' = 'darkorange', 'precf' = 'black'))+
+  scale_color_manual(values = c('prec' = '#2D708EFF', 'precf' = '#85D54AFF'))+
   scale_fill_viridis(alpha=1,begin= 0.65,end=0.7, discrete=T,option="D")
 
 plot.prec_za =  plot.prec_za + theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
@@ -591,7 +591,7 @@ plot.prec_za =  plot.prec_za + theme(panel.grid.major = element_blank(), panel.g
                                      panel.background = element_blank(), 
                                      axis.line = element_line(colour = "black"))+
   
-  labs(x="Mean Annual Precipitation (mm.y-¹)", y = "A. za",size=5) +
+  labs(x="Mean Annual Precipitation (mm.y-Â¹)", y = "A. za",size=5) +
   labs(col = "") +
   annotate("text", x  = 250, y = 0.0019 , size=8, label = "(m)") +
   theme(axis.title.x = element_text(size = rel(2.25),colour="black")) +
@@ -610,25 +610,25 @@ labels = as.character(breaks)
 
 plot.mean_za = ggplot(a.za, aes(x=tmean, y=..density..)) + 
   geom_density(aes(tmean),fill=color_present, alpha=.5) + 
-  geom_vline(aes(xintercept=mean(tmean)),color="darkorange",linetype="solid",size=1)+
-  geom_vline(aes(xintercept=quantile(tmean,0.975)),color="darkorange",linetype="dashed",size=1) +
-  geom_vline(aes(xintercept=quantile(tmean,0.025)),color="darkorange",linetype="dashed",size=1) +
+  geom_vline(aes(xintercept=mean(tmean)),color="#2D708EFF",linetype="solid",size=2)+
+  geom_vline(aes(xintercept=quantile(tmean,0.975)),color="#2D708EFF",linetype="dashed",size=2) +
+  geom_vline(aes(xintercept=quantile(tmean,0.025)),color="#2D708EFF",linetype="dashed",size=2) +
   
   geom_density(aes(tmeanf),fill=color_future, alpha=.5) + 
-  geom_vline(aes(xintercept=mean(tmeanf)),color="black",linetype="solid",size=1)+
-  geom_vline(aes(xintercept=quantile(tmeanf,0.975)),color="black",linetype="dashed",size=1) +
-  geom_vline(aes(xintercept=quantile(tmeanf,0.025)),color="black",linetype="dashed",size=1) +
+  geom_vline(aes(xintercept=mean(tmeanf)),color="#85D54AFF",linetype="solid",size=2)+
+  geom_vline(aes(xintercept=quantile(tmeanf,0.975)),color="#85D54AFF",linetype="dashed",size=2) +
+  geom_vline(aes(xintercept=quantile(tmeanf,0.025)),color="#85D54AFF",linetype="dashed",size=2) +
 
   scale_x_continuous(limits = c(200, 320), breaks = breaks, labels = labels) +
   scale_y_continuous(labels = scales::number_format(accuracy = 0.001)) +
-  scale_color_manual(values = c('tmean' = 'darkorange', 'tmeanf' = 'black'))+
+  scale_color_manual(values = c('tmean' = '#2D708EFF', 'tmeanf' = '#85D54AFF'))+
   scale_fill_viridis(alpha=1,begin= 0.65,end=0.7, discrete=T,option="D")
 
 plot.mean_za =  plot.mean_za + theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
                                      legend.text = element_blank(),
                                      panel.background = element_blank(), axis.line = element_line(colour = "black"))+
   
-  labs(x="Annual Mean Temperature (ºC x 10)", y="",size=5) +
+  labs(x="Annual Mean Temperature (ÂºC x 10)", y="",size=5) +
   labs(col = "") +
   annotate("text", x  = 204, y = 0.03 , size=8, label = "(n)") +
   theme(axis.title.x = element_text(size = rel(2.25),colour="black")) +
@@ -655,23 +655,23 @@ labels = as.character(breaks)
 plot.seas_dig = ggplot(a.digitata, na.rm=T, aes(x=tseas, y=..density..)) + 
   
   geom_density(aes(tseas),fill=color_present, alpha=.5) + 
-  geom_vline(aes(xintercept=mean(tseas)),color="darkorange",linetype="solid",size=1)+
-  geom_vline(aes(xintercept=quantile(tseas,0.975)),color="darkorange",linetype="dashed",size=1) +
-  geom_vline(aes(xintercept=quantile(tseas,0.025)),color="darkorange",linetype="dashed",size=1) +
+  geom_vline(aes(xintercept=mean(tseas)),color="#2D708EFF",linetype="solid",size=2)+
+  geom_vline(aes(xintercept=quantile(tseas,0.975)),color="#2D708EFF",linetype="dashed",size=2) +
+  geom_vline(aes(xintercept=quantile(tseas,0.025)),color="#2D708EFF",linetype="dashed",size=2) +
   geom_density(aes(tseasf),fill=color_future, alpha=.5) + 
-  geom_vline(aes(xintercept=mean(tseasf)),color="black",linetype="solid",size=1)+
-  geom_vline(aes(xintercept=quantile(tseasf,0.975)),color="black",linetype="dashed",size=1) +
-  geom_vline(aes(xintercept=quantile(tseasf,0.025)),color="black",linetype="dashed",size=1) +
+  geom_vline(aes(xintercept=mean(tseasf)),color="#85D54AFF",linetype="solid",size=2)+
+  geom_vline(aes(xintercept=quantile(tseasf,0.975)),color="#85D54AFF",linetype="dashed",size=2) +
+  geom_vline(aes(xintercept=quantile(tseasf,0.025)),color="#85D54AFF",linetype="dashed",size=2) +
   scale_x_continuous(limits = c(800,2700), breaks = breaks, labels = labels) +
   scale_y_continuous(labels = scales::number_format(accuracy = 0.001)) +
-  scale_color_manual(values = c('tseas' = 'darkorange', 'tseasf' = 'black'))+
+  scale_color_manual(values = c('tseas' = '#2D708EFF', 'tseasf' = '#85D54AFF'))+
   scale_fill_viridis(alpha=1,begin= 0.65,end=0.7, discrete=T,option="D")
 
 plot.seas_dig =  plot.seas_dig + theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
                                        legend.text = element_blank(),
                                        panel.background = element_blank(), axis.line = element_line(colour = "black"))+
   
-  labs(x="Temp. Seasonality (ºC sd x 100)",y="A. digitata",size=5) +
+  labs(x="Temp. Seasonality (ÂºC sd x 100)",y="A. digitata",size=5) +
   labs(col = "") +
   annotate("text", x  = 882, y = 0.004 , size=8, label = "(a)") +
   theme(axis.title.x = element_text(size = rel(2.25),colour="black")) +
@@ -692,18 +692,18 @@ labels = as.character(breaks)
 plot.cwd_dig = ggplot(a.digitata, aes(x=cwd, y=..density..)) + 
   
   geom_density(aes(cwd),fill=color_present, alpha=.5) + 
-  geom_vline(aes(xintercept=mean(cwd)),color="darkorange",linetype="solid",size=1)+
-  geom_vline(aes(xintercept=quantile(cwd,0.975)),color="darkorange",linetype="dashed",size=1) +
-  geom_vline(aes(xintercept=quantile(cwd,0.025)),color="darkorange",linetype="dashed",size=1) +
+  geom_vline(aes(xintercept=mean(cwd)),color="#2D708EFF",linetype="solid",size=2)+
+  geom_vline(aes(xintercept=quantile(cwd,0.975)),color="#2D708EFF",linetype="dashed",size=2) +
+  geom_vline(aes(xintercept=quantile(cwd,0.025)),color="#2D708EFF",linetype="dashed",size=2) +
   
   geom_density(aes(cwdf),fill=color_future, alpha=.5) + 
-  geom_vline(aes(xintercept=mean(cwdf)),color="black",linetype="solid",size=1)+
-  geom_vline(aes(xintercept=quantile(cwdf,0.975)),color="black",linetype="dashed",size=1) +
-  geom_vline(aes(xintercept=quantile(cwdf,0.025)),color="black",linetype="dashed",size=1) +
+  geom_vline(aes(xintercept=mean(cwdf)),color="#85D54AFF",linetype="solid",size=2)+
+  geom_vline(aes(xintercept=quantile(cwdf,0.975)),color="#85D54AFF",linetype="dashed",size=2) +
+  geom_vline(aes(xintercept=quantile(cwdf,0.025)),color="#85D54AFF",linetype="dashed",size=2) +
 
   scale_x_continuous(limits = c(600, 2100), breaks = breaks, labels = labels) +
   scale_y_continuous(labels = scales::number_format(accuracy = 0.001)) +
-  scale_color_manual(values = c('cwd' = 'darkorange', 'cwdf' = 'black'))+
+  scale_color_manual(values = c('cwd' = '#2D708EFF', 'cwdf' = '#85D54AFF'))+
   scale_fill_viridis(alpha=1,begin= 0.65,end=0.7, discrete=T,option="D")
 
   plot.cwd_dig =  plot.cwd_dig + theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
