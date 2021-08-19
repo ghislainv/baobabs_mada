@@ -181,7 +181,7 @@ p2 <- plot_anomaly(r=ano_85_2080[["tmean"]], label="(e)",
                    title="") +
     col_scale_ano_tmean
 p3 <- plot_anomaly(r=var_85_2080[["tseas"]], label="(b)",
-                   title="T. seasonality\n(°C sd x 100)") +
+                   title="T. seasonality\n(°C sd x 1000)") +
     col_scale_var_tseas
 p4 <- plot_anomaly(r=ano_85_2080[["tseas"]], label="(f)",
                    title="") +
