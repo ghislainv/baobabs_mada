@@ -28,7 +28,7 @@ range(data_frame2$tmean)
 map.mat <- ggplot(data_frame2, aes(x=alt, y=tmean)) + xlim(0,2041) + ylim(137,280) +
   geom_point(data=data_frame2,col="darkgreen",alpha=0.5) + 
   geom_smooth(method=loess , color="red", fill="#69b3a2", se=TRUE) +
-  labs(x="Elevation (m)",y="Mean annual temp. (°C x 10)",size=4) +
+  labs(x="Elevation (m)",y="Mean annual temp. (Â°C x 10)",size=4) +
   annotate("text", x  = 0, y = 280 , size=7, label = "(a)") +
   theme(plot.margin=unit(c(0.5,1,1,0.5), "lines"), 
         axis.title.x=element_text(size=rel(2)),
@@ -45,7 +45,7 @@ range(data_frame2$tseas)
 map.mat2 <- ggplot(data_frame2, aes(x=alt, y=tseas)) + xlim(0,2041) + ylim(991,3500) +
   geom_point(data=data_frame2,col="darkgreen",alpha=0.4) +
   geom_smooth(method=loess , color="red", fill="#69b3a2", se=TRUE) +
-  labs(x="Elevation (m)",y="Temp. seasonality (°C sd x 100)",size=4) +
+  labs(x="Elevation (m)",y="Temp. seasonality (Â°C sd x 1000)",size=4) +
   annotate("text", x  = 0, y = 3500 , size=7, label = "(b)") +
   theme(plot.margin=unit(c(0.5,1,1,0.5), "lines"), 
         axis.title.x=element_text(size=rel(2)),
@@ -64,7 +64,7 @@ range(data_frame2$y) # y latitude, don't forget ;) 7172500 8673500
 lat.mat1 <- ggplot(data_frame2, aes(x=data_frame2$y, y=tmean)) + ylim(137,280) + xlim(7172500,8673500) +
   geom_point(data=data_frame2,col="darkgreen",alpha=0.4) +
   geom_smooth(method=loess , color="red", fill="#69b3a2", se=TRUE) +
-  labs(x="Latitude (UTM)",y="Mean annual temp. (°C x 10)",size=4) +
+  labs(x="Latitude (UTM)",y="Mean annual temp. (Â°C x 10)",size=4) +
   annotate("text", x  = 7200000, y = 280 , size=7, label = "(c)") +
   theme(plot.margin=unit(c(0.5,1,1,0.5), "lines"), 
         axis.title.x=element_text(size=rel(2)),
@@ -83,7 +83,7 @@ lat.mat2 <- ggplot(data_frame2, aes(x=data_frame2$y, y=tseas)) + ylim(991,3500) 
   #geom_density2d(data=Abs.df,col=grey(0.5)) +
   geom_point(data=data_frame2,col="darkgreen",alpha=0.4) +
   geom_smooth(method=loess , color="red", fill="#69b3a2", se=TRUE) +
-  labs(x="Latitude (UTM)",y="Temp. seasonality (°C sd x 100)",size=4) +
+  labs(x="Latitude (UTM)",y="Temp. seasonality (Â°C sd x 1000)",size=4) +
   annotate("text", x  = 7200000, y = 3500 , size=7, label = "(d)") +
   theme(plot.margin=unit(c(0.5,1,1,0.5), "lines"), 
         axis.title.x=element_text(size=rel(2)),
