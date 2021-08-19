@@ -15,6 +15,7 @@ library(grid)
 library(gridExtra)
 library(here)
 
+# Using WorlClim v1.4
 r <- raster::getData("worldclim",var="bio",res=10)
 r <- r[[c(4)]]
 names(r) <- c("Seas")
@@ -36,11 +37,9 @@ bio4.2080_world <- mean(Stack.bio4.2080_world) ### 2080 temp seas. raster
 ## future
 wp <-extent(c(-180, 180, -23.5, 23.5))
 future_ws <- crop(bio4.2080_world,wp)
-crs(future_ws) <- "+proj=utm +zone=38 +south +datum=WGS84 +units=m +no_defs +ellps=WGS84 +towgs84=0,0,0"
 
 ## current
 Stack.bio4.current_worldcrop <- crop(r,wp)
-crs(Stack.bio4.current_worldcrop) <- "+proj=utm +zone=38 +south +datum=WGS84 +units=m +no_defs +ellps=WGS84 +towgs84=0,0,0"
 
 current_ws <- Stack.bio4.current_worldcrop
 Stack.bio4.current_worldcrop[] <- future_ws[]-current_ws[]
@@ -133,15 +132,15 @@ col_scale_var_anomws <- scale_fill_gradientn(
 
 # Current ws
 cur_ws <- plot_anomaly_ws(r=current_ws, label="(a)",
-                          title="Current temperature seasonality (°C sd x 100)") + col_scale_var_cur_ws
+                          title="Current temperature seasonality (°C sd x 1000)") + col_scale_var_cur_ws
 
 # Future anomaly
 ano_ws <- plot_anomaly_ws(r=Stack.bio4.current_worldcrop, label="(b)",
-                          title="Temperature seasonality anomaly (current vs. 2085 RCP 8.5,°C sd x 100)") + col_scale_var_anomws
+                          title="Temperature seasonality anomaly (current vs. 2085 RCP 8.5,°C sd x 1000)") + col_scale_var_anomws
 
 # future seasonality
 fut_ws <- plot_anomaly_ws(r=future_ws, label="(c)",
-                          title="Future temperature seasonality (2085 RCP 8.5,°C sd x 100)") + col_scale_var_fut_ws
+                          title="Future temperature seasonality (2085 RCP 8.5,°C sd x 1000)") + col_scale_var_fut_ws
 
 ## Combine plots
 lay_6 <- rbind(c(rep(seq(1,1,by=1),each=3)),

@@ -3,6 +3,8 @@ Adansonia*
 maxent
 data/*
 !data/baobabs_raw_data
+cmip5
+wc10
 
 # biblio bak
 bib/*.bak
