@@ -86,7 +86,7 @@ my_plot_tseas <-  my_plot + theme(panel.grid.major = element_blank(), panel.grid
                                  #legend.text = element_text(face= "italic",size=15),
                                  legend.title=element_blank(),
                                  panel.background = element_blank(), axis.line = element_line(colour = "black")) +
-  labs(x="Temp. Seasonality (sd x 100 ÂºC)", y = "Density",size=5) +
+  labs(x="Temp. Seasonality (sd x 1000 ºC)", y = "Density",size=5) +
   theme(legend.position="none") + theme_par
   
 # Density plots ### Annual Mean Temperature
@@ -104,7 +104,7 @@ my_plot_tmean <-  my_plot2 + theme(panel.grid.major = element_blank(), panel.gri
                                   legend.text = element_text(face= "italic",size=12),
                                   legend.title=element_blank(),
                                   panel.background = element_blank(), axis.line = element_line(colour = "black")) +
-  labs(x="Mean Annual Temperature (ÂºC x 10) ", y = "Density",size=5) +
+  labs(x="Mean Annual Temperature (ºC x 10) ", y = "Density",size=5) +
   theme(legend.key.size = unit(0.5, "cm")) + theme_par
 library(lemon)  
 my_plot_tmean <- lemon::reposition_legend(my_plot_tmean, 'top left', offset = 0.05)
@@ -122,7 +122,7 @@ my_plot_prec <-  my_plot3 + theme(panel.grid.major = element_blank(), panel.grid
                              #legend.text = element_text(face= "italic",size=15),
                              legend.title=element_blank(),
                              panel.background = element_blank(), axis.line = element_line(colour = "black")) +
-  labs(x="Mean Annual Precipitation (mm.y-Â¹)", y = "Density",size=5) +
+  labs(x="Mean Annual Precipitation (mm.y-¹)", y = "Density",size=5) +
   theme(legend.position="none") + theme_par
   
 # Density plots ### Climatic Water Deficit
@@ -197,9 +197,9 @@ plot.seas_suar  = ggplot(a.suare, aes(x=tseas, y=..density..)) +
 plot.seas_suar =  plot.seas_suar + theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
                                legend.text = element_blank(),
                                panel.background = element_blank(), axis.line = element_line(colour = "black"))+
-  labs(x="Temp. Seasonality (ÂºC sd x 100)", y = "A. suarezensis",size=5) +
+  labs(x="Temp. Seasonality (ºC sd x 1000)", y = "A. suarezensis",size=5) +
   labs(col = "") +
-  annotate("text", x  = 1190, y = 0.0105 , size=8, label = "(k)") +
+  annotate("text", x  = 1160, y = 0.0105 , size=8, label = "(k)") +
   theme(axis.title.x = element_text(size = rel(2.25),colour="black")) +
   theme(axis.title.y = element_text(size = rel(2.25),colour="black",face="italic")) +
   theme(axis.text.x = element_text(size = rel(2),colour="black")) +
@@ -234,7 +234,7 @@ plot.prec_suar =  plot.prec_suar + theme(panel.grid.major = element_blank(), pan
                                    legend.text = element_blank(),
                                    panel.background = element_blank(), axis.line = element_line(colour = "black"))+
   
-  labs(x="Mean Annual Precipitation (mm.y-Â¹)", y = "",size=5) +
+  labs(x="Mean Annual Precipitation (mm.y-¹)", y = "",size=5) +
   labs(col = "") +
   annotate("text", x  = 825, y = 0.0032 , size=8, label = "(l)") +
   theme(axis.title.x = element_text(size = rel(2.25),colour="black")) +
@@ -277,7 +277,7 @@ plot.seas_perrieri =  plot.seas_per + theme(panel.grid.major = element_blank(), 
                                         panel.background = element_blank(), 
                                         axis.line = element_line(colour = "black"))+
   
-  labs(x="Temp. Seasonality (ÂºC sd x 100)",  y = "A. perrieri",size=5) +
+  labs(x="Temp. Seasonality (ºC sd x 1000)",  y = "A. perrieri",size=5) +
   labs(col = "") +
   annotate("text", x  = 805, y = 0.0025 , size=8, label = "(g)") +
   theme(axis.title.x = element_text(size = rel(2.25),colour="black")) +
@@ -322,10 +322,12 @@ plot.cwd_perrieri =  plot.cwd_perrieri + theme(panel.grid.major = element_blank(
 ############## A.rubrostipa
 # Import dataset
 a.rubrostipa <- read.csv(file=paste0("Adansonia.rubrostipa/niche_graph_species_compared_anomaly.csv"), header=T,sep=";",dec=",")
+a.rubrostipa <- na.omit(a.rubrostipa)  #just in case
 
 ## 1st importance variable - Climatic Water Deficit
 range(a.rubrostipa$cwd)
 range(a.rubrostipa$cwdf) 
+
 mean(a.rubrostipa$cwd) 
 mean(a.rubrostipa$cwdf) 
 breaks <- c(round(seq(min(a.rubrostipa$cwd),max(a.rubrostipa$cwdf),length=6)))
@@ -389,7 +391,7 @@ plot.prec_rubro =  plot.prec_rubro + theme(panel.grid.major = element_blank(), p
                                              legend.text = element_blank(),
                                              panel.background = element_blank(), axis.line = element_line(colour = "black"))+
   
-  labs(x="Mean Annual Precipitation (mm.y-Â¹)", y="",size=5) +
+  labs(x="Mean Annual Precipitation (mm.y-¹)", y="",size=5) +
   labs(col = "") +
   annotate("text", x  = 200, y = 0.00125 , size=8, label = "(j)") +
   theme(axis.title.x = element_text(size = rel(2.25),colour="black")) +
@@ -430,7 +432,7 @@ plot.seas_mada =  plot.seas_mada + theme(panel.grid.major = element_blank(), pan
                                          panel.background = element_blank(), 
                                          axis.line = element_line(colour = "black"))+
   
-  labs(x="Temp. Seasonality (ÂºC sd x 100)", y = "A. madagascariensis",size=3) +
+  labs(x="Temp. Seasonality (ºC sd x 1000)", y = "A. madagascariensis",size=3) +
   labs(col = "") +
   annotate("text", x  = 875, y = 0.0023 , size=8, label = "(e)") +
   theme(axis.title.x = element_text(size = rel(2.25),colour="black")) +
@@ -469,7 +471,7 @@ plot.mean_mada =  plot.mean_mada + theme(panel.grid.major = element_blank(), pan
                                  legend.text = element_blank(),
                                  panel.background = element_blank(), axis.line = element_line(colour = "black"))+
   
-  labs(x="Annual Mean Temperature (ÂºC x 10)", y="",size=5) +
+  labs(x="Annual Mean Temperature (ºC x 10)", y="",size=5) +
   labs(col = "") +
   annotate("text", x  = 241.5, y = 0.059 , size=8, label = "(f)") +
   theme(axis.title.x = element_text(size = rel(2.25),colour="black")) +
@@ -511,7 +513,7 @@ plot.prec_grand =  plot.prec_grand + theme(panel.grid.major = element_blank(), p
                                            panel.background = element_blank(), 
                                            axis.line = element_line(colour = "black"))+
   
-  labs(x="Mean Annual Precipitation (mm.y-Â¹)", y = "     A. grandidieri",size=4) +
+  labs(x="Mean Annual Precipitation (mm.y-¹)", y = "     A. grandidieri",size=4) +
   labs(col = "") +
   annotate("text", x  = 336, y = 0.005 , size=8, label = "(c)") +
   theme(axis.title.x = element_text(size = rel(2.25),colour="black")) +
@@ -549,7 +551,7 @@ plot.mean_grand =  plot.mean_grand + theme(panel.grid.major = element_blank(), p
                                            legend.text = element_blank(),
                                            panel.background = element_blank(), axis.line = element_line(colour = "black"))+
   
-  labs(x="Annual Mean Temperature (ÂºC x 10)", y="",size=5) +
+  labs(x="Annual Mean Temperature (ºC x 10)", y="",size=5) +
   labs(col = "") +
   annotate("text", x  = 238, y = 0.08 , size=8, label = "(d)") +
   theme(axis.title.x = element_text(size = rel(2.25),colour="black")) +
@@ -591,7 +593,7 @@ plot.prec_za =  plot.prec_za + theme(panel.grid.major = element_blank(), panel.g
                                      panel.background = element_blank(), 
                                      axis.line = element_line(colour = "black"))+
   
-  labs(x="Mean Annual Precipitation (mm.y-Â¹)", y = "A. za",size=5) +
+  labs(x="Mean Annual Precipitation (mm.y-¹)", y = "A. za",size=5) +
   labs(col = "") +
   annotate("text", x  = 250, y = 0.0019 , size=8, label = "(m)") +
   theme(axis.title.x = element_text(size = rel(2.25),colour="black")) +
@@ -628,7 +630,7 @@ plot.mean_za =  plot.mean_za + theme(panel.grid.major = element_blank(), panel.g
                                      legend.text = element_blank(),
                                      panel.background = element_blank(), axis.line = element_line(colour = "black"))+
   
-  labs(x="Annual Mean Temperature (ÂºC x 10)", y="",size=5) +
+  labs(x="Annual Mean Temperature (ºC x 10)", y="",size=5) +
   labs(col = "") +
   annotate("text", x  = 204, y = 0.03 , size=8, label = "(n)") +
   theme(axis.title.x = element_text(size = rel(2.25),colour="black")) +
@@ -671,7 +673,7 @@ plot.seas_dig =  plot.seas_dig + theme(panel.grid.major = element_blank(), panel
                                        legend.text = element_blank(),
                                        panel.background = element_blank(), axis.line = element_line(colour = "black"))+
   
-  labs(x="Temp. Seasonality (ÂºC sd x 100)",y="A. digitata",size=5) +
+  labs(x="Temp. Seasonality (ºC sd x 1000)",y="A. digitata",size=5) +
   labs(col = "") +
   annotate("text", x  = 882, y = 0.004 , size=8, label = "(a)") +
   theme(axis.title.x = element_text(size = rel(2.25),colour="black")) +
