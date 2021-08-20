@@ -1,4 +1,7 @@
-# Baobabs Mada
+[![License
+GPLv3](https://img.shields.io/badge/licence-GPLv3-8f10cb.svg)](https://www.gnu.org/licenses/gpl-3.0.html)
+[![Cirad
+Dataverse](https://img.shields.io/badge/DOI-10.18167/DVN1/LIALRR-green)](https://doi.org/10.18167/DVN1/LIALRR)
 
 This GitHub repository includes the code and data for the following scientific article:
 
