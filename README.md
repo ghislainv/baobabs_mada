@@ -2,7 +2,7 @@
 
 This GitHub repository includes the code and data for the following scientific article:
 
-**MUNIZ TAGLIARI Mario, Pascal DANTHU, Jean-Michel LEONG POCK TSY, Cyrille CORNU, Jonathan LENOIR, Vítor CARVALHO-ROCHA, Ghislain VIEILLEDENT.** 2021. Not all species will migrate poleward as the climate warms: the case of the seven baobab species in Madagascar.
+**MUNIZ TAGLIARI Mario, Pascal DANTHU, Jean-Michel LEONG POCK TSY, Cyrille CORNU, Jonathan LENOIR, Vítor CARVALHO-ROCHA, Ghislain VIEILLEDENT.** 2021. Not all species will migrate poleward as the climate warms: the case of the seven baobab species in Madagascar. _Global Change Biology_.
 
 ## Baobab occurrence data
 
@@ -22,4 +22,4 @@ Figure: **Species range contraction under climate change for the four threatened
 
 ## Archive
 
-An archive of this repository is available on the Cirad Dataverse: \[DOI: [10.18167/DVN1/KMIO8N](http://dx.doi.org/10.18167/DVN1/KMIO8N)\].
+An archive of this repository is available on the Cirad Dataverse: \[DOI: [10.18167/DVN1/LIALRR](https://doi.org/10.18167/DVN1/LIALRR)\].
