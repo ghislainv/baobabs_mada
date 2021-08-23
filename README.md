@@ -1,4 +1,4 @@
-# Range shifts of baobabs as climate warms <img src="man/figures/A_grandidieri_drawing.png" align="right" alt="" width="120" />
+# Range shifts of baobabs as climate warms <img src="man/figures/A_grandidieri_drawing.jpg" align="right" alt="" width="120" />
 
 [![License GPLv3](https://img.shields.io/badge/licence-GPLv3-8f10cb.svg)](https://www.gnu.org/licenses/gpl-3.0.html)
 [![Cirad Dataverse](https://img.shields.io/badge/DOI-10.18167/DVN1/LIALRR-green)](https://doi.org/10.18167/DVN1/LIALRR)
