@@ -1,13 +1,10 @@
 # Data and outputs
 Adansonia*
-maxent
-data/*
-!data/baobabs_raw_data
+data/gisdata
+data/baobabs/*
+!data/baobabs/data_Adansonia.csv
 cmip5
 wc10
-
-# biblio bak
-bib/*.bak
 
 # History files
 .Rhistory
