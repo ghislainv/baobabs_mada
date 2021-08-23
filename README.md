@@ -27,6 +27,6 @@ Figure: **Species range contraction under climate change for the four threatened
 
 ## Notes
 
-An archive of this repository is available in the Cirad Dataverse repository: \[DOI: [10.18167/DVN1/LIALRR](https://doi.org/10.18167/DVN1/LIALRR)\].
+An archive of this repository is available in the Cirad Dataverse repository, doi: [10.1111/gcb.15859](https://doi.org/10.1111/gcb.15859).
 
-Baobab drawings by **Grazyna Krecka-Duchaufour** from "**C. Cornu and P. Danthu.** 2015. _Guide d'identification illustré des baobabs de Madagascar_. Cirad, Montpellier. 30 p." 
+Baobab drawings by **Grazyna Krecka-Duchaufour** from "**C. Cornu and P. Danthu.** 2015. _Guide d'identification illustré des baobabs de Madagascar_. Cirad, Montpellier, 30 p., <https://agritrop.cirad.fr/577579>".
