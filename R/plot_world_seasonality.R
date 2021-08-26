@@ -6,7 +6,6 @@
 # license         :GPLv3
 # ==============================================================================
 
-
 library(maptools)
 library(raster)
 library(viridis)
@@ -43,6 +42,13 @@ Stack.bio4.current_worldcrop <- crop(r,wp)
 
 current_ws <- Stack.bio4.current_worldcrop
 Stack.bio4.current_worldcrop[] <- future_ws[]-current_ws[]
+
+## Save rasters
+tseas <- stack(current_ws, future_ws, Stack.bio4.current_worldcrop)
+names(tseas) <- c("tseas_pres", "tseas_fut", "tseas_ano")
+# writeRaster(tseas, file="outputs/tseas_tropics.tif", overwrite=TRUE, options=c("COMPRESS=DEFLATE", "PREDICTOR=2"))
+## Load data
+tseas <- stack("outputs/tseas_tropics.tif")
 
 ## Setting basic theme options for plot with ggplot2
 theme_base_final <- theme(
@@ -107,7 +113,6 @@ col_scale_var_cur_ws <- scale_fill_gradientn(
   labels=seq(0,7600,l=6)
 )
 
-
 ## Color scales
 ## future world seasonality
 col_scale_var_fut_ws <- scale_fill_gradientn(
@@ -131,15 +136,15 @@ col_scale_var_anomws <- scale_fill_gradientn(
 )
 
 # Current ws
-cur_ws <- plot_anomaly_ws(r=current_ws, label="(a)",
+cur_ws <- plot_anomaly_ws(r=tseas[[1]], label="(a)",
                           title="Current temperature seasonality (°C sd x 1000)") + col_scale_var_cur_ws
 
 # Future anomaly
-ano_ws <- plot_anomaly_ws(r=Stack.bio4.current_worldcrop, label="(b)",
+ano_ws <- plot_anomaly_ws(r=tseas[[3]], label="(b)",
                           title="Temperature seasonality anomaly (current vs. 2085 RCP 8.5,°C sd x 1000)") + col_scale_var_anomws
 
 # future seasonality
-fut_ws <- plot_anomaly_ws(r=future_ws, label="(c)",
+fut_ws <- plot_anomaly_ws(r=tseas[[2]], label="(c)",
                           title="Future temperature seasonality (2085 RCP 8.5,°C sd x 1000)") + col_scale_var_fut_ws
 
 ## Combine plots
@@ -157,6 +162,69 @@ plot_world_anomaly <- grid.arrange(cur_ws, ano_ws, fut_ws,layout_matrix=lay_6)
 
 ggsave(file=paste0("./outputs/anomaly_world_chart.png"),
        plot=plot_world_anomaly,width=11,height=8,dpi=300,scale=0.8)
+
+# =============================================
+# Figure for press release
+# =============================================
+
+## Color scales
+## current world seasonality
+col_scale_cur <- scale_fill_gradientn(
+  colours=viridis(255, option="B", direction=1),
+  na.value="transparent",
+  values=rescale(seq(0,7.600,l=255),0,7.600),
+  limits=c(0,7.600),
+  breaks=seq(0,7.600,l=6),
+  labels=seq(0,7.600,l=6)
+)
+
+## Color scales
+## future world seasonality
+col_scale_fut <- scale_fill_gradientn(
+  colours=viridis(255, option="B", direction=1),
+  na.value="transparent",
+  values=rescale(seq(0,8.200,l=255),0,8.200),
+  limits=c(0,8.200),
+  breaks=seq(0,8.200,l=6),
+  labels=seq(0,8.200,l=6)
+)
+
+## Color scales
+## anomaly world seasonality
+col_scale_ano <- scale_fill_gradientn(
+  colours=c(grey(seq(0.3, 0.7, l=3)), viridis(255, option="C", direction=1)),
+  na.value="transparent",
+  values=rescale(c(-0.7, -0.35, seq(0, 1, l=255)), -0.7, 1),
+  limits=c(-0.7,1),
+  breaks=c(-0.7, -0.35, seq(0, 1, l=3)),
+  labels=c(-0.7, -0.35, seq(0, 1, l=3))
+)
+
+# Plots
+cur_ws <- plot_anomaly_ws(r=tseas[[1]]/1000, label="(a)",
+                          title="Current temperature seasonality (in °C)") + col_scale_cur
+# Future anomaly
+ano_ws <- plot_anomaly_ws(r=tseas[[3]]/1000, label="(b)",
+                          title="Temperature seasonality anomaly (2085 vs. current, in °C)") + col_scale_ano
+# future seasonality
+fut_ws <- plot_anomaly_ws(r=tseas[[2]]/1000, label="(c)",
+                          title="Future temperature seasonality (2085, in °C)") + col_scale_fut
+
+lay_6 <- rbind(c(rep(seq(1,1,by=1),each=3)),
+               c(rep(seq(1,1,by=1),each=3)),
+               c(rep(seq(1,1,by=1),each=3)),
+               c(rep(seq(2,2,by=1),each=3)),
+               c(rep(seq(2,2,by=1),each=3)),
+               c(rep(seq(2,2,by=1),each=3)),
+               c(rep(seq(3,3,by=1),each=3)),
+               c(rep(seq(3,3,by=1),each=3)),
+               c(rep(seq(3,3,by=1),each=3)))
+
+plot_tropics <- grid.arrange(cur_ws, ano_ws, fut_ws,layout_matrix=lay_6)
+
+ggsave(file=paste0("outputs/tseas_tropics_degree.png"),
+       plot=plot_tropics,width=11,height=8,dpi=300,scale=0.8)
+
 
 # ===========
 # End of file

@@ -5,6 +5,7 @@ data/baobabs/*
 !data/baobabs/data_Adansonia.csv
 cmip5
 wc10
+outputs/tseas_tropics.tif
 
 # History files
 .Rhistory
