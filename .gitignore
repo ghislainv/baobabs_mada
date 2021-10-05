@@ -6,6 +6,7 @@ data/baobabs/*
 cmip5
 wc10
 outputs/tseas_tropics.tif
+wc_comp
 
 # History files
 .Rhistory
